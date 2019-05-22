@@ -1,0 +1,15 @@
+#Grid_Container .ant-form-item {
+    display: flex;
+}
+
+#Grid_Container .ant-form-item-control-wrapper {
+    flex: 1;
+}
+
+#Grid_Container .antd-pro-pages-list-table-list-tableListOperator {
+    margin-bottom: 16px;
+}
+
+#Grid_Container .antd-pro-pages-list-table-list-tableListOperator button {
+    margin-right: 8px;
+}

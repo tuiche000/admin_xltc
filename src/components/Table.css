@@ -1,0 +1,15 @@
+#com_table .ant-form-item {
+  display: flex;
+}
+
+#com_table .ant-form-item-control-wrapper {
+  flex: 1;
+}
+
+.antd-pro-pages-list-table-list-tableListOperator {
+  margin-bottom: 16px;
+}
+
+.antd-pro-pages-list-table-list-tableListOperator button {
+  margin-right: 8px;
+}
