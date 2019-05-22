@@ -1,6 +1,7 @@
 import React from 'react'
-import { Form, Input, Radio } from 'antd';
+import { Form, Input, Select, Button } from 'antd';
 
+const { TextArea } = Input;
 
 // eslint-disable-next-line
 class regiosForm extends React.Component {
@@ -32,25 +33,101 @@ class regiosForm extends React.Component {
   render() {
     const { visible, onCancel, onCreate, form } = this.props;
     const { getFieldDecorator } = form;
+
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 8 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 8 },
+      },
+    };
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0,
+        },
+        sm: {
+          span: 16,
+          offset: 8,
+        },
+      },
+    };
+    const prefixSelector = getFieldDecorator('prefix', {
+      initialValue: '86',
+    })(
+      <Select style={{ width: 70 }}>
+        <Option value="86">+86</Option>
+        <Option value="87">+87</Option>
+      </Select>,
+    );
     return (
-      <Form layout="vertical">
-        <Form.Item label="Title">
-          {getFieldDecorator('title', {
-            rules: [{ required: true, message: 'Please input the title of collection!' }],
+      <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+        <Form.Item
+          label={
+            <span>
+              用户账号
+            </span>
+          }
+        >
+          {getFieldDecorator('nickname', {
+            rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
           })(<Input />)}
         </Form.Item>
-        <Form.Item label="Description">
-          {getFieldDecorator('description')(<Input type="textarea" />)}
+        <Form.Item label="手机号码">
+          {getFieldDecorator('手机号码', {
+            rules: [{ required: true, message: 'Please input your phone number!' }],
+          })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} />)}
         </Form.Item>
-        <Form.Item className="collection-create-form_last-form-item">
-          {getFieldDecorator('modifier', {
-            initialValue: 'public',
+        <Form.Item
+          label={
+            <span>
+              奖励
+            </span>
+          }
+        >
+          {getFieldDecorator('nickname', {
+            rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
+          })(<Input />)}
+        </Form.Item>
+        <Form.Item label="所属平台" hasFeedback>
+          {getFieldDecorator('select', {
+            rules: [{ required: true, message: 'Please select your country!' }],
           })(
-            <Radio.Group>
-              <Radio value="public">Public</Radio>
-              <Radio value="private">Private</Radio>
-            </Radio.Group>,
+            <Select placeholder="Please select a country">
+              <Option value="0">旅行社</Option>
+              <Option value="1">复游会</Option>
+            </Select>,
           )}
+        </Form.Item>
+
+        <Form.Item
+          label={
+            <span>
+              订单ID
+            </span>
+          }
+        >
+          {getFieldDecorator('nickname', {
+            rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
+          })(<Input />)}
+        </Form.Item>
+
+        <Form.Item label="备注" hasFeedback>
+          {getFieldDecorator('select', {
+            rules: [{ required: true, message: 'Please select your country!' }],
+          })(
+            <TextArea rows={4} />,
+          )}
+        </Form.Item>
+
+        <Form.Item {...tailFormItemLayout}>
+          <Button type="primary" htmlType="submit">
+            Register
+          </Button>
         </Form.Item>
       </Form>
     );

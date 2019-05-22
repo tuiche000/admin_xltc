@@ -7,6 +7,7 @@ import Login from '../pages/Login';
 import Banner from '../pages/Banner';
 import Grid from '../pages/Grid';
 import BasicDataRegion from '../pages/BasicData/regios/index';
+import RegionForm from '../pages/BasicData/regios/form';
 
 const { Header, Sider, Content } = Layout;
 
@@ -62,6 +63,7 @@ export default class BasicLayout extends Component {
             <Route path="/login" component={Login} />
             <Route path="/grid" exact component={Grid} />
             <Route path="/basicData/region" exact component={BasicDataRegion} />
+            <Route path="/basicData/region/form" exact component={RegionForm} />
           </Content>
         </Layout>
       </Layout>

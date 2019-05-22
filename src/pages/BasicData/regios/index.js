@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tree, Input, Row, Col, Dropdown, Button, Icon, Modal } from 'antd';
+import { Tree, Input, Row, Col, Dropdown, Button, Icon } from 'antd';
 
 import Table from '@/components/Table';
 import CscForm from './form'
@@ -44,14 +44,11 @@ export default class SearchTree extends React.Component {
       gData: [], //树形数据
       dataList: [], //数据列表
       TablePropData: [], //table数据
-      visible: false, //modal
     };
   }
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
+  fnForm = () => {
+    this.props.history.push('/basicData/region/form')
   };
 
   handleOk = e => {
@@ -205,7 +202,7 @@ export default class SearchTree extends React.Component {
           </Col>
           <Col span={18}>
             <div className="antd-pro-pages-list-table-list-tableListOperator">
-              <Button icon="plus" type="primary" onClick={this.showModal}>
+              <Button icon="plus" type="primary" onClick={this.fnForm}>
                 新建
               </Button>
               {/* {(
@@ -218,14 +215,6 @@ export default class SearchTree extends React.Component {
                   </Dropdown>
                 </span>
               )} */}
-              <Modal
-                title="Basic Modal"
-                visible={this.state.visible}
-                onOk={this.handleOk}
-                onCancel={this.handleCancel}
-              >
-                <CscForm />
-              </Modal>
             </div>
             <Table data={this.state.TablePropData} columns={columns} />
           </Col>
