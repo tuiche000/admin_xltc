@@ -8,8 +8,10 @@ import Layout from './layout/index';
 
 import { setLogin } from './actions';
 
-import fetchJson from './utils/fetch';
+import fetchJson, { _GET, _POST } from './utils/fetch';
 window.fetchJson = fetchJson
+window._GET = _GET
+window._POST = _POST
 
 class App extends Component {
   constructor(...args) {

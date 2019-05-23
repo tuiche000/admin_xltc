@@ -61,6 +61,8 @@
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "antd": "^3.18.2",
-    "babel-plugin-import": "^1.11.2"
+    "babel-plugin-import": "^1.11.2",
+    "query-string": "^6.5.0",
+    "react-amap": "^1.2.8"
   }
 }

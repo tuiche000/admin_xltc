@@ -3,13 +3,15 @@ import { Layout, Menu, Icon } from 'antd';
 import { Route, Link } from 'react-router-dom';
 import './index.css'
 
-import Login from '../pages/Login';
-import Banner from '../pages/Banner';
-import Grid from '../pages/Grid';
-import BasicDataRegion from '../pages/BasicData/regios/index';
-import RegionForm from '../pages/BasicData/regios/form';
+import Login from '@/pages/Login';
+import Banner from '@/pages/Banner';
+import Grid from '@/pages/Grid';
+import BasicDataRegion from '@/pages/BasicData/regios/index';
+import RegionForm from '@/pages/BasicData/regios/form';
+import department from '@/pages/users/department/index';
 
 const { Header, Sider, Content } = Layout;
+const SubMenu = Menu.SubMenu;
 
 export default class BasicLayout extends Component {
   constructor(...args) {
@@ -32,15 +34,41 @@ export default class BasicLayout extends Component {
       <Layout id="components-layout-demo-custom-trigger">
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
           <div className="logo" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={['']}>
+            <SubMenu
+              title={
+                <span>
+                  <Icon type="user" />
+                  <span>权限管理</span>
+                </span>
+              }
+            >
+              <Menu.Item key="/users/department">
+                <Link to="/users/department">
+                  <span>责任部门</span>
+                </Link>
+              </Menu.Item>
+            </SubMenu>
             <Menu.Item key="1">
-              <Icon type="user" />
-              <span><Link to="/grid">责任网络</Link></span>
+              <Link to="/grid">
+                <Icon type="user" />
+                <span>责任网络</span>
+              </Link>
             </Menu.Item>
-            <Menu.Item key="2">
-              <Icon type="video-camera" />
-              <span><Link to="/basicData/region">基本数据</Link></span>
-            </Menu.Item>
+            <SubMenu
+              title={
+                <span>
+                  <Icon type="user" />
+                  <span>基本数据</span>
+                </span>
+              }
+            >
+              <Menu.Item key="2">
+                <Link to="/basicData/region">
+                  <span>行政区域</span>
+                </Link>
+              </Menu.Item>
+            </SubMenu>
           </Menu>
         </Sider>
         <Layout>
@@ -61,6 +89,7 @@ export default class BasicLayout extends Component {
           >
             <Route path="/" exact component={Banner} />
             <Route path="/login" component={Login} />
+            <Route path="/users/department" component={department} />
             <Route path="/grid" exact component={Grid} />
             <Route path="/basicData/region" exact component={BasicDataRegion} />
             <Route path="/basicData/region/form" exact component={RegionForm} />
