@@ -1,47 +1,46 @@
 import React from 'react'
-import { Form, Row, Col, Input, Alert, Button, Icon, Dropdown } from 'antd';
+import { Form, Row, Col, Input, Alert, Button, Icon, Dropdown, Select, InputNumber, Cascader } from 'antd';
 // import './index.css'
-import { Table } from 'antd';
+import Table from '@/components/Table';
 
 const columns = [
   {
-    title: 'Name',
+    title: '代码',
+    dataIndex: 'code',
+  },
+  {
+    title: '部门类型',
+    dataIndex: 'departmentType',
+  },
+  {
+    title: '名字',
     dataIndex: 'name',
-    render: text => <a href="javascript:;">{text}</a>,
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
+    title: '行政区域',
+    dataIndex: 'regionId',
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-  },
-];
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
+    title: '启用',
+    dataIndex: 'enabled',
+    render: (text) => {
+      if (text) return (
+        <div>是</div>
+      )
+      if (!text) return (
+        <div>否</div>
+      )
+    }
   },
   {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
+    title: '显示顺序',
+    dataIndex: 'displayOrder',
   },
   {
-    key: '4',
-    name: 'Disabled User',
-    age: 99,
-    address: 'Sidney No. 1 Lake Park',
+    title: '操作',
+    render: () => (
+      <a href="javascript:;">编辑</a>
+    ),
   },
 ];
 
@@ -55,34 +54,167 @@ const rowSelection = {
     name: record.name,
   }),
 };
-
+const options = [
+  {
+    value: 'zhejiang',
+    label: 'Zhejiang',
+    children: [
+      {
+        value: 'hangzhou',
+        label: 'Hangzhou',
+        children: [
+          {
+            value: 'xihu',
+            label: 'West Lake',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    value: 'jiangsu',
+    label: 'Jiangsu',
+    children: [
+      {
+        value: 'nanjing',
+        label: 'Nanjing',
+        children: [
+          {
+            value: 'zhonghuamen',
+            label: 'Zhong Hua Men',
+          },
+        ],
+      },
+    ],
+  },
+];
 class AdvancedSearchForm extends React.Component {
   state = {
     expand: false,
+    tableData: []
   };
 
   // To generate mock Form.Item
   getFields() {
-    const count = this.state.expand ? 10 : 6;
+    const count = this.state.expand ? 10 : 3;
     const { getFieldDecorator } = this.props.form;
+    const fieldsProps = [
+      {
+        label: '代码',
+        name: 'code',
+        rules: [
+          {
+            required: true,
+            message: '请输入代码',
+          },
+        ],
+        element() {
+          return (
+            <Input placeholder="placeholder" />
+          )
+        }
+      },
+      {
+        label: '行政区域',
+        name: 'regionId',
+        rules: [
+          {
+            required: true,
+            message: '请选择行政区域',
+          },
+        ],
+        element() {
+          return (
+            <Cascader options={options} onChange={this.onChange} changeOnSelect placeholder="Please select" />
+          )
+        }
+      },
+      {
+        label: '名字',
+        name: 'name',
+        rules: [
+          {
+            required: true,
+            message: '请输入名字',
+          },
+        ],
+        element() {
+          return (
+            <Input placeholder="placeholder" />
+          )
+        }
+      },
+      {
+        label: '部门类型',
+        name: 'departmentType',
+        rules: [
+          {
+            required: false,
+            message: '123 something!',
+          },
+        ],
+        element() {
+          return (
+            <Select placeholder="Please select a regionType">
+              <Option value="CITY">省/市</Option>
+              <Option value="COUNTY">区/县</Option>
+              <Option value="VILLAGE">街/村</Option>
+              <Option value="OTHERS">其他</Option>
+            </Select>
+          )
+        }
+      },
+      {
+        label: '启用',
+        name: 'enabled',
+        rules: [
+          {
+            required: false,
+            message: '123 something!',
+          },
+        ],
+        element() {
+          return (
+            <Select placeholder="Please select a regionType">
+              <Option value="CITY">是</Option>
+              <Option value="COUNTY">否</Option>
+            </Select>
+          )
+        }
+      },
+      {
+        label: '显示顺序',
+        name: 'displayOrder',
+        rules: [
+          {
+            required: false,
+            message: '123 something!',
+          },
+        ],
+        element() {
+          return (
+            <InputNumber min={1} max={10} initialValue={3} />
+          )
+        }
+      }
+    ]
     const children = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < fieldsProps.length; i++) {
       children.push(
         <Col span={8} key={i} style={{ display: i < count ? 'block' : 'none' }}>
-          <Form.Item label={`Field ${i}`}>
-            {getFieldDecorator(`field-${i}`, {
-              rules: [
-                {
-                  required: true,
-                  message: 'Input something!',
-                },
-              ],
-            })(<Input placeholder="placeholder" />)}
+          <Form.Item label={fieldsProps[i].label}>
+            {getFieldDecorator(fieldsProps[i].name, fieldsProps[i].rules && {
+              rules: fieldsProps[i].rules,
+            })(fieldsProps[i].element())}
           </Form.Item>
         </Col>,
       );
     }
     return children;
+  }
+
+  onChange = val => {
+    console.log(val)
   }
 
   handleSearch = e => {
@@ -100,6 +232,17 @@ class AdvancedSearchForm extends React.Component {
     const { expand } = this.state;
     this.setState({ expand: !expand });
   };
+
+  fnfirstlevel = async () => {
+    let data = await window._GET('api/oss/department/firstlevel');
+    this.setState({
+      tableData: data
+    })
+  }
+
+  componentDidMount() {
+    this.fnfirstlevel()
+  }
 
   render() {
     return (
@@ -123,23 +266,26 @@ class AdvancedSearchForm extends React.Component {
           </Form>
         </section>
         <section className="antd-pro-pages-list-table-list-tableListOperator">
-          <Button icon="plus" type="primary">
+          <Button icon="plus" type="primary" onClick={() => {
+            this.props.history.push({
+              pathname: './department/form'
+            })
+          }}>
             新建
           </Button>
           {(
             <span>
               <Button>批量操作</Button>
-              <Dropdown>
+              {/* <Dropdown>
                 <Button>
                   更多操作 <Icon type="down" />
                 </Button>
-              </Dropdown>
+              </Dropdown> */}
             </span>
           )}
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
-          <Alert message="Informational Notes" type="info" showIcon style={{marginBottom: '16px'}} />
-          <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+          <Table data={this.state.tableData} columns={columns} />
         </section>
       </main>
     );

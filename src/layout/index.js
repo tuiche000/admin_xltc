@@ -8,7 +8,9 @@ import Banner from '@/pages/Banner';
 import Grid from '@/pages/Grid';
 import BasicDataRegion from '@/pages/BasicData/regios/index';
 import RegionForm from '@/pages/BasicData/regios/form';
-import department from '@/pages/users/department/index';
+import Department from '@/pages/users/department/index';
+import DepartmentFrom from '@/pages/users/department/form';
+import MapTest from '@/pages/Map';
 
 const { Header, Sider, Content } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -55,6 +57,12 @@ export default class BasicLayout extends Component {
                 <span>责任网络</span>
               </Link>
             </Menu.Item>
+            <Menu.Item key="map">
+              <Link to="/map">
+                <Icon type="map" />
+                <span>地图测试</span>
+              </Link>
+            </Menu.Item>
             <SubMenu
               title={
                 <span>
@@ -88,8 +96,10 @@ export default class BasicLayout extends Component {
             }}
           >
             <Route path="/" exact component={Banner} />
+            <Route path="/map" component={MapTest} />
             <Route path="/login" component={Login} />
-            <Route path="/users/department" component={department} />
+            <Route path="/users/department" exact component={Department} />
+            <Route path="/users/department/form" exact component={DepartmentFrom} />
             <Route path="/grid" exact component={Grid} />
             <Route path="/basicData/region" exact component={BasicDataRegion} />
             <Route path="/basicData/region/form" exact component={RegionForm} />

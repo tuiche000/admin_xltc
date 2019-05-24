@@ -89,7 +89,7 @@ export default class CscTable extends Component {
     return (
       <div id="com_table">
         <div className="antd-pro-components-standard-table-index-standardTable">
-          <Alert message="Informational Notes" type="info" showIcon style={{ marginBottom: '16px' }} />
+          {/* <Alert message="Informational Notes" type="info" showIcon style={{ marginBottom: '16px' }} /> */}
           <Table rowSelection={rowSelection} columns={this.props.columns} dataSource={this.props.data} />
         </div>
       </div>
