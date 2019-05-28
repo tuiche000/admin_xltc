@@ -87,6 +87,50 @@ export default class SearchTree extends React.Component {
     generateList(this.state.gData);
   }
 
+  renderTreeNodes = data =>
+  data && data.map(item => {
+      if (item.children) {
+        return (
+          <TreeNode title={item.name} key={item.id} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      return <TreeNode title={item.name} key={item.id} dataRef={item} />;
+    });
+
+  onLoadData = treeNode =>
+    new Promise(resolve => {
+      console.log(treeNode.props)
+      if (treeNode.props.dataRef.hasChildren) {
+        window._api.regionChildren(treeNode.props.dataRef.id).then(arr => {
+          treeNode.props.dataRef.children = arr
+          this.setState({
+            gData: [...this.state.gData],
+          });
+          // treeNode.props.dataRef.children = [
+          //   { title: 'Child Node', key: `${treeNode.props.eventKey}-0` },
+          //   { title: 'Child Node', key: `${treeNode.props.eventKey}-1` },
+          // ];
+          console.log(arr)
+          resolve();
+          return;
+        })
+      } else {
+        resolve();
+      }
+      // setTimeout(() => {
+      // treeNode.props.dataRef.children = [
+      //   { title: 'Child Node', key: `${treeNode.props.eventKey}-0` },
+      //   { title: 'Child Node', key: `${treeNode.props.eventKey}-1` },
+      // ];
+      // this.setState({
+      //   gData: [...this.state.gData],
+      // });
+      //   resolve();
+      // }, 1000);
+    });
+
   getParentKey = (node, tree) => {
     // debugger
     // let parentIds = []
@@ -99,18 +143,17 @@ export default class SearchTree extends React.Component {
     }
   };
 
-  loadBanner = async () => {
-    let data = await window._GET('api/oss/region/all');
+  regionFirstlevel = async () => {
+    let data = await window._api.regionFirstlevel()
     this.setState({
-      gData: data.children,
+      gData: data,
     });
     this.init()
   }
 
   // 根据主键获取下一级行政区域列表
   getRegionChildren = async (selectedKeys, e) => {
-    console.log(selectedKeys, e)
-    let data = await window._GET(`api/oss/region/${selectedKeys}`);
+    let data = await window._api.regionChildren(selectedKeys)
     this.setState({
       TablePropData: data
     })
@@ -124,101 +167,102 @@ export default class SearchTree extends React.Component {
   }
 
   onExpand = expandedKeys => {
-  console.log(expandedKeys)
-  this.setState({
-    expandedKeys,
-    autoExpandParent: false,
-  });
-};
-
-onChange = e => {
-
-  const _this = this
-  const value = e.target.value;
-
-  const expandedKeys = this.state.dataList
-    .map(item => {
-      if (value && item.name.indexOf(value) > -1) {
-
-        let parentId = _this.getParentKey(item, this.state.gData);
-        return parentId
-      }
-      return null;
-    })
-    .filter((item, i, self) => {
-      // debugger
-      return (item == true)
-      // return false
+    console.log(expandedKeys)
+    this.setState({
+      expandedKeys,
+      autoExpandParent: false,
     });
-  // debugger
-  this.setState({
-    expandedKeys,
-    searchValue: value,
-    autoExpandParent: true,
-  });
-};
+  };
 
-componentDidMount() {
-  this.loadBanner()
-  // this.getParent()
-}
+  onChange = e => {
 
-componentWillMount() {
+    const _this = this
+    const value = e.target.value;
 
-}
+    const expandedKeys = this.state.dataList
+      .map(item => {
+        if (value && item.name.indexOf(value) > -1) {
 
-shouldComponentUpdate(nextProps, nextState) {
-  return nextState !== this.state
-}
+          let parentId = _this.getParentKey(item, this.state.gData);
+          return parentId
+        }
+        return null;
+      })
+      .filter((item, i, self) => {
+        // debugger
+        return (item == true)
+        // return false
+      });
+    // debugger
+    this.setState({
+      expandedKeys,
+      searchValue: value,
+      autoExpandParent: true,
+    });
+  };
 
-render() {
-  const { searchValue, expandedKeys, autoExpandParent, gData } = this.state;
-  const loop = data =>
-    data.map(item => {
-      const index = item.name.indexOf(searchValue);
-      const beforeStr = item.name.substr(0, index);
-      const afterStr = item.name.substr(index + searchValue.length);
-      const title =
-        index > -1 ? (
-          <span>
-            {beforeStr}
-            <span style={{ color: '#f50' }}>{searchValue}</span>
-            {afterStr}
-          </span>
-        ) : (
-            <span>{item.name}</span>
+  componentDidMount() {
+    this.regionFirstlevel()
+    // this.getParent()
+  }
+
+  componentWillMount() {
+
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState !== this.state
+  }
+
+  render() {
+    const { searchValue, expandedKeys, autoExpandParent, gData } = this.state;
+    const loop = data =>
+      data.map(item => {
+        const index = item.name.indexOf(searchValue);
+        const beforeStr = item.name.substr(0, index);
+        const afterStr = item.name.substr(index + searchValue.length);
+        const title =
+          index > -1 ? (
+            <span>
+              {beforeStr}
+              <span style={{ color: '#f50' }}>{searchValue}</span>
+              {afterStr}
+            </span>
+          ) : (
+              <span>{item.name}</span>
+            );
+        if (item.children) {
+          return (
+            <TreeNode key={item.id} title={title} >
+              {loop(item.children)}
+            </TreeNode>
           );
-      if (item.children) {
-        return (
-          <TreeNode key={item.id} title={title} >
-            {loop(item.children)}
-          </TreeNode>
-        );
-      }
-      return <TreeNode key={item.id} title={title} />;
-    });
+        }
+        return <TreeNode key={item.id} title={title} />;
+      });
 
-  return (
-    <main>
-      <Row gutter={50}>
-        <Col span={6}>
-          <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
-          <Tree
-            onSelect={this.getRegionChildren}
-            showLine={true}
-            onExpand={this.onExpand}
-            expandedKeys={expandedKeys}
-            autoExpandParent={autoExpandParent}
-          >
-            {gData && loop(gData)}
-          </Tree>
-        </Col>
-        <Col span={18}>
-          <div className="antd-pro-pages-list-table-list-tableListOperator">
-            <Button icon="plus" type="primary" onClick={this.fnForm}>
-              新建
+    return (
+      <main>
+        <Row gutter={50}>
+          <Col span={6}>
+            <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
+            <Tree
+              loadData={this.onLoadData}
+              onSelect={this.getRegionChildren}
+              onExpand={this.onExpand}
+              expandedKeys={expandedKeys}
+              autoExpandParent={autoExpandParent}
+            >
+              {/* {gData && loop(gData)} */}
+              {this.renderTreeNodes(this.state.gData)}
+            </Tree>
+          </Col>
+          <Col span={18}>
+            <div className="antd-pro-pages-list-table-list-tableListOperator">
+              <Button icon="plus" type="primary" onClick={this.fnForm}>
+                新建
               </Button>
-            {/* {(
+              {/* {(
                 <span>
                   <Button>批量操作</Button>
                   <Dropdown>
@@ -228,13 +272,13 @@ render() {
                   </Dropdown>
                 </span>
               )} */}
-          </div>
-          <Table data={this.state.TablePropData} columns={this.state.columns} />
-        </Col>
+            </div>
+            <Table data={this.state.TablePropData} columns={this.state.columns} />
+          </Col>
 
-      </Row>
+        </Row>
 
-    </main>
-  );
-}
+      </main>
+    );
+  }
 }

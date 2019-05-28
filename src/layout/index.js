@@ -2,15 +2,8 @@ import React, { Component } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import { Route, Link } from 'react-router-dom';
 import './index.css'
-
-import Login from '@/pages/Login';
-import Banner from '@/pages/Banner';
-import Grid from '@/pages/Grid';
-import BasicDataRegion from '@/pages/BasicData/regios/index';
-import RegionForm from '@/pages/BasicData/regios/form';
-import Department from '@/pages/users/department/index';
-import DepartmentFrom from '@/pages/users/department/form';
-import MapTest from '@/pages/Map';
+import Routes from '@/routes'
+import { allRouters } from '@/routes'
 
 const { Header, Sider, Content } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -31,53 +24,53 @@ export default class BasicLayout extends Component {
     });
   };
 
+  fnMenuList = () => {
+    let arr = Routes.map(item => {
+      if (item.routes) {
+        return (
+          <SubMenu
+            key={item.path}
+            title={<span><Icon type={item.icon} /><span>{item.name}</span></span>}
+          >
+            {
+              item.routes.map((item2) => {
+                return (
+                  <Menu.Item key={item2.path}>
+                    <Link to={item2.path}>
+                      <Icon type={item2.icon} />
+                      <span>{item2.name}</span>
+                    </Link>
+                  </Menu.Item>
+                )
+              })
+            }
+          </SubMenu>
+        )
+      }
+      return (
+        <Menu.Item key={item.path}>
+          <Link to={item.path}>
+            <Icon type={item.icon} />
+            <span>{item.name}</span>
+          </Link>
+        </Menu.Item>
+      )
+    })
+    return (
+      <Menu theme="dark" mode="inline" defaultOpenKeys={this.state.defaultOpenKeys} defaultSelectedKeys={this.state.defaultSelectedKeys}>
+        {arr}
+      </Menu>
+    )
+  }
+
   render() {
     return (
       <Layout id="components-layout-demo-custom-trigger">
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
           <div className="logo" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['']}>
-            <SubMenu
-              title={
-                <span>
-                  <Icon type="user" />
-                  <span>权限管理</span>
-                </span>
-              }
-            >
-              <Menu.Item key="/users/department">
-                <Link to="/users/department">
-                  <span>责任部门</span>
-                </Link>
-              </Menu.Item>
-            </SubMenu>
-            <Menu.Item key="1">
-              <Link to="/grid">
-                <Icon type="user" />
-                <span>责任网络</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="map">
-              <Link to="/map">
-                <Icon type="map" />
-                <span>地图测试</span>
-              </Link>
-            </Menu.Item>
-            <SubMenu
-              title={
-                <span>
-                  <Icon type="user" />
-                  <span>基本数据</span>
-                </span>
-              }
-            >
-              <Menu.Item key="2">
-                <Link to="/basicData/region">
-                  <span>行政区域</span>
-                </Link>
-              </Menu.Item>
-            </SubMenu>
-          </Menu>
+          {
+            this.fnMenuList()
+          }
         </Sider>
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }}>
@@ -95,14 +88,24 @@ export default class BasicLayout extends Component {
               minHeight: 280,
             }}
           >
-            <Route path="/" exact component={Banner} />
-            <Route path="/map" component={MapTest} />
-            <Route path="/login" component={Login} />
-            <Route path="/users/department" exact component={Department} />
-            <Route path="/users/department/form" exact component={DepartmentFrom} />
-            <Route path="/grid" exact component={Grid} />
-            <Route path="/basicData/region" exact component={BasicDataRegion} />
-            <Route path="/basicData/region/form" exact component={RegionForm} />
+            {
+              allRouters.map((item, index) => {
+                return (
+                  <Route key={index} path={item.path} exact component={item.component} />
+                )
+              })
+            }
+            {/* {
+              Routes.map((item, index) => {
+                if (!item.notLayout) {
+                  return (
+                    <Route key={index} path={item.path} exact component={item.component} />
+                  )
+                } else {
+                  return null
+                }
+              })
+            } */}
           </Content>
         </Layout>
       </Layout>

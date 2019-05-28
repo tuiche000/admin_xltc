@@ -126,7 +126,7 @@ class AdvancedSearchForm extends React.Component {
           <Button icon="plus" type="primary">
             新建
           </Button>
-          {(
+          {/* {(
             <span>
               <Button>批量操作</Button>
               <Dropdown>
@@ -135,7 +135,7 @@ class AdvancedSearchForm extends React.Component {
                 </Button>
               </Dropdown>
             </span>
-          )}
+          )} */}
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
           <Alert message="Informational Notes" type="info" showIcon style={{marginBottom: '16px'}} />

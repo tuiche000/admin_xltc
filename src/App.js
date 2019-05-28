@@ -3,15 +3,16 @@ import React, { Component } from 'react';
 /*eslint-enable no-unused-vars*/
 
 import { connect } from 'react-redux';
-
 import Layout from './layout/index';
 
 import { setLogin } from './actions';
 
-import fetchJson, { _GET, _POST } from './utils/fetch';
-window.fetchJson = fetchJson
-window._GET = _GET
-window._POST = _POST
+import api from './api/index'
+window._api = api
+// import fetchJson, { _GET, _POST } from './utils/fetch';
+// window.fetchJson = fetchJson
+// window._GET = _GET
+// window._POST = _POST
 
 class App extends Component {
   constructor(...args) {

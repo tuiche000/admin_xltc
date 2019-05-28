@@ -1,48 +1,23 @@
 import React from 'react'
-import { Form, Row, Col, Input, Alert, Button, Icon, Dropdown, Select, InputNumber, Cascader } from 'antd';
+import { Form, Row, Col, Input, Alert, Button, Icon, Dropdown, Select, InputNumber, Cascader, Menu, message, Popconfirm } from 'antd';
 // import './index.css'
 import Table from '@/components/Table';
 
-const columns = [
-  {
-    title: '代码',
-    dataIndex: 'code',
-  },
-  {
-    title: '部门类型',
-    dataIndex: 'departmentType',
-  },
-  {
-    title: '名字',
-    dataIndex: 'name',
-  },
-  {
-    title: '行政区域',
-    dataIndex: 'regionId',
-  },
-  {
-    title: '启用',
-    dataIndex: 'enabled',
-    render: (text) => {
-      if (text) return (
-        <div>是</div>
-      )
-      if (!text) return (
-        <div>否</div>
-      )
-    }
-  },
-  {
-    title: '显示顺序',
-    dataIndex: 'displayOrder',
-  },
-  {
-    title: '操作',
-    render: () => (
-      <a href="javascript:;">编辑</a>
-    ),
-  },
-];
+const menu = (
+  <Menu>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+        批量删除
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
+        批量设置
+      </a>
+    </Menu.Item>
+  </Menu>
+);
+
 
 // rowSelection object indicates the need for row selection
 const rowSelection = {
@@ -91,7 +66,73 @@ const options = [
 class AdvancedSearchForm extends React.Component {
   state = {
     expand: false,
-    tableData: []
+    tableData: [],
+    columns: [
+      {
+        title: '代码',
+        dataIndex: 'code',
+      },
+      {
+        title: '部门类型',
+        dataIndex: 'departmentType',
+      },
+      {
+        title: '名字',
+        dataIndex: 'name',
+      },
+      {
+        title: '行政区域',
+        dataIndex: 'regionId',
+      },
+      {
+        title: '启用',
+        dataIndex: 'enabled',
+        render: (text) => {
+          if (text) return (
+            <div>是</div>
+          )
+          if (!text) return (
+            <div>否</div>
+          )
+        }
+      },
+      {
+        title: '显示顺序',
+        dataIndex: 'displayOrder',
+      },
+      {
+        title: '操作',
+        render: (text) => (
+          <div>
+            <a href="javascript:;" onClick={
+              () => {
+                this.props.history.push({
+                  pathname: './department/form',
+                  query: {
+                    id: text.id
+                  }
+                })
+              }
+            }>编辑</a>
+            <Popconfirm
+              title="Are you sure delete this task?"
+              onConfirm={() => {
+                message.success('Click on Yes');
+              }}
+              onCancel={
+                () => {
+                  message.error('Click on No');
+                }
+              }
+              okText="Yes"
+              cancelText="No"
+            >
+              <a style={{ marginLeft: 10 }} href="javascript:;">删除</a>
+            </Popconfirm>
+          </div>
+        ),
+      },
+    ],
   };
 
   // To generate mock Form.Item
@@ -102,12 +143,6 @@ class AdvancedSearchForm extends React.Component {
       {
         label: '代码',
         name: 'code',
-        rules: [
-          {
-            required: true,
-            message: '请输入代码',
-          },
-        ],
         element() {
           return (
             <Input placeholder="placeholder" />
@@ -117,12 +152,6 @@ class AdvancedSearchForm extends React.Component {
       {
         label: '行政区域',
         name: 'regionId',
-        rules: [
-          {
-            required: true,
-            message: '请选择行政区域',
-          },
-        ],
         element() {
           return (
             <Cascader options={options} onChange={this.onChange} changeOnSelect placeholder="Please select" />
@@ -132,12 +161,6 @@ class AdvancedSearchForm extends React.Component {
       {
         label: '名字',
         name: 'name',
-        rules: [
-          {
-            required: true,
-            message: '请输入名字',
-          },
-        ],
         element() {
           return (
             <Input placeholder="placeholder" />
@@ -147,12 +170,6 @@ class AdvancedSearchForm extends React.Component {
       {
         label: '部门类型',
         name: 'departmentType',
-        rules: [
-          {
-            required: false,
-            message: '123 something!',
-          },
-        ],
         element() {
           return (
             <Select placeholder="Please select a regionType">
@@ -167,12 +184,6 @@ class AdvancedSearchForm extends React.Component {
       {
         label: '启用',
         name: 'enabled',
-        rules: [
-          {
-            required: false,
-            message: '123 something!',
-          },
-        ],
         element() {
           return (
             <Select placeholder="Please select a regionType">
@@ -185,12 +196,6 @@ class AdvancedSearchForm extends React.Component {
       {
         label: '显示顺序',
         name: 'displayOrder',
-        rules: [
-          {
-            required: false,
-            message: '123 something!',
-          },
-        ],
         element() {
           return (
             <InputNumber min={1} max={10} initialValue={3} />
@@ -234,7 +239,7 @@ class AdvancedSearchForm extends React.Component {
   };
 
   fnfirstlevel = async () => {
-    let data = await window._GET('api/oss/department/firstlevel');
+    let data = await window._api.departmentFirstlevel()
     this.setState({
       tableData: data
     })
@@ -275,17 +280,17 @@ class AdvancedSearchForm extends React.Component {
           </Button>
           {(
             <span>
-              <Button>批量操作</Button>
-              {/* <Dropdown>
+              {/* <Button>批量操作</Button> */}
+              <Dropdown overlay={menu}>
                 <Button>
                   更多操作 <Icon type="down" />
                 </Button>
-              </Dropdown> */}
+              </Dropdown>
             </span>
           )}
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
-          <Table data={this.state.tableData} columns={columns} />
+          <Table data={this.state.tableData} columns={this.state.columns} />
         </section>
       </main>
     );

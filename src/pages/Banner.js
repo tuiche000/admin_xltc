@@ -122,7 +122,8 @@ class Banner extends Component{
   render(){
     return (
       <div>
-        <Tabs
+        首页
+        {/* <Tabs
           tabs={[
             {text: '焦点图管理', path: '/', selected: true},
             {text: '车辆管理', path: '/car'}
@@ -208,7 +209,7 @@ class Banner extends Component{
               ]}
             />
           </Dialog>
-        ):''}
+        ):''} */}
       </div>
     );
   }

@@ -11,10 +11,16 @@ class regiosForm extends React.Component {
     visible: true,
     mapVisble: true,
     formData: {
-      position: {
-        lat: '',
-        lng: '',
-      }
+      "id": null,
+      "name": null,
+      "level": null,
+      "departmentType": null,
+      "region": null,
+      "enabled": null,
+      "hasChildren": null,
+      "fullname": null,
+      "position": {},
+      "test": ''
     }
   };
 
@@ -58,6 +64,13 @@ class regiosForm extends React.Component {
     })
   }
 
+  fnDepartmentId = async (id) => {
+    let data = await window._api.departmentId(id)
+    this.setState({
+      formData: data
+    })
+  }
+
   fnRegionAdd = async (opt) => {
     let data = await window._POST('api/oss/region', opt);
     console.log(data)
@@ -65,9 +78,12 @@ class regiosForm extends React.Component {
 
   componentDidMount() {
     console.log(this.props.location)
-    this.props.location.hasOwnProperty('query') && this.setState({
-      id: this.props.location.query.id
-    })
+    if (this.props.location.hasOwnProperty('query')) {
+      this.setState({
+        ID: this.props.location.query.id
+      })
+      this.fnDepartmentId(this.props.location.query.id)
+    }
   }
 
   render() {
@@ -111,13 +127,15 @@ class regiosForm extends React.Component {
     }
     return (
       <div>
+        <h3>{
+          this.state.ID ? '编辑' : '添加'
+        }</h3>
         {
           !this.state.mapVisble && <div style={{ width: '100%', height: '400px' }}>
             <Map center={position} zoom={5} amapkey={amapkey} events={mapEvents} />
           </div>
 
         }
-
         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
           <Form.Item
             label={
@@ -128,10 +146,11 @@ class regiosForm extends React.Component {
           >
             {getFieldDecorator('name', {
               rules: [{ required: true, message: '请输入名字!', whitespace: true }],
+              initialValue: this.state.formData.name
             })(<Input />)}
           </Form.Item>
           <Form.Item label="所属平台" hasFeedback>
-            {getFieldDecorator('regionType', { rules: [{ required: true, message: '请选择regionType!' }], })(
+            {getFieldDecorator('regionType', { rules: [{ required: true, message: '请选择regionType!' }], initialValue: this.state.formData.departmentType })(
               <Select placeholder="Please select a regionType">
                 <Option value="CITY">省/市</Option>
                 <Option value="COUNTY">区/县</Option>
@@ -140,27 +159,33 @@ class regiosForm extends React.Component {
               </Select>)}
           </Form.Item>
           <Form.Item label="坐标">
-            {getFieldDecorator('postion')(
+            {getFieldDecorator('postion', { initialValue: this.state.formData.test })(
               <Input style={{ width: '100%' }} addonAfter={<Icon type="environment" onClick={this.fnToggleMap} theme="filled" />} />
             )}
           </Form.Item>
           <Form.Item label="区划代码">
             {getFieldDecorator('areacode', {
               rules: [{ required: true, message: 'Please input 区划代码!' }],
+              initialValue: this.state.formData.test
             })(<Input style={{ width: '100%' }} />)}
           </Form.Item>
           <Form.Item label="邮编">
-            {getFieldDecorator('bbb')(<Input style={{ width: '100%' }} />)}
+            {getFieldDecorator('bbb', {initialValue: this.state.formData.test})(<Input style={{ width: '100%' }} />)}
           </Form.Item>
           <Form.Item label="级别">
-            {getFieldDecorator('ccc')(<InputNumber min={1} max={10} initialValue={3} />)}
+            {getFieldDecorator('level', {initialValue: this.state.formData.level})(<InputNumber min={1} max={10} initialValue={3} />)}
           </Form.Item>
           <Form.Item label="显示顺序">
-            {getFieldDecorator('displayOrder')(<InputNumber min={1} max={10} initialValue={3} />)}
+            {getFieldDecorator('displayOrder', {initialValue: this.state.formData.test})(<InputNumber min={1} max={10} initialValue={3} />)}
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
               保存
+            </Button>
+            <Button style={{ marginLeft: 20 }} onClick={
+              () => this.props.history.goBack()
+            }>
+              返回
             </Button>
           </Form.Item>
         </Form>
