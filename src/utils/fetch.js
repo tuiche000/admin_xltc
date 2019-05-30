@@ -61,7 +61,11 @@ async function commonFetcdh(url, options, method = 'GET', query) {
     let res = await fetch((BASE + url), initObj)
     let { code, status, data } = await res.json();
     if (code === '0' && status === 'OK') {
-      return data
+      if (data) return data
+      return {
+        code,
+        status
+      }
     } else {
       throw new Error(message);
     }
@@ -83,10 +87,31 @@ export async function _GET(url, options) {
 /**
  * POST请求
  * @param url 请求地址
- * @param options 请求参数
+ * @param options body请求参数
+ * @param query query请求参数
  */
 export async function _POST(url, options, query) {
   return commonFetcdh(url, options, 'POST', query)
+}
+
+/**
+ * DELETE请求
+ * @param url 请求地址
+ * @param options body请求参数
+ * @param query query请求参数
+ */
+export async function _DELETE(url, options, query) {
+  return commonFetcdh(url, options, 'DELETE', query)
+}
+
+/**
+ * PUT请求
+ * @param url 请求地址
+ * @param options body请求参数
+ * @param query query请求参数
+ */
+export async function _PUT(url, options, query) {
+  return commonFetcdh(url, options, 'PUT', query)
 }
 
 export default commonFetcdh

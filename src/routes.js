@@ -6,7 +6,6 @@ import Grid from '@/pages/Grid';
 import Issue from '@/pages/Issue';
 // 基本数据
 import BasicDataRegion from '@/pages/BasicData/regios/index';
-import RegionForm from '@/pages/BasicData/regios/form';
 import BasicDataDictionary from '@/pages/BasicData/Dictionary';
 import BasicDataUpload from '@/pages/BasicData/Upload';
 // 权限管理
@@ -26,7 +25,6 @@ export const allRouters = [
     { path: '/grid', component: Grid },
     { path: '/issue', component: Issue },
     { path: '/basicData/region', component: BasicDataRegion },
-    { path: '/basicData/region/form', component: RegionForm,},
     { path: '/basicData/dictionary', component: BasicDataDictionary,},
     { path: '/basicData/upload', component: BasicDataUpload,},
 ]

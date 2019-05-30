@@ -1,7 +1,8 @@
 import React from 'react'
-import { Form, Row, Col, Input, Alert, Button, Icon, Dropdown, Select, InputNumber, Cascader, Menu, message, Popconfirm } from 'antd';
-// import './index.css'
+import { Form, Row, Col, Input, Tree, Button, Icon, Dropdown, Select, InputNumber, Cascader, Menu, message, Popconfirm } from 'antd';
 import Table from '@/components/Table';
+
+const { TreeNode } = Tree;
 
 const menu = (
   <Menu>
@@ -67,6 +68,7 @@ class AdvancedSearchForm extends React.Component {
   state = {
     expand: false,
     tableData: [],
+    gData: [], //树形数据
     columns: [
       {
         title: '代码',
@@ -241,9 +243,23 @@ class AdvancedSearchForm extends React.Component {
   fnfirstlevel = async () => {
     let data = await window._api.departmentFirstlevel()
     this.setState({
-      tableData: data
+      tableData: data,
+      gData: data
     })
   }
+
+  renderTreeNodes = data => {
+    return data.map(item => {
+      if (item.children) {
+        return (
+          <TreeNode title={item.name} key={item.id} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      return <TreeNode title={item.name} isLeaf={item.hasChildren ? false : true} key={item.id} dataRef={item} />;
+    })
+  };
 
   componentDidMount() {
     this.fnfirstlevel()
@@ -252,46 +268,62 @@ class AdvancedSearchForm extends React.Component {
   render() {
     return (
       <main id="Grid_Container">
-        <section className="antd-pro-pages-list-table-list-tableListForm">
-          <Form onSubmit={this.handleSearch}>
-            <Row gutter={24}>{this.getFields()}</Row>
-            <Row>
-              <Col span={24} style={{ textAlign: 'right' }}>
-                <Button type="primary" htmlType="submit">
-                  查询
+        <Row>
+          <Col span={6}>
+            <Tree
+              loadData={this.onLoadData}
+              onSelect={this.getRegionChildren}
+              onExpand={this.onExpand}
+            >
+              {/* <TreeNode key='xzqy' title="行政区域" isLeaf={true} >
+              </TreeNode> */}
+              {this.renderTreeNodes(this.state.gData)}
+            </Tree>
+          </Col>
+          <Col span={18}>
+            {/* <section className="antd-pro-pages-list-table-list-tableListForm">
+              <Form onSubmit={this.handleSearch}>
+                <Row gutter={24}>{this.getFields()}</Row>
+                <Row>
+                  <Col span={24} style={{ textAlign: 'right' }}>
+                    <Button type="primary" htmlType="submit">
+                      查询
             </Button>
-                <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
-                  重置
+                    <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+                      重置
             </Button>
-                <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
-                  展开更多 <Icon type={this.state.expand ? 'up' : 'down'} />
-                </a>
-              </Col>
-            </Row>
-          </Form>
-        </section>
-        <section className="antd-pro-pages-list-table-list-tableListOperator">
-          <Button icon="plus" type="primary" onClick={() => {
-            this.props.history.push({
-              pathname: './department/form'
-            })
-          }}>
-            新建
+                    <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
+                      展开更多 <Icon type={this.state.expand ? 'up' : 'down'} />
+                    </a>
+                  </Col>
+                </Row>
+              </Form>
+            </section> */}
+            <section className="antd-pro-pages-list-table-list-tableListOperator">
+              <Button icon="plus" type="primary" onClick={() => {
+                this.props.history.push({
+                  pathname: './department/form'
+                })
+              }}>
+                新建
           </Button>
-          {(
-            <span>
-              {/* <Button>批量操作</Button> */}
-              <Dropdown overlay={menu}>
-                <Button>
-                  更多操作 <Icon type="down" />
-                </Button>
-              </Dropdown>
-            </span>
-          )}
-        </section>
-        <section className="antd-pro-components-standard-table-index-standardTable">
-          <Table data={this.state.tableData} columns={this.state.columns} />
-        </section>
+              {(
+                <span>
+                  {/* <Button>批量操作</Button> */}
+                  <Dropdown overlay={menu}>
+                    <Button>
+                      更多操作 <Icon type="down" />
+                    </Button>
+                  </Dropdown>
+                </span>
+              )}
+            </section>
+            <section className="antd-pro-components-standard-table-index-standardTable">
+              <Table data={this.state.tableData} columns={this.state.columns} />
+            </section>
+          </Col>
+        </Row>
+
       </main>
     );
   }

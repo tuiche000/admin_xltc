@@ -18,40 +18,40 @@ class regiosForm extends React.Component {
     }
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-        // values.parentId = this.props.location.query.id
-        this.fnRegionAdd(values, {
-          parentId: this.props.location.query.id
-        })
-      }
-    });
+  // handleSubmit = e => {
+  //   e.preventDefault();
+  //   this.props.form.validateFields((err, values) => {
+  //     if (!err) {
+  //       console.log('Received values of form: ', values);
+  //       // values.parentId = this.props.location.query.id
+        // this.fnRegionAdd(values, {
+        //   parentId: this.props.location.query.id
+        // })
+  //     }
+  //   });
 
-  }
+  // }
 
-  handleCancel = () => {
-    this.setState({ visible: false });
-  };
+  // handleCancel = () => {
+  //   this.setState({ visible: false });
+  // };
 
-  handleCreate = () => {
-    const form = this.formRef.props.form;
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
+  // handleCreate = () => {
+  //   const form = this.formRef.props.form;
+  //   form.validateFields((err, values) => {
+  //     if (err) {
+  //       return;
+  //     }
 
-      console.log('Received values of form: ', values);
-      form.resetFields();
-      this.setState({ visible: false });
-    });
-  };
+      // console.log('Received values of form: ', values);
+      // form.resetFields();
+      // this.setState({ visible: false });
+  //   });
+  // };
 
-  saveFormRef = formRef => {
-    this.formRef = formRef;
-  };
+  // saveFormRef = formRef => {
+  //   this.formRef = formRef;
+  // };
 
   fnToggleMap = () => {
     this.setState((state) => {
@@ -74,7 +74,7 @@ class regiosForm extends React.Component {
   }
 
   render() {
-    const { visible, onCancel, onCreate, form } = this.props;
+    const { visible, onCancel, onCreate, form, initialValue } = this.props;
     const { getFieldDecorator } = form;
 
     const formItemLayout = {
@@ -119,8 +119,7 @@ class regiosForm extends React.Component {
         // title="Create a new collection"
         // okText="Create"
         onCancel={onCancel}
-        // onOk={onCreate}
-        footer={null}
+        onOk={onCreate}
       >
         {
           !this.state.mapVisble && <div style={{ width: '100%', height: '400px' }}>
@@ -139,10 +138,11 @@ class regiosForm extends React.Component {
           >
             {getFieldDecorator('name', {
               rules: [{ required: true, message: '请输入名字!', whitespace: true }],
+              initialValue: initialValue.name
             })(<Input />)}
           </Form.Item>
           <Form.Item label="所属平台" hasFeedback>
-            {getFieldDecorator('regionType', { rules: [{ required: true, message: '请选择regionType!' }], })(
+            {getFieldDecorator('regionType', { rules: [{ required: true, message: '请选择regionType!' }], initialValue: initialValue.regionType })(
               <Select placeholder="Please select a regionType">
                 <Option value="CITY">省/市</Option>
                 <Option value="COUNTY">区/县</Option>
@@ -151,28 +151,31 @@ class regiosForm extends React.Component {
               </Select>)}
           </Form.Item>
           <Form.Item label="坐标">
-            {getFieldDecorator('postion')(
+            {getFieldDecorator('postion', {
+              initialValue: initialValue.postion
+            })(
               <Input style={{ width: '100%' }} addonAfter={<Icon type="environment" onClick={this.fnToggleMap} theme="filled" />} />
             )}
           </Form.Item>
           <Form.Item label="区划代码">
             {getFieldDecorator('areacode', {
               rules: [{ required: true, message: 'Please input 区划代码!' }],
+              initialValue: initialValue.areacode
             })(<Input style={{ width: '100%' }} />)}
           </Form.Item>
           <Form.Item label="邮编">
-            {getFieldDecorator('bbb')(<Input style={{ width: '100%' }} />)}
+            {getFieldDecorator('postcode', {initialValue: initialValue.postcode})(<Input style={{ width: '100%' }} />)}
           </Form.Item>
           <Form.Item label="级别">
-            {getFieldDecorator('ccc')(<InputNumber min={1} max={10} initialValue={3} />)}
+            {getFieldDecorator('level', {initialValue: initialValue.level})(<InputNumber min={1} max={10} initialValue={3} />)}
           </Form.Item>
           <Form.Item label="显示顺序">
-            {getFieldDecorator('displayOrder')(<InputNumber min={1} max={10} initialValue={3} />)}
+            {getFieldDecorator('displayOrder', {initialValue: initialValue.displayOrder})(<InputNumber min={1} max={10} initialValue={3} />)}
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
+            {/* <Button type="primary" htmlType="submit">
               保存
-            </Button>
+            </Button> */}
           </Form.Item>
         </Form>
       </Modal>

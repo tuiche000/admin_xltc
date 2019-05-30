@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tree, Input, Row, Col, Button } from 'antd';
+import { Tree, Popconfirm, Row, Col, Button, message } from 'antd';
 
 import Table from '@/components/Table';
 import CscForm from './form'
@@ -11,13 +11,15 @@ export default class SearchTree extends React.Component {
     super(props)
     this.state = {
       expandedKeys: [], //（受控）展开指定的树节点
-      selectedKeys: ['xzqy'], //（受控）设置选中的树节点	
+      selectedKeys: [], //（受控）设置选中的树节点	
       searchValue: '', //搜索的值
       autoExpandParent: true, //是否自动展开
       gData: [], //树形数据
       dataList: [], //数据列表
       TablePropData: [], //table数据
+      initialValue: {}, // 编辑的默认数据 
       visible: false, // 弹出框显示
+      type: 'add', // 编辑或新增
       columns: [
         {
           title: '名字',
@@ -42,25 +44,45 @@ export default class SearchTree extends React.Component {
         {
           title: '操作',
           dataIndex: '6',
-          render: (text, record) => <a href="javascript:;" onClick={(record) => this.fnEdit(record)}>编辑</a>,
+          render: (text, record) => {
+            return (
+              <div>
+                <a href="javascript:;" onClick={(e) => this.fnEdit(record)}>编辑</a>
+                <Popconfirm
+                  title="Are you sure delete this task?"
+                  onConfirm={(e) => this.fnDel(record)}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <a href="javascript:;" style={{ marginLeft: 10 }}>删除</a>
+                </Popconfirm>
+              </div>
+            )
+          }
         },
       ]
     };
   }
 
-  fnEdit = (id) => {
-    console.log(id)
-    this.props.history.push({ pathname: '/basicData/region/form', query: { id } })
+  fnEdit = (record) => {
+    this.setState({
+      type: 'edit',
+      visible: true,
+      initialValue: record
+    })
+  }
+
+  fnDel = async (record) => {
+    let {code} = await window._api.regionDel(record.id)
+    if (code == 0) {
+      message.success('删除成功')
+    }
+    this.formRef.props.form.resetFields()
+    this.getRegionChildren(this.state.selectedKeys[0])
   }
 
   fnForm = () => {
     this.setState({ visible: true });
-    // this.props.history.push({
-    //   pathname: '/basicData/region/form',
-    //   query: {
-    //     id: this.state.selectedKeys[0]
-    //   }
-    // })
   };
 
   handleOk = e => {
@@ -173,13 +195,40 @@ export default class SearchTree extends React.Component {
     this.setState({ visible: false });
   };
 
+  fnRegionAdd = async (opt, query) => {
+    let { code } = await window._api.regionAdd(opt, query)
+    if (code == 0) {
+      message.success('添加成功')
+      this.getRegionChildren(this.state.selectedKeys[0])
+      this.formRef.props.form.resetFields()
+    }
+  }
+
+  fnRegionEdit = async (opt) => {
+    let { code } = await window._api.regionPut(opt)
+    if (code == 0) {
+      message.success('修改成功')
+      this.getRegionChildren(this.state.selectedKeys[0])
+      this.formRef.props.form.resetFields()
+    }
+  }
+
   handleCreate = () => {
+    const { type, selectedKeys, initialValue } = this.state
     const form = this.formRef.props.form;
     form.validateFields((err, values) => {
       if (err) {
         return;
       }
-
+      if (type == 'add') {
+        this.fnRegionAdd(values, {
+          parentId: selectedKeys[0]
+        })
+      } else if (type == 'edit') {
+        values.id = initialValue.id
+        this.fnRegionEdit(values)
+      }
+      
       console.log('Received values of form: ', values);
       form.resetFields();
       this.setState({ visible: false });
@@ -190,37 +239,8 @@ export default class SearchTree extends React.Component {
     this.formRef = formRef;
   };
 
-  // onChange = e => {
-
-  //   const _this = this
-  //   const value = e.target.value;
-
-  //   const expandedKeys = this.state.dataList
-  //     .map(item => {
-  //       if (value && item.name.indexOf(value) > -1) {
-
-  //         let parentId = _this.getParentKey(item, this.state.gData);
-  //         return parentId
-  //       }
-  //       return null;
-  //     })
-  //     .filter((item, i, self) => {
-  //       // debugger
-  //       return (item == true)
-  //       // return false
-  //     });
-  //   // debugger
-  //   this.setState({
-  //     expandedKeys,
-  //     searchValue: value,
-  //     autoExpandParent: true,
-  //   });
-  // };
-
   componentDidMount() {
     this.regionFirstlevel()
-    // this.getRegionChildren(0)
-    // this.getParent(0)
   }
 
   componentWillMount() {
@@ -232,23 +252,9 @@ export default class SearchTree extends React.Component {
   }
 
   render() {
-    // const { searchValue, expandedKeys, autoExpandParent, gData } = this.state;
-    const { expandedKeys, autoExpandParent, selectedKeys } = this.state;
+    // const { expandedKeys, autoExpandParent, selectedKeys } = this.state;
     const loop = data =>
       data.map(item => {
-        // const index = item.name.indexOf(searchValue);
-        // const beforeStr = item.name.substr(0, index);
-        // const afterStr = item.name.substr(index + searchValue.length);
-        // const title =
-        //   index > -1 ? (
-        //     <span>
-        //       {beforeStr}
-        //       <span style={{ color: '#f50' }}>{searchValue}</span>
-        //       {afterStr}
-        //     </span>
-        //   ) : (
-        //       <span>{item.name}</span>
-        //     );
         if (item.children) {
           return (
             <TreeNode key={item.id} title={title} >
@@ -263,18 +269,13 @@ export default class SearchTree extends React.Component {
       <main>
         <Row>
           <Col span={6}>
-            {/* <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} /> */}
             <Tree
               loadData={this.onLoadData}
               onSelect={this.getRegionChildren}
               onExpand={this.onExpand}
-              // expandedKeys={expandedKeys}
-              autoExpandParent={autoExpandParent}
-            // selectedKeys={this.selectedKeys}
             >
               <TreeNode key='xzqy' title="行政区域" isLeaf={true} >
               </TreeNode>
-              {/* {gData && loop(gData)} */}
               {this.renderTreeNodes(this.state.gData)}
             </Tree>
           </Col>
@@ -300,6 +301,7 @@ export default class SearchTree extends React.Component {
         </Row>
         <CscForm
           wrappedComponentRef={this.saveFormRef}
+          initialValue={this.state.initialValue}
           visible={this.state.visible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
