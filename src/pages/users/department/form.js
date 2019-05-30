@@ -182,7 +182,7 @@ class regiosForm extends React.Component {
             <Button type="primary" htmlType="submit">
               保存
             </Button>
-            <Button style={{ marginLeft: 20 }} onClick={
+            <Button style={{ marginLeft: 10 }} onClick={
               () => this.props.history.goBack()
             }>
               返回

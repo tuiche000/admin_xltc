@@ -32,7 +32,7 @@ let BASE = 'http://checking.fothing.com/'
  * @param options 请求参数
  * @param method 请求方式
  */
-async function commonFetcdh(url, options, method = 'GET') {
+async function commonFetcdh(url, options, method = 'GET', query) {
   const searchStr = queryString.stringify(options)
   let initObj = {}
   if (method === 'GET') { // 如果是GET请求，拼接url
@@ -45,6 +45,7 @@ async function commonFetcdh(url, options, method = 'GET') {
       })
     }
   } else {
+    if (query) url += '?' + queryString.stringify(query)
     initObj = {
       method: method,
       headers: new Headers({
@@ -84,8 +85,8 @@ export async function _GET(url, options) {
  * @param url 请求地址
  * @param options 请求参数
  */
-export async function _POST(url, options) {
-  return commonFetcdh(url, options, 'POST')
+export async function _POST(url, options, query) {
+  return commonFetcdh(url, options, 'POST', query)
 }
 
 export default commonFetcdh

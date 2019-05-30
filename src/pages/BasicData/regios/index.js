@@ -1,22 +1,23 @@
 import React from 'react'
-import { Tree, Input, Row, Col, Dropdown, Button, Icon } from 'antd';
+import { Tree, Input, Row, Col, Button } from 'antd';
 
 import Table from '@/components/Table';
 import CscForm from './form'
 
 const { TreeNode } = Tree;
-const Search = Input.Search;
 
 export default class SearchTree extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      expandedKeys: [], //（受控）展开指定的树节点	
+      expandedKeys: [], //（受控）展开指定的树节点
+      selectedKeys: ['xzqy'], //（受控）设置选中的树节点	
       searchValue: '', //搜索的值
       autoExpandParent: true, //是否自动展开
       gData: [], //树形数据
       dataList: [], //数据列表
       TablePropData: [], //table数据
+      visible: false, // 弹出框显示
       columns: [
         {
           title: '名字',
@@ -53,7 +54,13 @@ export default class SearchTree extends React.Component {
   }
 
   fnForm = () => {
-    this.props.history.push('/basicData/region/form')
+    this.setState({ visible: true });
+    // this.props.history.push({
+    //   pathname: '/basicData/region/form',
+    //   query: {
+    //     id: this.state.selectedKeys[0]
+    //   }
+    // })
   };
 
   handleOk = e => {
@@ -87,8 +94,8 @@ export default class SearchTree extends React.Component {
     generateList(this.state.gData);
   }
 
-  renderTreeNodes = data =>
-  data && data.map(item => {
+  renderTreeNodes = data => {
+    return data.map(item => {
       if (item.children) {
         return (
           <TreeNode title={item.name} key={item.id} dataRef={item}>
@@ -96,22 +103,22 @@ export default class SearchTree extends React.Component {
           </TreeNode>
         );
       }
-      return <TreeNode title={item.name} key={item.id} dataRef={item} />;
-    });
+      return <TreeNode title={item.name} isLeaf={item.hasChildren ? false : true} key={item.id} dataRef={item} />;
+    })
+  };
 
   onLoadData = treeNode =>
     new Promise(resolve => {
-      console.log(treeNode.props)
       if (treeNode.props.dataRef.hasChildren) {
         window._api.regionChildren(treeNode.props.dataRef.id).then(arr => {
-          treeNode.props.dataRef.children = arr
+          let newArr = arr.map(item => {
+            item.isLeaf = false
+            return item
+          })
+          treeNode.props.dataRef.children = newArr
           this.setState({
             gData: [...this.state.gData],
           });
-          // treeNode.props.dataRef.children = [
-          //   { title: 'Child Node', key: `${treeNode.props.eventKey}-0` },
-          //   { title: 'Child Node', key: `${treeNode.props.eventKey}-1` },
-          // ];
           console.log(arr)
           resolve();
           return;
@@ -119,23 +126,10 @@ export default class SearchTree extends React.Component {
       } else {
         resolve();
       }
-      // setTimeout(() => {
-      // treeNode.props.dataRef.children = [
-      //   { title: 'Child Node', key: `${treeNode.props.eventKey}-0` },
-      //   { title: 'Child Node', key: `${treeNode.props.eventKey}-1` },
-      // ];
-      // this.setState({
-      //   gData: [...this.state.gData],
-      // });
-      //   resolve();
-      // }, 1000);
     });
 
   getParentKey = (node, tree) => {
-    // debugger
-    // let parentIds = []
     if (node.parentId) {
-      // parentIds.push(node.parentId)
       if (tree[node.parentId] && tree[node.parentId].parentId) {
         this.getParentKey(tree[node.parentId], tree)
       }
@@ -147,6 +141,7 @@ export default class SearchTree extends React.Component {
     let data = await window._api.regionFirstlevel()
     this.setState({
       gData: data,
+      TablePropData: data,
     });
     this.init()
   }
@@ -155,7 +150,8 @@ export default class SearchTree extends React.Component {
   getRegionChildren = async (selectedKeys, e) => {
     let data = await window._api.regionChildren(selectedKeys)
     this.setState({
-      TablePropData: data
+      TablePropData: data,
+      selectedKeys: selectedKeys
     })
   }
 
@@ -167,43 +163,64 @@ export default class SearchTree extends React.Component {
   }
 
   onExpand = expandedKeys => {
-    console.log(expandedKeys)
     this.setState({
       expandedKeys,
       autoExpandParent: false,
     });
   };
 
-  onChange = e => {
+  handleCancel = () => {
+    this.setState({ visible: false });
+  };
 
-    const _this = this
-    const value = e.target.value;
+  handleCreate = () => {
+    const form = this.formRef.props.form;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
 
-    const expandedKeys = this.state.dataList
-      .map(item => {
-        if (value && item.name.indexOf(value) > -1) {
-
-          let parentId = _this.getParentKey(item, this.state.gData);
-          return parentId
-        }
-        return null;
-      })
-      .filter((item, i, self) => {
-        // debugger
-        return (item == true)
-        // return false
-      });
-    // debugger
-    this.setState({
-      expandedKeys,
-      searchValue: value,
-      autoExpandParent: true,
+      console.log('Received values of form: ', values);
+      form.resetFields();
+      this.setState({ visible: false });
     });
   };
 
+  saveFormRef = formRef => {
+    this.formRef = formRef;
+  };
+
+  // onChange = e => {
+
+  //   const _this = this
+  //   const value = e.target.value;
+
+  //   const expandedKeys = this.state.dataList
+  //     .map(item => {
+  //       if (value && item.name.indexOf(value) > -1) {
+
+  //         let parentId = _this.getParentKey(item, this.state.gData);
+  //         return parentId
+  //       }
+  //       return null;
+  //     })
+  //     .filter((item, i, self) => {
+  //       // debugger
+  //       return (item == true)
+  //       // return false
+  //     });
+  //   // debugger
+  //   this.setState({
+  //     expandedKeys,
+  //     searchValue: value,
+  //     autoExpandParent: true,
+  //   });
+  // };
+
   componentDidMount() {
     this.regionFirstlevel()
-    // this.getParent()
+    // this.getRegionChildren(0)
+    // this.getParent(0)
   }
 
   componentWillMount() {
@@ -215,22 +232,23 @@ export default class SearchTree extends React.Component {
   }
 
   render() {
-    const { searchValue, expandedKeys, autoExpandParent, gData } = this.state;
+    // const { searchValue, expandedKeys, autoExpandParent, gData } = this.state;
+    const { expandedKeys, autoExpandParent, selectedKeys } = this.state;
     const loop = data =>
       data.map(item => {
-        const index = item.name.indexOf(searchValue);
-        const beforeStr = item.name.substr(0, index);
-        const afterStr = item.name.substr(index + searchValue.length);
-        const title =
-          index > -1 ? (
-            <span>
-              {beforeStr}
-              <span style={{ color: '#f50' }}>{searchValue}</span>
-              {afterStr}
-            </span>
-          ) : (
-              <span>{item.name}</span>
-            );
+        // const index = item.name.indexOf(searchValue);
+        // const beforeStr = item.name.substr(0, index);
+        // const afterStr = item.name.substr(index + searchValue.length);
+        // const title =
+        //   index > -1 ? (
+        //     <span>
+        //       {beforeStr}
+        //       <span style={{ color: '#f50' }}>{searchValue}</span>
+        //       {afterStr}
+        //     </span>
+        //   ) : (
+        //       <span>{item.name}</span>
+        //     );
         if (item.children) {
           return (
             <TreeNode key={item.id} title={title} >
@@ -243,16 +261,19 @@ export default class SearchTree extends React.Component {
 
     return (
       <main>
-        <Row gutter={50}>
+        <Row>
           <Col span={6}>
-            <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
+            {/* <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} /> */}
             <Tree
               loadData={this.onLoadData}
               onSelect={this.getRegionChildren}
               onExpand={this.onExpand}
-              expandedKeys={expandedKeys}
+              // expandedKeys={expandedKeys}
               autoExpandParent={autoExpandParent}
+            // selectedKeys={this.selectedKeys}
             >
+              <TreeNode key='xzqy' title="行政区域" isLeaf={true} >
+              </TreeNode>
               {/* {gData && loop(gData)} */}
               {this.renderTreeNodes(this.state.gData)}
             </Tree>
@@ -273,11 +294,16 @@ export default class SearchTree extends React.Component {
                 </span>
               )} */}
             </div>
-            <Table data={this.state.TablePropData} columns={this.state.columns} />
+            <Table data={this.state.TablePropData} columns={this.state.columns} pagination={false} />
           </Col>
 
         </Row>
-
+        <CscForm
+          wrappedComponentRef={this.saveFormRef}
+          visible={this.state.visible}
+          onCancel={this.handleCancel}
+          onCreate={this.handleCreate}
+        />
       </main>
     );
   }

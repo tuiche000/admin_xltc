@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Select, Button, InputNumber, Icon } from 'antd';
+import { Form, Input, Select, Button, InputNumber, Icon, Modal } from 'antd';
 import { Map } from 'react-amap';
 
 const { TextArea } = Input;
@@ -23,7 +23,10 @@ class regiosForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        this.fnRegionAdd(values)
+        // values.parentId = this.props.location.query.id
+        this.fnRegionAdd(values, {
+          parentId: this.props.location.query.id
+        })
       }
     });
 
@@ -58,16 +61,16 @@ class regiosForm extends React.Component {
     })
   }
 
-  fnRegionAdd = async (opt) => {
-    let data = await window._POST('api/oss/region', opt);
+  fnRegionAdd = async (opt, query) => {
+    let data = await window._api.regionAdd(opt, query)
     console.log(data)
   }
 
   componentDidMount() {
-    console.log(this.props.location)
-    this.props.location.hasOwnProperty('query') && this.setState({
-      id: this.props.location.query.id
-    })
+    // console.log(this.props.location)
+    // this.props.location.hasOwnProperty('query') && this.setState({
+    //   id: this.props.location.query.id
+    // })
   }
 
   render() {
@@ -81,7 +84,7 @@ class regiosForm extends React.Component {
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 8 },
+        sm: { span: 12 },
       },
     };
     const tailFormItemLayout = {
@@ -110,7 +113,15 @@ class regiosForm extends React.Component {
       },
     }
     return (
-      <div>
+
+      <Modal
+        visible={visible}
+        // title="Create a new collection"
+        // okText="Create"
+        onCancel={onCancel}
+        // onOk={onCreate}
+        footer={null}
+      >
         {
           !this.state.mapVisble && <div style={{ width: '100%', height: '400px' }}>
             <Map center={position} zoom={5} amapkey={amapkey} events={mapEvents} />
@@ -164,7 +175,7 @@ class regiosForm extends React.Component {
             </Button>
           </Form.Item>
         </Form>
-      </div>
+      </Modal>
 
     );
   }
