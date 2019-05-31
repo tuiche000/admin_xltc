@@ -4,8 +4,16 @@ import {
 import { 
   departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit,
 } from './department'
+import { 
+  gridList,
+} from './grid'
+import { 
+  userList,
+} from './user'
 
 export default {
   regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut,
-  departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit
+  departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit,
+  gridList,
+  userList,
 }

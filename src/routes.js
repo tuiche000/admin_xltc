@@ -9,9 +9,9 @@ import BasicDataRegion from '@/pages/BasicData/regios/index';
 import BasicDataDictionary from '@/pages/BasicData/Dictionary';
 import BasicDataUpload from '@/pages/BasicData/Upload';
 // 权限管理
-import UsersManager from '@/pages/users/manager/index';
-import Department from '@/pages/users/department/index';
-import DepartmentFrom from '@/pages/users/department/form';
+import UsersManager from '@/pages/Users/manager/index';
+import Department from '@/pages/Users/department/index';
+import DepartmentFrom from '@/pages/Users/department/form';
 // 地图测试
 import MapTest from '@/pages/Map';
 

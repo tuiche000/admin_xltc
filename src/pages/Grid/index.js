@@ -1,21 +1,41 @@
 import React from 'react'
-import { Form, Row, Col, Input, Alert, Button, Icon, Dropdown } from 'antd';
+import { Form, Row, Col, Input, Alert, Button, Icon } from 'antd';
 import './index.css'
 import { Table } from 'antd';
+import ModalForm from './form'
 
 const columns = [
   {
-    title: 'Name',
+    title: '名字',
     dataIndex: 'name',
     render: text => <a href="javascript:;">{text}</a>,
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
+    title: '路型等级',
+    dataIndex: 'roadType',
   },
   {
-    title: 'Address',
+    title: '责任路长',
     dataIndex: 'address',
+  },
+  {
+    title: '行政区域',
+    dataIndex: 'region',
+  },
+  {
+    title: '是否有地图',
+    dataIndex: 'mapabled',
+  },
+  {
+    title: '操作',
+    render(text, record) {
+      return (
+        <div>
+          <a href="javascript:;">查看</a>
+          <a href="javascript:;" style={{ marginLeft: 10 }}>编辑</a>
+        </div>
+      )
+    }
   },
 ];
 const data = [
@@ -58,26 +78,78 @@ const rowSelection = {
 
 class AdvancedSearchForm extends React.Component {
   state = {
+    visible: false,
     expand: false,
+    initialValue: {},
+    tableData: [],
   };
 
   // To generate mock Form.Item
   getFields() {
-    const count = this.state.expand ? 10 : 6;
+    const count = this.state.expand ? 10 : 3;
     const { getFieldDecorator } = this.props.form;
-    const children = [];
-    for (let i = 0; i < 10; i++) {
+    const children = []
+    const fields = [
+      {
+        FieldName: 'name',
+        label: '名字',
+        options: {
+        },
+        render() {
+          return <Input placeholder="placeholder" />
+        }
+      },
+      {
+        FieldName: 'name',
+        label: '路型等级',
+        options: {
+        },
+        render() {
+          return <Input placeholder="placeholder" />
+        }
+      },
+      {
+        FieldName: 'name',
+        label: '责任路长',
+        options: {
+        },
+        render() {
+          return <Input placeholder="placeholder" />
+        }
+      },
+      {
+        FieldName: 'name',
+        label: '责任部门',
+        options: {
+        },
+        render() {
+          return <Input placeholder="placeholder" />
+        }
+      },
+      {
+        FieldName: 'name',
+        label: '行政区域',
+        options: {
+        },
+        render() {
+          return <Input placeholder="placeholder" />
+        }
+      },
+      {
+        FieldName: 'name',
+        label: '是否有地图',
+        options: {
+        },
+        render() {
+          return <Input placeholder="placeholder" />
+        }
+      },
+    ];
+    for (let i = 0; i < fields.length; i++) {
       children.push(
         <Col span={8} key={i} style={{ display: i < count ? 'block' : 'none' }}>
-          <Form.Item label={`Field ${i}`}>
-            {getFieldDecorator(`field-${i}`, {
-              rules: [
-                {
-                  required: true,
-                  message: 'Input something!',
-                },
-              ],
-            })(<Input placeholder="placeholder" />)}
+          <Form.Item label={fields[i].label}>
+            {getFieldDecorator(`${fields[i].field}`, fields[i].options)(fields[i].render())}
           </Form.Item>
         </Col>,
       );
@@ -92,14 +164,21 @@ class AdvancedSearchForm extends React.Component {
     });
   };
 
-  handleReset = () => {
-    this.props.form.resetFields();
-  };
+  fnGridList = async () => {
+    let data = await window._api.gridList()
+    this.setState({
+      tableData: data.result
+    })
+  }
 
   toggle = () => {
     const { expand } = this.state;
     this.setState({ expand: !expand });
   };
+
+  componentDidMount() {
+    this.fnGridList()
+  }
 
   render() {
     return (
@@ -112,7 +191,7 @@ class AdvancedSearchForm extends React.Component {
                 <Button type="primary" htmlType="submit">
                   查询
             </Button>
-                <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+                <Button style={{ marginLeft: 8 }} onClick={() => this.props.form.resetFields()}>
                   重置
             </Button>
                 <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
@@ -123,7 +202,9 @@ class AdvancedSearchForm extends React.Component {
           </Form>
         </section>
         <section className="antd-pro-pages-list-table-list-tableListOperator">
-          <Button icon="plus" type="primary">
+          <Button icon="plus" type="primary" onClick={e => {
+            this.setState({ visible: true, type: 'add' });
+          }}>
             新建
           </Button>
           {/* {(
@@ -138,9 +219,23 @@ class AdvancedSearchForm extends React.Component {
           )} */}
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
-          <Alert message="Informational Notes" type="info" showIcon style={{marginBottom: '16px'}} />
-          <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+          <Alert message="Informational Notes" type="info" showIcon style={{ marginBottom: '16px' }} />
+          <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
         </section>
+
+        <ModalForm
+          wrappedComponentRef={formRef => {
+            this.formRef = formRef;
+          }}
+          initialValue={this.state.initialValue}
+          visible={this.state.visible}
+          onCancel={e => {
+            this.setState({
+              visible: false,
+            });
+          }}
+          onCreate={this.handleCreate}
+        />
       </main>
     );
   }

@@ -341,7 +341,7 @@ class AdvancedSearchForm extends React.Component {
             </section> */}
             <section className="antd-pro-pages-list-table-list-tableListOperator">
               <Button icon="plus" type="primary" onClick={e => {
-                this.setState({ visible: true });
+                this.setState({ visible: true, type: 'add' });
               }}>
                 新建
           </Button>

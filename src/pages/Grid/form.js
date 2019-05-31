@@ -76,26 +76,22 @@ class regiosForm extends React.Component {
 
         }
         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-          <Form.Item label="部门类型" hasFeedback>
-            {getFieldDecorator('departmentType', { initialValue: initialValue.regionType })(
-              <Select placeholder="Please select a regionType">
-                <Option value="CITY">省/市</Option>
-                <Option value="COUNTY">区/县</Option>
-                <Option value="VILLAGE">街/村</Option>
-                <Option value="OTHERS">其他</Option>
-              </Select>)}
-          </Form.Item>
-          <Form.Item
-            label={
-              <span>
-                名字
-            </span>
-            }
-          >
+          <Form.Item label="名字">
             {getFieldDecorator('name', {
               rules: [{ required: true, message: '请输入名字!', whitespace: true }],
               initialValue: initialValue.name
             })(<Input />)}
+          </Form.Item>
+          <Form.Item label="路型等级" hasFeedback>
+            {getFieldDecorator('departmentType', { initialValue: initialValue.regionType })(
+              <Select placeholder="Please select a regionType">
+                <Option value="CITY">国道</Option>
+                <Option value="COUNTY">省道</Option>
+                <Option value="VILLAGE">县道</Option>
+                <Option value="OTHERS">乡道</Option>
+                <Option value="CITY">专用公路</Option>
+                <Option value="COUNTY">石景山区</Option>
+              </Select>)}
           </Form.Item>
           <Form.Item label="企业信用编号">
             {getFieldDecorator('taxcode', {
@@ -115,7 +111,7 @@ class regiosForm extends React.Component {
             {getFieldDecorator('postcode', { initialValue: initialValue.postcode })(<Input style={{ width: '100%' }} />)}
           </Form.Item>
           <Form.Item label="启用">
-            {getFieldDecorator('enabled', {  })(<Switch />)}
+            {getFieldDecorator('enabled', {})(<Switch />)}
           </Form.Item>
           <Form.Item label="显示顺序">
             {getFieldDecorator('displayOrder', { initialValue: initialValue.displayOrder })(<InputNumber min={1} max={10} initialValue={3} />)}
