@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Select, Button, InputNumber, Icon } from 'antd';
+import { Form, Input, Select, Button, InputNumber, Switch, Modal } from 'antd';
 import { Map } from 'react-amap';
 
 const { TextArea } = Input;
@@ -24,38 +24,6 @@ class regiosForm extends React.Component {
     }
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-        this.fnRegionAdd(values)
-      }
-    });
-
-  }
-
-  handleCancel = () => {
-    this.setState({ visible: false });
-  };
-
-  handleCreate = () => {
-    const form = this.formRef.props.form;
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
-
-      console.log('Received values of form: ', values);
-      form.resetFields();
-      this.setState({ visible: false });
-    });
-  };
-
-  saveFormRef = formRef => {
-    this.formRef = formRef;
-  };
-
   fnToggleMap = () => {
     this.setState((state) => {
       return {
@@ -64,30 +32,11 @@ class regiosForm extends React.Component {
     })
   }
 
-  fnDepartmentId = async (id) => {
-    let data = await window._api.departmentId(id)
-    this.setState({
-      formData: data
-    })
-  }
-
-  fnRegionAdd = async (opt) => {
-    let data = await window._POST('api/oss/region', opt);
-    console.log(data)
-  }
-
   componentDidMount() {
-    console.log(this.props.location)
-    if (this.props.location.hasOwnProperty('query')) {
-      this.setState({
-        ID: this.props.location.query.id
-      })
-      this.fnDepartmentId(this.props.location.query.id)
-    }
   }
 
   render() {
-    const { visible, onCancel, onCreate, form } = this.props;
+    const { visible, onCancel, onCreate, form, initialValue } = this.props;
     const { getFieldDecorator } = form;
 
     const formItemLayout = {
@@ -97,7 +46,7 @@ class regiosForm extends React.Component {
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 8 },
+        sm: { span: 12 },
       },
     };
     const tailFormItemLayout = {
@@ -126,10 +75,14 @@ class regiosForm extends React.Component {
       },
     }
     return (
-      <div>
-        <h3>{
-          this.state.ID ? '编辑' : '添加'
-        }</h3>
+      <Modal
+        visible={visible}
+        // title="Create a new collection"
+        // okText="Create"
+        onCancel={onCancel}
+        onOk={onCreate}
+        centered={true}
+      >
         {
           !this.state.mapVisble && <div style={{ width: '100%', height: '400px' }}>
             <Map center={position} zoom={5} amapkey={amapkey} events={mapEvents} />
@@ -137,6 +90,15 @@ class regiosForm extends React.Component {
 
         }
         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+          <Form.Item label="部门类型" hasFeedback>
+            {getFieldDecorator('departmentType', { initialValue: initialValue.regionType })(
+              <Select placeholder="Please select a regionType">
+                <Option value="CITY">省/市</Option>
+                <Option value="COUNTY">区/县</Option>
+                <Option value="VILLAGE">街/村</Option>
+                <Option value="OTHERS">其他</Option>
+              </Select>)}
+          </Form.Item>
           <Form.Item
             label={
               <span>
@@ -146,11 +108,16 @@ class regiosForm extends React.Component {
           >
             {getFieldDecorator('name', {
               rules: [{ required: true, message: '请输入名字!', whitespace: true }],
-              initialValue: this.state.formData.name
+              initialValue: initialValue.name
             })(<Input />)}
           </Form.Item>
-          <Form.Item label="所属平台" hasFeedback>
-            {getFieldDecorator('regionType', { rules: [{ required: true, message: '请选择regionType!' }], initialValue: this.state.formData.departmentType })(
+          <Form.Item label="企业信用编号">
+            {getFieldDecorator('taxcode', {
+              initialValue: initialValue.taxcode
+            })(<Input style={{ width: '100%' }} />)}
+          </Form.Item>
+          <Form.Item label="行政区域" hasFeedback>
+            {getFieldDecorator('regionType', { rules: [{ required: true, message: '请选择regionType!' }], initialValue: initialValue.departmentType })(
               <Select placeholder="Please select a regionType">
                 <Option value="CITY">省/市</Option>
                 <Option value="COUNTY">区/县</Option>
@@ -158,38 +125,17 @@ class regiosForm extends React.Component {
                 <Option value="OTHERS">其他</Option>
               </Select>)}
           </Form.Item>
-          <Form.Item label="坐标">
-            {getFieldDecorator('postion', { initialValue: this.state.formData.test })(
-              <Input style={{ width: '100%' }} addonAfter={<Icon type="environment" onClick={this.fnToggleMap} theme="filled" />} />
-            )}
-          </Form.Item>
-          <Form.Item label="区划代码">
-            {getFieldDecorator('areacode', {
-              rules: [{ required: true, message: 'Please input 区划代码!' }],
-              initialValue: this.state.formData.test
-            })(<Input style={{ width: '100%' }} />)}
-          </Form.Item>
           <Form.Item label="邮编">
-            {getFieldDecorator('bbb', {initialValue: this.state.formData.test})(<Input style={{ width: '100%' }} />)}
+            {getFieldDecorator('postcode', { initialValue: initialValue.postcode })(<Input style={{ width: '100%' }} />)}
           </Form.Item>
-          <Form.Item label="级别">
-            {getFieldDecorator('level', {initialValue: this.state.formData.level})(<InputNumber min={1} max={10} initialValue={3} />)}
+          <Form.Item label="启用">
+            {getFieldDecorator('enabled', {  })(<Switch />)}
           </Form.Item>
           <Form.Item label="显示顺序">
-            {getFieldDecorator('displayOrder', {initialValue: this.state.formData.test})(<InputNumber min={1} max={10} initialValue={3} />)}
-          </Form.Item>
-          <Form.Item {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
-              保存
-            </Button>
-            <Button style={{ marginLeft: 10 }} onClick={
-              () => this.props.history.goBack()
-            }>
-              返回
-            </Button>
+            {getFieldDecorator('displayOrder', { initialValue: initialValue.displayOrder })(<InputNumber min={1} max={10} initialValue={3} />)}
           </Form.Item>
         </Form>
-      </div>
+      </Modal>
 
     );
   }

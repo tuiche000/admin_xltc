@@ -18,41 +18,6 @@ class regiosForm extends React.Component {
     }
   };
 
-  // handleSubmit = e => {
-  //   e.preventDefault();
-  //   this.props.form.validateFields((err, values) => {
-  //     if (!err) {
-  //       console.log('Received values of form: ', values);
-  //       // values.parentId = this.props.location.query.id
-        // this.fnRegionAdd(values, {
-        //   parentId: this.props.location.query.id
-        // })
-  //     }
-  //   });
-
-  // }
-
-  // handleCancel = () => {
-  //   this.setState({ visible: false });
-  // };
-
-  // handleCreate = () => {
-  //   const form = this.formRef.props.form;
-  //   form.validateFields((err, values) => {
-  //     if (err) {
-  //       return;
-  //     }
-
-      // console.log('Received values of form: ', values);
-      // form.resetFields();
-      // this.setState({ visible: false });
-  //   });
-  // };
-
-  // saveFormRef = formRef => {
-  //   this.formRef = formRef;
-  // };
-
   fnToggleMap = () => {
     this.setState((state) => {
       return {
@@ -67,10 +32,6 @@ class regiosForm extends React.Component {
   }
 
   componentDidMount() {
-    // console.log(this.props.location)
-    // this.props.location.hasOwnProperty('query') && this.setState({
-    //   id: this.props.location.query.id
-    // })
   }
 
   render() {
@@ -120,6 +81,7 @@ class regiosForm extends React.Component {
         // okText="Create"
         onCancel={onCancel}
         onOk={onCreate}
+        centered={true}
       >
         {
           !this.state.mapVisble && <div style={{ width: '100%', height: '400px' }}>
@@ -173,9 +135,6 @@ class regiosForm extends React.Component {
             {getFieldDecorator('displayOrder', {initialValue: initialValue.displayOrder})(<InputNumber min={1} max={10} initialValue={3} />)}
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>
-            {/* <Button type="primary" htmlType="submit">
-              保存
-            </Button> */}
           </Form.Item>
         </Form>
       </Modal>

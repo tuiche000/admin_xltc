@@ -2,7 +2,7 @@ import React from 'react'
 import { Tree, Popconfirm, Row, Col, Button, message } from 'antd';
 
 import Table from '@/components/Table';
-import CscForm from './form'
+import ModalForm from './form'
 
 const { TreeNode } = Tree;
 
@@ -82,7 +82,7 @@ export default class SearchTree extends React.Component {
   }
 
   fnForm = () => {
-    this.setState({ visible: true });
+    this.setState({ visible: true, type: 'add' });
   };
 
   handleOk = e => {
@@ -299,7 +299,7 @@ export default class SearchTree extends React.Component {
           </Col>
 
         </Row>
-        <CscForm
+        <ModalForm
           wrappedComponentRef={this.saveFormRef}
           initialValue={this.state.initialValue}
           visible={this.state.visible}

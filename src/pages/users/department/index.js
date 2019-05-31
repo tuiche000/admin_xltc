@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, Row, Col, Input, Tree, Button, Icon, Dropdown, Select, InputNumber, Cascader, Menu, message, Popconfirm } from 'antd';
 import Table from '@/components/Table';
+import ModalForm from './form'
 
 const { TreeNode } = Tree;
 
@@ -18,56 +19,15 @@ const menu = (
     </Menu.Item>
   </Menu>
 );
-
-
-// rowSelection object indicates the need for row selection
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-  getCheckboxProps: record => ({
-    disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    name: record.name,
-  }),
-};
-const options = [
-  {
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [
-      {
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [
-          {
-            value: 'xihu',
-            label: 'West Lake',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [
-      {
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [
-          {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-          },
-        ],
-      },
-    ],
-  },
-];
 class AdvancedSearchForm extends React.Component {
   state = {
     expand: false,
     tableData: [],
+    selectedKeys: [], // 当前选中的parId
+    selected: {}, // 当前选中的treeNode对象
+    initialValue: {}, // 编辑的数据
+    visible: false, // 弹出框显示隐藏
+    type: 'add', // add=>添加 edit=>编辑
     gData: [], //树形数据
     columns: [
       {
@@ -104,22 +64,15 @@ class AdvancedSearchForm extends React.Component {
       },
       {
         title: '操作',
-        render: (text) => (
+        render: (text, record) => (
           <div>
             <a href="javascript:;" onClick={
-              () => {
-                this.props.history.push({
-                  pathname: './department/form',
-                  query: {
-                    id: text.id
-                  }
-                })
-              }
+              () => this.fnEdit(record)
             }>编辑</a>
             <Popconfirm
               title="Are you sure delete this task?"
               onConfirm={() => {
-                message.success('Click on Yes');
+                this.fnDepartmentDel(text)
               }}
               onCancel={
                 () => {
@@ -224,6 +177,14 @@ class AdvancedSearchForm extends React.Component {
     console.log(val)
   }
 
+  fnEdit = (record) => {
+    this.setState({
+      type: 'edit',
+      visible: true,
+      initialValue: record
+    })
+  }
+
   handleSearch = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -248,6 +209,16 @@ class AdvancedSearchForm extends React.Component {
     })
   }
 
+  fnDepartmentDel = async (record) => {
+    console.log(record)
+    let { code } = await window._api.departmentDel(record.id)
+    if (code == 0) {
+      message.success('删除成功')
+    }
+    // this.formRef.props.form.resetFields()
+    // this.getRegionChildren(this.state.selectedKeys[0])
+  }
+
   renderTreeNodes = data => {
     return data.map(item => {
       if (item.children) {
@@ -261,6 +232,75 @@ class AdvancedSearchForm extends React.Component {
     })
   };
 
+  fnDepartmentAdd = async (opt, query) => {
+    console.log(this.state.selected)
+    let { region } = this.state.selected
+    let data = await window._api.departmentAdd(region, opt, query)
+    console.log(data)
+  }
+
+  fnDepartmentEdit = async (opt, query) => {
+    console.log(this.state.initialValue)
+    let regionId = this.state.initialValue.region
+    let data = await window._api.departmentEdit(regionId, opt, query)
+    console.log(data)
+  }
+
+  // 根据主键获取下一级责任部门列表
+  fnGetChildren = async (arr, e) => {
+    console.log(e)
+    let data = await window._api.departmentId(arr[0])
+    this.setState({
+      tableData: data,
+      selectedKeys: arr,
+      selected: e.selectedNodes[0].props.dataRef,
+    })
+  }
+
+  onLoadData = treeNode =>
+    new Promise(resolve => {
+      if (treeNode.props.dataRef.hasChildren) {
+        window._api.departmentId(treeNode.props.dataRef.id).then(arr => {
+          let newArr = arr.map(item => {
+            item.isLeaf = false
+            return item
+          })
+          treeNode.props.dataRef.children = newArr
+          this.setState({
+            gData: [...this.state.gData],
+          });
+          console.log(arr)
+          resolve();
+          return;
+        })
+      } else {
+        resolve();
+      }
+    });
+
+  handleCreate = () => {
+    const { type, selectedKeys, selected, initialValue } = this.state
+    const form = this.formRef.props.form;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      let query = selectedKeys[0] ? {
+        parentId: selectedKeys[0]
+      } : {}
+      if (type == 'add') {
+        this.fnDepartmentAdd(values, query)
+      } else if (type == 'edit') {
+        values.id = initialValue.id
+        this.fnDepartmentEdit(values, query)
+      }
+
+      console.log('Received values of form: ', values);
+      form.resetFields();
+      this.setState({ visible: false });
+    });
+  };
+
   componentDidMount() {
     this.fnfirstlevel()
   }
@@ -272,7 +312,7 @@ class AdvancedSearchForm extends React.Component {
           <Col span={6}>
             <Tree
               loadData={this.onLoadData}
-              onSelect={this.getRegionChildren}
+              onSelect={this.fnGetChildren}
               onExpand={this.onExpand}
             >
               {/* <TreeNode key='xzqy' title="行政区域" isLeaf={true} >
@@ -300,10 +340,8 @@ class AdvancedSearchForm extends React.Component {
               </Form>
             </section> */}
             <section className="antd-pro-pages-list-table-list-tableListOperator">
-              <Button icon="plus" type="primary" onClick={() => {
-                this.props.history.push({
-                  pathname: './department/form'
-                })
+              <Button icon="plus" type="primary" onClick={e => {
+                this.setState({ visible: true });
               }}>
                 新建
           </Button>
@@ -323,7 +361,19 @@ class AdvancedSearchForm extends React.Component {
             </section>
           </Col>
         </Row>
-
+        <ModalForm
+          wrappedComponentRef={formRef => {
+            this.formRef = formRef;
+          }}
+          initialValue={this.state.initialValue}
+          visible={this.state.visible}
+          onCancel={e => {
+            this.setState({
+              visible: false,
+            });
+          }}
+          onCreate={this.handleCreate}
+        />
       </main>
     );
   }
