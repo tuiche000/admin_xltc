@@ -8,11 +8,8 @@
         "style": "css" // `style: true` 会加载 less 文件
       }
     ],
-    [
-      "@babel/plugin-proposal-class-properties",
-    ],
-    // "transform-decorators-legacy",
-    // "transform-class-properties"
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose" : true }]
   ],
   // "presets": [
   //   "env",

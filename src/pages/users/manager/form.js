@@ -1,6 +1,8 @@
 import React from 'react'
-import { Form, Input, Select, Button, InputNumber, Switch, Upload, Modal, Icon, DatePicker, Checkbox, Row, Col } from 'antd';
+import { Form, Input, Select, Button, Switch, Upload, Modal, Icon, DatePicker, Checkbox, Row, TreeSelect } from 'antd';
 import { Map } from 'react-amap';
+
+const TreeNode = TreeSelect.TreeNode;
 
 // eslint-disable-next-line
 class regiosForm extends React.Component {
@@ -8,6 +10,8 @@ class regiosForm extends React.Component {
     ID: "",
     visible: true,
     mapVisble: true,
+    gData: [],
+    value: undefined, // tree值
   };
 
   fnToggleMap = () => {
@@ -26,7 +30,70 @@ class regiosForm extends React.Component {
     return e && e.fileList;
   };
 
+  // 选中tree节点
+  treeonChange = (value, label, extra) => {
+    console.log(value);
+    this.setState({ value });
+  };
+
+  // tree异步加载数据
+  onLoadData = treeNode =>
+    new Promise(resolve => {
+      if (treeNode.props.dataRef.hasChildren) {
+        window._api.departmentId(treeNode.props.dataRef.id).then(arr => {
+          let newArr = arr.map(item => {
+            item.isLeaf = false
+            return item
+          })
+          treeNode.props.dataRef.children = newArr
+          this.setState({
+            gData: [...this.state.gData],
+          });
+          console.log(arr)
+          resolve();
+          return;
+        })
+      } else {
+        resolve();
+      }
+    });
+
+  // 获取第一层的tree数据
+  fnfirstlevel = async () => {
+    let data = await window._api.departmentFirstlevel()
+    this.setState({
+      tableData: data,
+      gData: data
+    })
+  }
+
+  // 根据主键获取下一级责任部门列表
+  fnGetChildren = async (arr, e) => {
+    console.log(e)
+    let data = await window._api.departmentId(arr[0])
+    this.setState({
+      tableData: data,
+      selectedKeys: arr,
+      selected: e.selectedNodes[0].props.dataRef,
+    })
+  }
+
+  // 加载tree节点
+  renderTreeNodes = data => {
+    return data.map(item => {
+      if (item.children) {
+        return (
+          <TreeNode value={item.name} title={item.name} key={item.id} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      return <TreeNode value={item.name} title={item.name} isLeaf={item.hasChildren ? false : true} key={item.id} dataRef={item} />;
+    })
+  };
+
   componentDidMount() {
+    this.fnfirstlevel()
   }
 
   render() {
@@ -88,7 +155,7 @@ class regiosForm extends React.Component {
         }
         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
           <Form.Item label="用户名">
-            {getFieldDecorator('name', {
+            {getFieldDecorator('username', {
               rules: [{ required: true, message: '请输入', whitespace: true }],
               initialValue: initialValue.name
             })(<Input />)}
@@ -100,7 +167,7 @@ class regiosForm extends React.Component {
             })(<Input />)}
           </Form.Item>
           <Form.Item label="邮箱">
-            {getFieldDecorator('name', {
+            {getFieldDecorator('email', {
               rules: [{ required: true, message: '请输入', whitespace: true }, {
                 type: 'email',
                 message: 'The input is not valid E-mail!',
@@ -109,13 +176,13 @@ class regiosForm extends React.Component {
             })(<Input />)}
           </Form.Item>
           <Form.Item label="电话">
-            {getFieldDecorator('name', {
+            {getFieldDecorator('phone', {
               rules: [{ required: true, message: '请输入', whitespace: true }],
               initialValue: initialValue.name
             })(<Input />)}
           </Form.Item>
           <Form.Item label="头像">
-            {getFieldDecorator('name', {
+            {getFieldDecorator('nick', {
               rules: [{ required: true, message: '请输入', whitespace: true }],
               initialValue: initialValue.name,
               getValueFromEvent: this.normFile,
@@ -126,13 +193,13 @@ class regiosForm extends React.Component {
             </Upload>)}
           </Form.Item>
           <Form.Item label="生日">
-            {getFieldDecorator('name', {
+            {getFieldDecorator('1', {
               rules: [{ required: true, message: '请输入', whitespace: true }],
               initialValue: initialValue.name
             })(<DatePicker onChange={onChange} />)}
           </Form.Item>
           <Form.Item label="性别">
-            {getFieldDecorator('name', {
+            {getFieldDecorator('sex', {
               rules: [{ required: true, message: '请输入', whitespace: true }],
               initialValue: initialValue.name
             })(<Select placeholder="Please select a regionType">
@@ -141,7 +208,7 @@ class regiosForm extends React.Component {
             </Select>)}
           </Form.Item>
           <Form.Item label="踏查职级">
-            {getFieldDecorator('name', {
+            {getFieldDecorator('2', {
               rules: [{ required: true, message: '请输入', whitespace: true }],
               initialValue: initialValue.name
             })(<Select placeholder="Please select a regionType">
@@ -153,64 +220,44 @@ class regiosForm extends React.Component {
             </Select>)}
           </Form.Item>
           <Form.Item label="责任部门">
-            {getFieldDecorator('name', {
+            {getFieldDecorator('zrbm', {
               rules: [{ required: true, message: '请输入', whitespace: true }],
               initialValue: initialValue.name
-            })(<Input />)}
+            })(
+              <TreeSelect
+                loadData={this.onLoadData}
+                onSelect={this.getRegionChildren}
+                showSearch
+                style={{ width: 300 }}
+                value={this.state.value}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                placeholder="Please select"
+                allowClear
+                onChange={this.treeonChange}
+              >
+                {this.renderTreeNodes(this.state.gData)}
+              </TreeSelect>
+            )}
           </Form.Item>
           <Form.Item label="启用">
-            {getFieldDecorator('name', {
+            {getFieldDecorator('4', {
               rules: [{ required: true, message: '请输入', whitespace: true }],
               initialValue: initialValue.name
             })(<Switch />)}
           </Form.Item>
           <Form.Item label="角色">
-            {getFieldDecorator('name', {
+            {getFieldDecorator('jiaose', {
               rules: [{ required: true, message: '请输入', whitespace: true }],
               initialValue: initialValue.name
             })(<Checkbox.Group style={{ width: '100%' }}>
               <Row>
-              <Checkbox value="系统管理员">系统管理员</Checkbox>
-              <Checkbox value="审计员">
-                    审计员
+                <Checkbox value="系统管理员">系统管理员</Checkbox>
+                <Checkbox value="审计员">
+                  审计员
                 </Checkbox>
               </Row>
             </Checkbox.Group>)}
           </Form.Item>
-          {/* <Form.Item label="路型等级" hasFeedback>
-            {getFieldDecorator('departmentType', { initialValue: initialValue.regionType })(
-              <Select placeholder="Please select a regionType">
-                <Option value="CITY">国道</Option>
-                <Option value="COUNTY">省道</Option>
-                <Option value="VILLAGE">县道</Option>
-                <Option value="OTHERS">乡道</Option>
-                <Option value="CITY">专用公路</Option>
-                <Option value="COUNTY">石景山区</Option>
-              </Select>)}
-          </Form.Item>
-          <Form.Item label="企业信用编号">
-            {getFieldDecorator('taxcode', {
-              initialValue: initialValue.taxcode
-            })(<Input style={{ width: '100%' }} />)}
-          </Form.Item>
-          <Form.Item label="行政区域" hasFeedback>
-            {getFieldDecorator('regionType', { rules: [{ required: true, message: '请选择regionType!' }], initialValue: initialValue.departmentType })(
-              <Select placeholder="Please select a regionType">
-                <Option value="CITY">省/市</Option>
-                <Option value="COUNTY">区/县</Option>
-                <Option value="VILLAGE">街/村</Option>
-                <Option value="OTHERS">其他</Option>
-              </Select>)}
-          </Form.Item>
-          <Form.Item label="邮编">
-            {getFieldDecorator('postcode', { initialValue: initialValue.postcode })(<Input style={{ width: '100%' }} />)}
-          </Form.Item>
-          <Form.Item label="启用">
-            {getFieldDecorator('enabled', {})(<Switch />)}
-          </Form.Item>
-          <Form.Item label="显示顺序">
-            {getFieldDecorator('displayOrder', { initialValue: initialValue.displayOrder })(<InputNumber min={1} max={10} initialValue={3} />)}
-          </Form.Item> */}
         </Form>
       </Modal>
 

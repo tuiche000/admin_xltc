@@ -3,41 +3,8 @@ import { Form, Row, Col, Input, Alert, Button, Icon } from 'antd';
 import './index.css'
 import { Table } from 'antd';
 import ModalForm from './form'
+import GridModal from './modal'
 
-const columns = [
-  {
-    title: '名字',
-    dataIndex: 'name',
-    render: text => <a href="javascript:;">{text}</a>,
-  },
-  {
-    title: '路型等级',
-    dataIndex: 'roadType',
-  },
-  {
-    title: '责任路长',
-    dataIndex: 'address',
-  },
-  {
-    title: '行政区域',
-    dataIndex: 'region',
-  },
-  {
-    title: '是否有地图',
-    dataIndex: 'mapabled',
-  },
-  {
-    title: '操作',
-    render(text, record) {
-      return (
-        <div>
-          <a href="javascript:;">查看</a>
-          <a href="javascript:;" style={{ marginLeft: 10 }}>编辑</a>
-        </div>
-      )
-    }
-  },
-];
 const data = [
   {
     key: '1',
@@ -181,6 +148,52 @@ class AdvancedSearchForm extends React.Component {
   }
 
   render() {
+    const _this = this
+    const columns = [
+      {
+        title: '名字',
+        dataIndex: 'name',
+        render: text => <a href="javascript:;">{text}</a>,
+      },
+      {
+        title: '路型等级',
+        dataIndex: 'roadType',
+      },
+      {
+        title: '责任路长',
+        dataIndex: 'address',
+      },
+      {
+        title: '行政区域',
+        dataIndex: 'region',
+      },
+      {
+        title: '是否有地图',
+        dataIndex: 'mapabled',
+        render: text => <span href="javascript:;">{text.mapabled ? '是' : '否'}</span>
+      },
+      {
+        title: '操作',
+        render(text, record) {
+          return (
+            <div>
+              <a href="javascript:;" onClick={() => {
+                _this.setState({
+                  visible: true,
+                  type: 'detail'
+                })
+              }}>查看</a>
+              <a href="javascript:;" style={{ marginLeft: 10 }} onClick={() => {
+                _this.setState({
+                  type: 'edit',
+                  visible: true,
+                })
+              }}>编辑</a>
+            </div>
+          )
+        }
+      },
+    ];
     return (
       <main id="Grid_Container">
         <section className="antd-pro-pages-list-table-list-tableListForm">
@@ -222,8 +235,22 @@ class AdvancedSearchForm extends React.Component {
           <Alert message="Informational Notes" type="info" showIcon style={{ marginBottom: '16px' }} />
           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
         </section>
-
-        <ModalForm
+        <GridModal
+          visible={this.state.visible}
+          type={this.state.type}
+          onOk={() => {
+            this.setState({
+              visible: false
+            })
+          }}
+          onCancel={() => {
+            this.setState({
+              visible: false
+            })
+          }}
+        >
+        </GridModal>
+        {/* <ModalForm
           wrappedComponentRef={formRef => {
             this.formRef = formRef;
           }}
@@ -235,7 +262,7 @@ class AdvancedSearchForm extends React.Component {
             });
           }}
           onCreate={this.handleCreate}
-        />
+        /> */}
       </main>
     );
   }

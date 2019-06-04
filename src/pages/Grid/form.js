@@ -1,9 +1,12 @@
 import React from 'react'
-import { Form, Input, Select, Button, InputNumber, Switch, Modal } from 'antd';
+import { Form, Input, Select, TreeSelect, Switch, Modal } from 'antd';
 import { Map } from 'react-amap';
 
+const TreeNode = TreeSelect.TreeNode;
+
 // eslint-disable-next-line
-class regiosForm extends React.Component {
+@Form.create()
+export default class regiosForm extends React.Component {
   state = {
     ID: "",
     visible: true,
@@ -67,7 +70,6 @@ class regiosForm extends React.Component {
         // okText="Create"
         onCancel={onCancel}
         onOk={onCreate}
-        centered={true}
       >
         {
           !this.state.mapVisble && <div style={{ width: '100%', height: '400px' }}>
@@ -93,28 +95,25 @@ class regiosForm extends React.Component {
                 <Option value="COUNTY">石景山区</Option>
               </Select>)}
           </Form.Item>
-          <Form.Item label="企业信用编号">
-            {getFieldDecorator('taxcode', {
-              initialValue: initialValue.taxcode
-            })(<Input style={{ width: '100%' }} />)}
-          </Form.Item>
           <Form.Item label="行政区域" hasFeedback>
             {getFieldDecorator('regionType', { rules: [{ required: true, message: '请选择regionType!' }], initialValue: initialValue.departmentType })(
-              <Select placeholder="Please select a regionType">
-                <Option value="CITY">省/市</Option>
-                <Option value="COUNTY">区/县</Option>
-                <Option value="VILLAGE">街/村</Option>
-                <Option value="OTHERS">其他</Option>
-              </Select>)}
+              <TreeSelect
+                loadData={this.onLoadData}
+                onSelect={this.getRegionChildren}
+                showSearch
+                style={{ width: 300 }}
+                value={this.state.value}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                placeholder="Please select"
+                allowClear
+                onChange={this.treeonChange}
+              >
+                {/* {this.renderTreeNodes(this.state.gData)} */}
+              </TreeSelect>
+            )}
           </Form.Item>
-          <Form.Item label="邮编">
-            {getFieldDecorator('postcode', { initialValue: initialValue.postcode })(<Input style={{ width: '100%' }} />)}
-          </Form.Item>
-          <Form.Item label="启用">
+          <Form.Item label="是否有地图">
             {getFieldDecorator('enabled', {})(<Switch />)}
-          </Form.Item>
-          <Form.Item label="显示顺序">
-            {getFieldDecorator('displayOrder', { initialValue: initialValue.displayOrder })(<InputNumber min={1} max={10} initialValue={3} />)}
           </Form.Item>
         </Form>
       </Modal>
@@ -122,7 +121,3 @@ class regiosForm extends React.Component {
     );
   }
 }
-
-const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(regiosForm)
-
-export default CollectionCreateForm
