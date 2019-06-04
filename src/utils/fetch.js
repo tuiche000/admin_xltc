@@ -36,7 +36,7 @@ async function commonFetcdh(url, options, method = 'GET', query) {
   }
   try {
     let res = await fetch((BASE + url), initObj)
-    let { code, status, data } = await res.json();
+    let { code, status, data, message } = await res.json();
     if (code === '0' && status === 'OK') {
       if (data) return data
       return {
@@ -44,7 +44,7 @@ async function commonFetcdh(url, options, method = 'GET', query) {
         status
       }
     } else {
-      message.error('请求失败')
+      message.error(message)
       throw new Error();
     }
   } catch (e) {

@@ -5,7 +5,8 @@ import { Map } from 'react-amap';
 const TreeNode = TreeSelect.TreeNode;
 
 // eslint-disable-next-line
-class regiosForm extends React.Component {
+@Form.create()
+export default class regiosForm extends React.Component {
   state = {
     ID: "",
     visible: true,
@@ -264,7 +265,3 @@ class regiosForm extends React.Component {
     );
   }
 }
-
-const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(regiosForm)
-
-export default CollectionCreateForm

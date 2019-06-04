@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Row, Col, Input, Alert, Button, Icon } from 'antd';
+import { Form, Row, Col, Input, Alert, Button, Icon, Popconfirm, message } from 'antd';
 import './index.css'
 import { Table } from 'antd';
 import ModalForm from './form'
@@ -43,7 +43,8 @@ const rowSelection = {
   }),
 };
 
-class AdvancedSearchForm extends React.Component {
+@Form.create()
+export default class AdvancedSearchForm extends React.Component {
   state = {
     visible: false,
     expand: false,
@@ -143,6 +144,40 @@ class AdvancedSearchForm extends React.Component {
     this.setState({ expand: !expand });
   };
 
+  // submit
+  handleCreate = () => {
+    // const { type, selectedKeys, selected, initialValue } = this.state
+    const form = this.formRef.props.form;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      let query = selectedKeys[0] ? {
+        parentId: selectedKeys[0]
+      } : {}
+      if (type == 'add') {
+        this.fnDepartmentAdd(values, query)
+      } else if (type == 'edit') {
+        values.id = initialValue.id
+        this.fnDepartmentEdit(values, query)
+      }
+
+      console.log('Received values of form: ', values);
+      form.resetFields();
+      this.setState({ visible: false });
+    });
+  }
+
+  // 删除责任网格
+  fnGridDel = async (record) => {
+    let { code } = await window._api.gridDel(record.id)
+    if (code == 0) {
+      message.success('删除成功')
+    }
+    // this.formRef.props.form.resetFields()
+    // this.getRegionChildren(this.state.selectedKeys[0])
+  }
+
   componentDidMount() {
     this.fnGridList()
   }
@@ -177,18 +212,33 @@ class AdvancedSearchForm extends React.Component {
         render(text, record) {
           return (
             <div>
-              <a href="javascript:;" onClick={() => {
+              {/* <a href="javascript:;" onClick={() => {
                 _this.setState({
                   visible: true,
                   type: 'detail'
                 })
-              }}>查看</a>
+              }}>查看</a> */}
               <a href="javascript:;" style={{ marginLeft: 10 }} onClick={() => {
                 _this.setState({
                   type: 'edit',
                   visible: true,
                 })
               }}>编辑</a>
+              <Popconfirm
+                title="Are you sure delete this task?"
+                onConfirm={() => {
+                  _this.fnGridDel(record)
+                }}
+                onCancel={
+                  () => {
+                    message.error('Click on No');
+                  }
+                }
+                okText="Yes"
+                cancelText="No"
+              >
+                <a style={{ marginLeft: 10 }} href="javascript:;">删除</a>
+              </Popconfirm>
             </div>
           )
         }
@@ -236,13 +286,12 @@ class AdvancedSearchForm extends React.Component {
           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
         </section>
         <GridModal
+          wrappedComponentRef={formRef => {
+            this.formRef = formRef;
+          }}
           visible={this.state.visible}
           type={this.state.type}
-          onOk={() => {
-            this.setState({
-              visible: false
-            })
-          }}
+          onOk={this.handleCreate}
           onCancel={() => {
             this.setState({
               visible: false
@@ -267,6 +316,3 @@ class AdvancedSearchForm extends React.Component {
     );
   }
 }
-
-const WrappedAdvancedSearchForm = Form.create({ name: 'advanced_search' })(AdvancedSearchForm);
-export default WrappedAdvancedSearchForm

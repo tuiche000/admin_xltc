@@ -99,7 +99,7 @@ export default class MaoTest extends React.Component {
     if (this.tool) {
       this.tool.polyline();
       this.setState({
-        what: '准备绘制折线）'
+        what: '准备绘制折线'
       });
     }
   }
