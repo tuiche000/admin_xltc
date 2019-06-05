@@ -147,7 +147,7 @@ export default class GridModal extends React.Component {
   }
 
   render() {
-    const { form, type } = this.props;
+    const { form, type, initialValue } = this.props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -170,11 +170,28 @@ export default class GridModal extends React.Component {
           <Form.Item label="名字">
             {type === 'detail' ? '第一路和第二路' : getFieldDecorator('name', {
               rules: [{ required: true, message: 'Please input' }],
+              initialValue: initialValue.name,
             })(<Input />)}
           </Form.Item>
           <Form.Item label="路型等级">
-            {type === 'detail' ? '乡道' : getFieldDecorator('description', {
+            {type === 'detail' ? '乡道' : getFieldDecorator('roadType', {
               rules: [{ required: true, message: 'Please input' }],
+              initialValue: initialValue.roadType,
+            })(
+              <Select placeholder="Please select">
+                <Option value="CITY">国道</Option>
+                <Option value="COUNTY">省道</Option>
+                <Option value="VILLAGE">县道</Option>
+                <Option value="OTHERS">乡道</Option>
+                <Option value="zygl">专用公路</Option>
+                <Option value="sjsq">石景山区</Option>
+              </Select>
+            )}
+          </Form.Item>
+          <Form.Item label="责任路长">
+            {type === 'detail' ? '张二明' : getFieldDecorator('users', {
+              rules: [{ required: true, message: 'Please input' }],
+              initialValue: initialValue.users,
             })(
               <Select placeholder="Please select a regionType">
                 <Option value="CITY">国道</Option>
@@ -186,23 +203,10 @@ export default class GridModal extends React.Component {
               </Select>
             )}
           </Form.Item>
-          <Form.Item label="责任路长">
-            {type === 'detail' ? '张二明' : getFieldDecorator('description', {
-              rules: [{ required: true, message: 'Please input' }],
-            })(
-              <Select placeholder="Please select a regionType">
-                <Option value="CITY">国道</Option>
-                <Option value="COUNTY">省道</Option>
-                <Option value="VILLAGE">县道</Option>
-                <Option value="OTHERS">乡道</Option>
-                <Option value="CITY">专用公路</Option>
-                <Option value="COUNTY">石景山区</Option>
-              </Select>
-            )}
-          </Form.Item>
           <Form.Item label="责任部门">
-            {type === 'detail' ? '责任部门' : getFieldDecorator('zrbm', {
+            {type === 'detail' ? '责任部门' : getFieldDecorator('departments', {
               rules: [{ required: true, message: 'Please input' }],
+              initialValue: initialValue.departments,
             })(
               <TreeSelect
                 loadData={this.onLoadData}
@@ -220,8 +224,9 @@ export default class GridModal extends React.Component {
             )}
           </Form.Item>
           <Form.Item label="行政区域">
-            {type === 'detail' ? '昂昂溪区' : getFieldDecorator('xzqy', {
+            {type === 'detail' ? '昂昂溪区' : getFieldDecorator('region', {
               rules: [{ required: true, message: 'Please input' }],
+              initialValue: initialValue.region,
             })(
               <TreeSelect
                 loadData={this.regoinOnLoadData}
@@ -239,8 +244,9 @@ export default class GridModal extends React.Component {
             )}
           </Form.Item>
           <Form.Item label="是否有地图">
-            {type === 'detail' ? '是' : getFieldDecorator('enabled', {
+            {type === 'detail' ? '是' : getFieldDecorator('mapabled', {
               rules: [{ required: true, message: 'Please input' }],
+              initialValue: initialValue.mapabled,
             })(<Switch />)}
           </Form.Item>
           <Form.Item label="线路坐标">
@@ -248,7 +254,9 @@ export default class GridModal extends React.Component {
               <Map
                 latlngs={[{ latitude: 40.016243, longitude: 116.47498 }, { latitude: 40.016913, longitude: 116.47491 }, { latitude: 40.016921, longitude: 116.474712 }]}
               />
-            ) : getFieldDecorator('postion', {})(
+            ) : getFieldDecorator('latlngs', {
+              initialValue: initialValue.latlngs,
+            })(
               <Map
                 togglePolyline={this.fnTogglePolyline}
                 // edit={this.state.edit}

@@ -5,33 +5,6 @@ import { Table } from 'antd';
 import ModalForm from './form'
 import GridModal from './modal'
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-  },
-  {
-    key: '4',
-    name: 'Disabled User',
-    age: 99,
-    address: 'Sidney No. 1 Lake Park',
-  },
-];
-
 // rowSelection object indicates the need for row selection
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
@@ -50,6 +23,8 @@ export default class AdvancedSearchForm extends React.Component {
     expand: false,
     initialValue: {},
     tableData: [],
+    type: 'add',
+    initialValue: {}, // form回显的字段
   };
 
   // To generate mock Form.Item
@@ -144,22 +119,73 @@ export default class AdvancedSearchForm extends React.Component {
     this.setState({ expand: !expand });
   };
 
+  fnGridAdd = async (opt) => {
+    let { code } = await window._api.gridAdd(opt)
+    if (code == 0) {
+      message.success('添加成功')
+      this.fnGridList()
+    }
+  }
+
+  fnGridEdit = async (opt) => {
+    let { code } = await window._api.gridPut(opt)
+    if (code == 0) {
+      message.success('修改成功')
+      this.fnGridList()
+    }
+  }
+
   // submit
   handleCreate = () => {
     // const { type, selectedKeys, selected, initialValue } = this.state
     const form = this.formRef.props.form;
     form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
-      let query = selectedKeys[0] ? {
-        parentId: selectedKeys[0]
-      } : {}
+      // if (err) {
+      //   return;
+      // }
+
+      // let query = selectedKeys[0] ? {
+      //   parentId: selectedKeys[0]
+      // } : {}
+      let { type } = this.state
       if (type == 'add') {
-        this.fnDepartmentAdd(values, query)
+        this.fnGridAdd({
+          "name": "NAME",
+          "roadType": "STATE",
+          "users": [
+            "4zIybvEyycOxwoKLWLStsG"
+          ],
+          "departments": [
+            1000
+          ],
+          "mapabled": true,
+          "latlngs": [
+            {
+              "latitude": 26.7011948,
+              "longitude": 113.5207633
+            }
+          ]
+        })
       } else if (type == 'edit') {
-        values.id = initialValue.id
-        this.fnDepartmentEdit(values, query)
+        // values.id = initialValue.id
+        this.fnGridEdit({
+          "id": this.state.initialValue.id,
+          "name": values.name,
+          "roadType": "STATE",
+          "users": [
+            "4zIybvEyycOxwoKLWLStsG"
+          ],
+          "departments": [
+            1000
+          ],
+          "mapabled": true,
+          "latlngs": [
+            {
+              "latitude": 26.7011948,
+              "longitude": 113.5207633
+            }
+          ]
+        })
       }
 
       console.log('Received values of form: ', values);
@@ -173,6 +199,7 @@ export default class AdvancedSearchForm extends React.Component {
     let { code } = await window._api.gridDel(record.id)
     if (code == 0) {
       message.success('删除成功')
+      this.fnGridList()
     }
     // this.formRef.props.form.resetFields()
     // this.getRegionChildren(this.state.selectedKeys[0])
@@ -221,6 +248,7 @@ export default class AdvancedSearchForm extends React.Component {
               <a href="javascript:;" style={{ marginLeft: 10 }} onClick={() => {
                 _this.setState({
                   type: 'edit',
+                  initialValue: record,
                   visible: true,
                 })
               }}>编辑</a>
@@ -292,6 +320,7 @@ export default class AdvancedSearchForm extends React.Component {
           visible={this.state.visible}
           type={this.state.type}
           onOk={this.handleCreate}
+          initialValue={this.state.initialValue}
           onCancel={() => {
             this.setState({
               visible: false
