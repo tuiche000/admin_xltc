@@ -8,12 +8,12 @@ import {
   gridList, gridDel, gridAdd, gridPut,
 } from './grid'
 import {
-  userList,
+  userList, userAdd, userDel, userPut,
 } from './user'
 
 export default {
   regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut,
   departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit,
   gridList, gridDel, gridAdd, gridPut,
-  userList,
+  userList, userAdd, userDel, userPut,
 }

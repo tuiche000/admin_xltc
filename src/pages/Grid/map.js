@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button } from 'antd'
 import { Map, MouseTool, Polyline, PolyEditor } from 'react-amap';
 
 const layerStyle = {
@@ -44,7 +45,7 @@ export default class App extends React.Component {
     console.log(obj)
     switch (obj.CLASS_NAME) {
       case 'AMap.Polyline':
-        console.log(obj.getPath())
+        this.props.save(obj.getPath())
         text = `你绘制了折线，有${obj.getPath().length}个端点`;
         break;
       default:
@@ -100,7 +101,7 @@ export default class App extends React.Component {
               this.props.type == 'add' && <div style={layerStyle}>{this.state.what}</div>
             }
             {
-              this.props.type == 'detail' && (
+              this.props.type == 'edit' && (
                 <Polyline path={latlngs}>
                   <PolyEditor active={this.state.lineActive} />
                 </Polyline>
@@ -112,20 +113,20 @@ export default class App extends React.Component {
         {
           this.props.type == 'edit' ? (
             <div>
-              <button onClick={() => {
+              <Button onClick={() => {
                 this.setState({
                   lineActive: !this.state.lineActive
                 })
-              }} >编辑/取消编辑</button>
-              <button onClick={() => { }} >保存坐标</button>
+              }} >编辑/取消编辑</Button>
+              <Button onClick={() => { }} style={{marginLeft: 10}} >保存坐标</Button>
             </div>
           ) : null
         }
         {
           this.props.type == 'add' ? (
             <div>
-              <button onClick={() => { this.polyline() }}>绘制折线</button>
-              <button onClick={() => { this.clearPolyline() }}>清除折线</button>
+              <Button onClick={() => { this.polyline() }}>绘制折线</Button>
+              {/* <Button onClick={() => { this.clearPolyline() }}>清除折线</Button> */}
             </div>
           ) : null
         }

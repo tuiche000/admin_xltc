@@ -158,7 +158,7 @@ export default class regiosForm extends React.Component {
           <Form.Item label="用户名">
             {getFieldDecorator('username', {
               rules: [{ required: true, message: '请输入', whitespace: true }],
-              initialValue: initialValue.name
+              initialValue: initialValue.username
             })(<Input />)}
           </Form.Item>
           <Form.Item label="名字">
@@ -169,23 +169,29 @@ export default class regiosForm extends React.Component {
           </Form.Item>
           <Form.Item label="邮箱">
             {getFieldDecorator('email', {
-              rules: [{ required: true, message: '请输入', whitespace: true }, {
-                type: 'email',
-                message: 'The input is not valid E-mail!',
-              },],
-              initialValue: initialValue.name
+              // rules: [{ required: true, message: '请输入', whitespace: true }, {
+              //   type: 'email',
+              //   message: 'The input is not valid E-mail!',
+              // },],
+              initialValue: initialValue.email
             })(<Input />)}
           </Form.Item>
           <Form.Item label="电话">
             {getFieldDecorator('phone', {
-              rules: [{ required: true, message: '请输入', whitespace: true }],
-              initialValue: initialValue.name
+              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              initialValue: initialValue.phone
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item label="身份证号码">
+            {getFieldDecorator('idcard', {
+              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              initialValue: initialValue.idcard
             })(<Input />)}
           </Form.Item>
           <Form.Item label="头像">
-            {getFieldDecorator('nick', {
-              rules: [{ required: true, message: '请输入', whitespace: true }],
-              initialValue: initialValue.name,
+            {getFieldDecorator('avatar', {
+              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              initialValue: initialValue.avatar,
               getValueFromEvent: this.normFile,
             })(<Upload name="logo" action="/upload.do" listType="picture">
               <Button>
@@ -194,36 +200,36 @@ export default class regiosForm extends React.Component {
             </Upload>)}
           </Form.Item>
           <Form.Item label="生日">
-            {getFieldDecorator('1', {
-              rules: [{ required: true, message: '请输入', whitespace: true }],
-              initialValue: initialValue.name
+            {getFieldDecorator('birthday', {
+              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              // initialValue: initialValue.birthday
             })(<DatePicker onChange={onChange} />)}
           </Form.Item>
           <Form.Item label="性别">
-            {getFieldDecorator('sex', {
-              rules: [{ required: true, message: '请输入', whitespace: true }],
-              initialValue: initialValue.name
+            {getFieldDecorator('gender', {
+              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              initialValue: initialValue.gender
             })(<Select placeholder="Please select a regionType">
-              <Option value="CITY">男</Option>
-              <Option value="COUNTY">女</Option>
+              <Option value="MALE">男</Option>
+              <Option value="FEMALE">女</Option>
             </Select>)}
           </Form.Item>
           <Form.Item label="踏查职级">
-            {getFieldDecorator('2', {
+            {getFieldDecorator('roadManagerRank', {
               rules: [{ required: true, message: '请输入', whitespace: true }],
-              initialValue: initialValue.name
+              initialValue: initialValue.roadManagerRank
             })(<Select placeholder="Please select a regionType">
-              <Option value="CITY">一级踏查人</Option>
-              <Option value="COUNTY">二级踏查人</Option>
-              <Option value="VILLAGE">三级踏查人</Option>
-              <Option value="OTHERS">处理人</Option>
-              <Option value="CITY">FIVE</Option>
+              <Option value="FIRST">一级踏查人</Option>
+              <Option value="SECOND">二级踏查人</Option>
+              <Option value="THIRD">三级踏查人</Option>
+              <Option value="FOURTH">问题处置员</Option>
+              <Option value="FIFTH">问题协调员</Option>
             </Select>)}
           </Form.Item>
           <Form.Item label="责任部门">
-            {getFieldDecorator('zrbm', {
-              rules: [{ required: true, message: '请输入', whitespace: true }],
-              initialValue: initialValue.name
+            {getFieldDecorator('department', {
+              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              initialValue: initialValue.department
             })(
               <TreeSelect
                 loadData={this.onLoadData}
@@ -241,21 +247,20 @@ export default class regiosForm extends React.Component {
             )}
           </Form.Item>
           <Form.Item label="启用">
-            {getFieldDecorator('4', {
-              rules: [{ required: true, message: '请输入', whitespace: true }],
+            {getFieldDecorator('enable', {
+              // rules: [{ required: true, message: '请输入', whitespace: true }],
               initialValue: initialValue.name
             })(<Switch />)}
           </Form.Item>
           <Form.Item label="角色">
-            {getFieldDecorator('jiaose', {
-              rules: [{ required: true, message: '请输入', whitespace: true }],
-              initialValue: initialValue.name
+            {getFieldDecorator('roles', {
+              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              initialValue: initialValue.roles
             })(<Checkbox.Group style={{ width: '100%' }}>
               <Row>
                 <Checkbox value="系统管理员">系统管理员</Checkbox>
-                <Checkbox value="审计员">
-                  审计员
-                </Checkbox>
+                <Checkbox value="审计员">审计员</Checkbox>
+                <Checkbox value="中台管理员">中台管理员</Checkbox>
               </Row>
             </Checkbox.Group>)}
           </Form.Item>

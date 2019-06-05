@@ -2,7 +2,7 @@ import React from 'react'
 import { Form, Row, Col, Input, Alert, Button, Icon, Popconfirm, message } from 'antd';
 import './index.css'
 import { Table } from 'antd';
-import ModalForm from './form'
+// import ModalForm from './form'
 import GridModal from './modal'
 
 // rowSelection object indicates the need for row selection
@@ -21,7 +21,6 @@ export default class AdvancedSearchForm extends React.Component {
   state = {
     visible: false,
     expand: false,
-    initialValue: {},
     tableData: [],
     type: 'add',
     initialValue: {}, // form回显的字段
@@ -137,55 +136,18 @@ export default class AdvancedSearchForm extends React.Component {
 
   // submit
   handleCreate = () => {
-    // const { type, selectedKeys, selected, initialValue } = this.state
+    const { type, initialValue } = this.state
     const form = this.formRef.props.form;
     form.validateFields((err, values) => {
-      // if (err) {
-      //   return;
-      // }
-
-      // let query = selectedKeys[0] ? {
-      //   parentId: selectedKeys[0]
-      // } : {}
-      let { type } = this.state
+      console.log(values)
+      if (err) {
+        return;
+      }
       if (type == 'add') {
-        this.fnGridAdd({
-          "name": "NAME",
-          "roadType": "STATE",
-          "users": [
-            "4zIybvEyycOxwoKLWLStsG"
-          ],
-          "departments": [
-            1000
-          ],
-          "mapabled": true,
-          "latlngs": [
-            {
-              "latitude": 26.7011948,
-              "longitude": 113.5207633
-            }
-          ]
-        })
+        this.fnGridAdd(values)
       } else if (type == 'edit') {
-        // values.id = initialValue.id
-        this.fnGridEdit({
-          "id": this.state.initialValue.id,
-          "name": values.name,
-          "roadType": "STATE",
-          "users": [
-            "4zIybvEyycOxwoKLWLStsG"
-          ],
-          "departments": [
-            1000
-          ],
-          "mapabled": true,
-          "latlngs": [
-            {
-              "latitude": 26.7011948,
-              "longitude": 113.5207633
-            }
-          ]
-        })
+        values.id = initialValue.id
+        this.fnGridEdit(values)
       }
 
       console.log('Received values of form: ', values);
@@ -298,16 +260,6 @@ export default class AdvancedSearchForm extends React.Component {
           }}>
             新建
           </Button>
-          {/* {(
-            <span>
-              <Button>批量操作</Button>
-              <Dropdown>
-                <Button>
-                  更多操作 <Icon type="down" />
-                </Button>
-              </Dropdown>
-            </span>
-          )} */}
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
           <Alert message="Informational Notes" type="info" showIcon style={{ marginBottom: '16px' }} />
@@ -328,19 +280,6 @@ export default class AdvancedSearchForm extends React.Component {
           }}
         >
         </GridModal>
-        {/* <ModalForm
-          wrappedComponentRef={formRef => {
-            this.formRef = formRef;
-          }}
-          initialValue={this.state.initialValue}
-          visible={this.state.visible}
-          onCancel={e => {
-            this.setState({
-              visible: false,
-            });
-          }}
-          onCreate={this.handleCreate}
-        /> */}
       </main>
     );
   }

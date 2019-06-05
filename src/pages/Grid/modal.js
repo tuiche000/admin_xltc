@@ -3,8 +3,15 @@ import { Modal, Button, Form, Input, Switch, Select, TreeSelect } from 'antd';
 import Map from './map'
 
 const TreeNode = TreeSelect.TreeNode;
+const { Option } = Select;
 
-@Form.create()
+let mapVisible = true
+@Form.create({
+  onValuesChange(props, changedValues, allValues) {
+    mapVisible = changedValues.mapabled
+    // if (changedValues.mapabled) mapVisible = changedValues.mapabled
+  }
+})
 export default class GridModal extends React.Component {
   state = {
     edit: true, // 是否允许编辑地图上的线
@@ -12,6 +19,8 @@ export default class GridModal extends React.Component {
     regionData: [], // 责任部门tree数据
     value: undefined, // 责任部门tree值
     regionValue: undefined, // 责任部门tree值
+    mapVisible: false, // 地图是否显示
+    userOpt: [], // 踏查人列表selet选项
   }
 
   // map组件的编辑/取消编辑
@@ -106,12 +115,12 @@ export default class GridModal extends React.Component {
     return data.map(item => {
       if (item.children) {
         return (
-          <TreeNode value={item.name} title={item.name} key={item.id} dataRef={item}>
+          <TreeNode value={item.id} title={item.name} key={item.id} dataRef={item}>
             {this.renderTreeNodes(item.children)}
           </TreeNode>
         );
       }
-      return <TreeNode value={item.name} title={item.name} isLeaf={item.hasChildren ? false : true} key={item.id} dataRef={item} />;
+      return <TreeNode value={item.id} title={item.name} isLeaf={item.hasChildren ? false : true} key={item.id} dataRef={item} />;
     })
   };
 
@@ -120,12 +129,12 @@ export default class GridModal extends React.Component {
     return data.map(item => {
       if (item.children) {
         return (
-          <TreeNode value={item.name} title={item.name} key={item.id} dataRef={item}>
+          <TreeNode value={item.id} title={item.name} key={item.id} dataRef={item}>
             {this.renderTreeNodes(item.children)}
           </TreeNode>
         );
       }
-      return <TreeNode value={item.name} title={item.name} isLeaf={item.hasChildren ? false : true} key={item.id} dataRef={item} />;
+      return <TreeNode value={item.id} title={item.name} isLeaf={item.hasChildren ? false : true} key={item.id} dataRef={item} />;
     })
   };
 
@@ -134,20 +143,39 @@ export default class GridModal extends React.Component {
     console.log(value);
     this.setState({ value });
   };
-  
+
   // region选中tree节点
   regionTreeonChange = (value, label, extra) => {
     console.log(value);
     this.setState({ regionValue: value });
   };
 
+  // 获取踏查人列表
+  fnUserList = async () => {
+    let data = await window._api.userList()
+    this.setState({
+      userOpt: data.result
+    })
+  }
+
+  // 保存地图坐标
+  mapSave = (latlngs) => {
+    console.log(latlngs)
+    this.props.form.setFieldsValue({
+      latlngs
+    })
+  }
+
   componentDidMount() {
     this.fnfirstlevel()
     this.regionFirstlevel()
+    this.fnUserList()
   }
 
   render() {
     const { form, type, initialValue } = this.props;
+    // mapVisible = initialValue.mapabled
+    const { userOpt } = this.state
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -161,7 +189,7 @@ export default class GridModal extends React.Component {
     };
     return (
       <Modal
-        title={true ? `查看责任网络` : `编辑责任网络`}
+        title={type === 'add' ? `添加责任网络` : `编辑责任网络`}
         visible={this.props.visible}
         onOk={this.props.onOk}
         onCancel={this.props.onCancel}
@@ -193,13 +221,12 @@ export default class GridModal extends React.Component {
               rules: [{ required: true, message: 'Please input' }],
               initialValue: initialValue.users,
             })(
-              <Select placeholder="Please select a regionType">
-                <Option value="CITY">国道</Option>
-                <Option value="COUNTY">省道</Option>
-                <Option value="VILLAGE">县道</Option>
-                <Option value="OTHERS">乡道</Option>
-                <Option value="zygl">专用公路</Option>
-                <Option value="sjsq">石景山区</Option>
+              <Select mode="multiple" placeholder="Please select">
+                {
+                  userOpt.map((item, index) => {
+                    return <Option key={item.id}>{item.name}</Option>
+                  })
+                }
               </Select>
             )}
           </Form.Item>
@@ -212,6 +239,7 @@ export default class GridModal extends React.Component {
                 loadData={this.onLoadData}
                 // onSelect={this.getRegionChildren}
                 showSearch
+                multiple
                 style={{ width: 300 }}
                 value={this.state.value}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -245,12 +273,30 @@ export default class GridModal extends React.Component {
           </Form.Item>
           <Form.Item label="是否有地图">
             {type === 'detail' ? '是' : getFieldDecorator('mapabled', {
-              rules: [{ required: true, message: 'Please input' }],
-              initialValue: initialValue.mapabled,
+              // rules: [{ required: true, message: 'Please input' }],
+              valuePropName: 'checked',
+              initialValue: initialValue.mapabled || true,
             })(<Switch />)}
           </Form.Item>
-          <Form.Item label="线路坐标">
-            {type === 'detail' ? (
+          {
+            mapVisible && <Form.Item label="线路坐标">
+              {
+                getFieldDecorator('latlngs', {
+                  initialValue: initialValue.latlngs,
+                })(
+                  <Map
+                    togglePolyline={this.fnTogglePolyline}
+                    // edit={this.state.edit}
+                    save={(latlngs) => {
+                      console.log(latlngs)
+                      this.mapSave(latlngs)
+                    }}
+                    type={this.props.type}
+                    latlngs={initialValue.latlngs}
+                  />
+                )
+              }
+              {/* {type === 'detail' ? (
               <Map
                 latlngs={[{ latitude: 40.016243, longitude: 116.47498 }, { latitude: 40.016913, longitude: 116.47491 }, { latitude: 40.016921, longitude: 116.474712 }]}
               />
@@ -263,8 +309,9 @@ export default class GridModal extends React.Component {
                 type={this.props.type}
                 latlngs={[{ latitude: 40.016243, longitude: 116.47498 }, { latitude: 40.016913, longitude: 116.47491 }, { latitude: 40.016921, longitude: 116.474712 }]}
               />
-            )}
-          </Form.Item>
+            )} */}
+            </Form.Item>
+          }
         </Form>
       </Modal>
     );

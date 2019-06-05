@@ -82,11 +82,11 @@ export default [
         name: '踏查管理',
         component: 'BasicDataRegion'
       },
-      {
-        path: '/route/manager',
-        name: '踏查线路',
-        component: 'BasicDataRegion'
-      },
+      // {
+      //   path: '/route/manager',
+      //   name: '踏查线路',
+      //   component: 'BasicDataRegion'
+      // },
     ]
   },
 ]
