@@ -1,0 +1,8 @@
+.HotTags h6 {
+  font-size: 14px;
+  font-weight: bold;
+}
+.HotTags .ant-tag{
+  font-size: 14px;
+  margin: 8px;
+}

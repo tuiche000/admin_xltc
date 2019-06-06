@@ -10,10 +10,14 @@ import {
 import {
   userList, userAdd, userDel, userPut,
 } from './user'
+import {
+  issueList, issueId,
+} from './issue'
 
 export default {
   regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut,
   departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit,
   gridList, gridDel, gridAdd, gridPut,
   userList, userAdd, userDel, userPut,
+  issueList, issueId,
 }

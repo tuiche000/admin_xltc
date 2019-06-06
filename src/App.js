@@ -42,7 +42,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Layout />
+        <Layout {...this.props} />
       </div>
     );
   }

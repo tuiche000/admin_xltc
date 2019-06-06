@@ -63,6 +63,18 @@ export default class BasicLayout extends Component {
     )
   }
 
+  componentWillMount() {
+    let pathname = this.props.location.pathname
+    let pathSnippets = pathname.split('/').filter(item => item)
+    let defaultOpenKeys = [`/${pathSnippets[0]}`, `/${pathSnippets[0]}/${pathSnippets[1]}`]
+    this.setState((state, props) => {
+      return {
+        defaultOpenKeys: defaultOpenKeys,
+        defaultSelectedKeys: [`${pathname}`]
+      }
+    })
+  }
+
   render() {
     return (
       <Layout id="components-layout-demo-custom-trigger">

@@ -4,6 +4,8 @@ import Banner from '@/pages/Banner';
 import Grid from '@/pages/Grid';
 // 问题台账
 import Issue from '@/pages/Issue';
+// 踏查管理
+import Tacha from '@/pages/Tacha';
 // 基本数据
 import BasicDataRegion from '@/pages/BasicData/regios/index';
 import BasicDataDictionary from '@/pages/BasicData/Dictionary';
@@ -24,6 +26,7 @@ export const allRouters = [
     { path: '/users/department/form', component: DepartmentFrom },
     { path: '/grid', component: Grid },
     { path: '/issue', component: Issue },
+    { path: '/tacha', component: Tacha },
     { path: '/basicData/region', component: BasicDataRegion },
     { path: '/basicData/dictionary', component: BasicDataDictionary,},
     { path: '/basicData/upload', component: BasicDataUpload,},
@@ -73,20 +76,9 @@ export default [
   },
   { path: '/issue', component: 'Grid', name: '问题台账', icon: 'home' },
   {
-    path: '/route',
-    name: '踏查轨迹',
+    path: '/tacha',
+    name: '踏查管理',
     icon: 'user',
-    routes: [
-      {
-        path: '/route/manager',
-        name: '踏查管理',
-        component: 'BasicDataRegion'
-      },
-      // {
-      //   path: '/route/manager',
-      //   name: '踏查线路',
-      //   component: 'BasicDataRegion'
-      // },
-    ]
+    component: Tacha,
   },
 ]

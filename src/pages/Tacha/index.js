@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Col, Input, message } from 'antd';
+import { Form, Col, Input, message, Alert } from 'antd';
 import { Table } from 'antd';
 import IssueModal from './modal'
 import HotTags from '@/components/HotTags'
@@ -21,12 +21,11 @@ export default class AdvancedSearchForm extends React.Component {
     visible: false,
     tableData: [],
     type: 'add',
-    id: undefined, // 点击详情的id
     initialValue: {}, // form回显的字段
   };
 
-  fnIssueList = async () => {
-    let data = await window._api.issueList()
+  fnGridList = async () => {
+    let data = await window._api.gridList()
     this.setState({
       tableData: data.result
     })
@@ -87,52 +86,63 @@ export default class AdvancedSearchForm extends React.Component {
   }
 
   componentDidMount() {
-    this.fnIssueList()
+    this.fnGridList()
   }
 
   render() {
     const _this = this
-    const { visible, id } = _this.state
+    const { visible } = _this.state
     const columns = [
       {
-        title: '问题名称',
+        title: '踏查编码',
         dataIndex: 'name',
-        render: (text, cord) => <a href="javascript:;" onClick={
+        render: text => <a href="javascript:;" onClick={
           () => {
             _this.setState({
-              id: cord.id,
-              visible: true,
+              visible: true
             })
           }
         }>{text}</a>,
       },
       {
-        title: '状态',
-        dataIndex: 'issueStatus',
+        title: '责任网络',
+        dataIndex: 'roadType',
       },
       {
-        title: '角色',
-        dataIndex: 'roles',
-      },
-      {
-        title: '问题描述',
-        dataIndex: 'description',
-      },
-      {
-        title: '地址',
+        title: '起点',
         dataIndex: 'address',
       },
       {
-        title: '问题级别',
-        dataIndex: 'issueType',
+        title: '终点',
+        dataIndex: 'region',
       },
-      // {
-      //   title: '照片/视频',
-      //   dataIndex: 'star',
-      // },
       {
-        title: '评价',
-        dataIndex: 'star',
+        title: '角色',
+        dataIndex: 'region',
+      },
+      {
+        title: '姓名',
+        dataIndex: 'region',
+      },
+      {
+        title: '踏查时间',
+        dataIndex: 'region',
+      },
+      {
+        title: '里程(km)',
+        dataIndex: 'region',
+      },
+      {
+        title: '用时(min)',
+        dataIndex: 'region',
+      },
+      {
+        title: '步数',
+        dataIndex: 'region',
+      },
+      {
+        title: '问题数(个)',
+        dataIndex: 'region',
       },
       // {
       //   title: '操作',
@@ -202,17 +212,18 @@ export default class AdvancedSearchForm extends React.Component {
         <section className="antd-pro-components-standard-table-index-standardTable">
           <HotTags
             tagsFromServer={[
-              '全部',
-              '待交办',
-              '已交办',
-              '已处理',
-              '已评价',
+              '踏查时间',
+              '踏查用时',
+              '踏查里程',
+              '踏查步数',
+              '问题数',
             ]}
             title="排序方式："
             fnChange={this.fnChange}
           ></HotTags>
           <br></br>
-          <Table rowKey="id" rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
+          <Alert message="共有234条数据" type="info" showIcon style={{ marginBottom: '16px' }} />
+          <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
         </section>
         <IssueModal
           onCancel={() => {
@@ -220,7 +231,6 @@ export default class AdvancedSearchForm extends React.Component {
               visible: false
             })
           }}
-          id={id}
           visible={visible}
         ></IssueModal>
       </main>
