@@ -236,7 +236,7 @@ export default class regiosForm extends React.Component {
                 onSelect={this.getRegionChildren}
                 showSearch
                 style={{ width: 300 }}
-                value={this.state.value}
+                // value={this.state.value}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 placeholder="Please select"
                 allowClear

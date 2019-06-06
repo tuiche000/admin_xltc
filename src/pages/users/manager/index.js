@@ -165,7 +165,7 @@ export default class AdvancedSearchForm extends React.Component {
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
           <Alert message="Informational Notes" type="info" showIcon style={{ marginBottom: '16px' }} />
-          <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
+          <Table rowKey="id" rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
         </section>
 
         <ModalForm

@@ -35,7 +35,16 @@ export default class App extends React.Component {
       addnode: () => { console.log('polyeditor addnode') },
       adjust: () => { console.log('polyeditor adjust') },
       removenode: () => { console.log('polyeditor removenode') },
-      end: () => { console.log('polyeditor end') },
+      end: (obj) => {
+        let paths = obj.target.getPath()
+        let latlngs = paths.map(item => {
+          return {
+            "latitude": item.lat,
+            "longitude": item.lng
+          }
+        })
+        self.props.save(latlngs)
+      },
     };
     this.mapCenter = { longitude: 116.47498, latitude: 40.016243 }
   }
@@ -45,7 +54,14 @@ export default class App extends React.Component {
     console.log(obj)
     switch (obj.CLASS_NAME) {
       case 'AMap.Polyline':
-        this.props.save(obj.getPath())
+        let paths = obj.getPath()
+        let latlngs = paths.map(item => {
+          return {
+            "latitude": item.lat,
+            "longitude": item.lng
+          }
+        })
+        this.props.save(latlngs)
         text = `你绘制了折线，有${obj.getPath().length}个端点`;
         break;
       default:
@@ -103,7 +119,7 @@ export default class App extends React.Component {
             {
               this.props.type == 'edit' && (
                 <Polyline path={latlngs}>
-                  <PolyEditor active={this.state.lineActive} />
+                  <PolyEditor active={this.state.lineActive} events={this.editorEvents} />
                 </Polyline>
               )
             }
@@ -118,7 +134,7 @@ export default class App extends React.Component {
                   lineActive: !this.state.lineActive
                 })
               }} >编辑/取消编辑</Button>
-              <Button onClick={() => { }} style={{marginLeft: 10}} >保存坐标</Button>
+              {/* <Button onClick={() => { }} style={{marginLeft: 10}} >保存坐标</Button> */}
             </div>
           ) : null
         }

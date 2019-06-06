@@ -279,7 +279,7 @@ export default class GridModal extends React.Component {
             })(<Switch />)}
           </Form.Item>
           {
-            mapVisible && <Form.Item label="线路坐标">
+            <Form.Item label="线路坐标">
               {
                 getFieldDecorator('latlngs', {
                   initialValue: initialValue.latlngs,
@@ -288,7 +288,6 @@ export default class GridModal extends React.Component {
                     togglePolyline={this.fnTogglePolyline}
                     // edit={this.state.edit}
                     save={(latlngs) => {
-                      console.log(latlngs)
                       this.mapSave(latlngs)
                     }}
                     type={this.props.type}
