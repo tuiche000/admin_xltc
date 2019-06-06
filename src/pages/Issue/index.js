@@ -214,15 +214,18 @@ export default class AdvancedSearchForm extends React.Component {
           <br></br>
           <Table rowKey="id" rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
         </section>
-        <IssueModal
-          onCancel={() => {
-            this.setState({
-              visible: false
-            })
-          }}
-          id={id}
-          visible={visible}
-        ></IssueModal>
+        {
+          visible && <IssueModal
+            onCancel={() => {
+              this.setState({
+                visible: false
+              })
+            }}
+            id={id}
+            visible={visible}
+          ></IssueModal>
+        }
+
       </main>
     );
   }

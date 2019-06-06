@@ -2,18 +2,29 @@ import React from 'react'
 import { Descriptions, Modal, Card, Timeline, Rate, Tag, Icon } from 'antd';
 
 export default class IssuseModal extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: {}
+    }
+  }
 
   fnIssueId = async (id) => {
     let data = await window._api.issueId(id)
-    console.log(data)
+    this.setState({
+      data
+    })
   }
 
   componentDidMount() {
-    this.fnIssueId()
+    console.log(this.props.id)
+    if (this.props.id) {
+      this.fnIssueId(this.props.id)
+    }
   }
 
   render() {
-    if (this.props.id) this.fnIssueId(this.props.id)
+    let { data } = this.state
     return (
       <Modal
         // title={type === 'add' ? `添加责任网络` : `编辑责任网络`}
@@ -25,15 +36,15 @@ export default class IssuseModal extends React.Component {
       >
         <section>
           <Descriptions title="荣创路17号_问题000 详情">
-            <Descriptions.Item label="问题名称">荣创路17号_问题0001</Descriptions.Item>
-            <Descriptions.Item label="状态"><Tag color="#f50">难</Tag></Descriptions.Item>
-            <Descriptions.Item label="角色 / 姓名"><Tag color="#2db7f5">一级踏查人 / 张明全</Tag></Descriptions.Item>
-            <Descriptions.Item span={3} label="问题描述">北京市朝阳区荣创路有店外经营、垃圾乱堆,北京市朝阳区荣创路有店外经营、垃圾乱堆</Descriptions.Item>
+            <Descriptions.Item label="问题名称">{data.name}</Descriptions.Item>
+            <Descriptions.Item label="状态"><Tag color="#f50">{data.issueStatus}</Tag></Descriptions.Item>
+            <Descriptions.Item label="角色 / 姓名"><Tag color="#2db7f5">一级踏查人 / {data.userName}</Tag></Descriptions.Item>
+            <Descriptions.Item span={3} label="问题描述">{data.description}</Descriptions.Item>
             <Descriptions.Item label={<Icon type="environment" />}>
-              北京市朝阳区荣创路17号
+              {data.address}
              </Descriptions.Item>
             <Descriptions.Item label={<Icon type="clock-circle" />}>
-              2019-01-02   12:24
+              {data.createDate}
              </Descriptions.Item>
           </Descriptions>
         </section>
