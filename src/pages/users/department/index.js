@@ -348,11 +348,11 @@ class AdvancedSearchForm extends React.Component {
               {(
                 <span>
                   {/* <Button>批量操作</Button> */}
-                  <Dropdown overlay={menu}>
+                  {/* <Dropdown overlay={menu}>
                     <Button>
                       更多操作 <Icon type="down" />
                     </Button>
-                  </Dropdown>
+                  </Dropdown> */}
                 </span>
               )}
             </section>

@@ -1,5 +1,4 @@
 import Login from '@/pages/Login';
-import Banner from '@/pages/Banner';
 // 责任网络
 import Grid from '@/pages/Grid';
 // 问题台账
@@ -18,7 +17,6 @@ import DepartmentFrom from '@/pages/Users/department/form';
 import MapTest from '@/pages/Map';
 
 export const allRouters = [
-    { path: '/', component: Banner },
     { path: '/map', component: MapTest },
     { path: '/login', component: Login },
     { path: '/users/manager', component: UsersManager },
@@ -33,6 +31,7 @@ export const allRouters = [
 ]
 export default [
   // { path: '/', component: 'Banner', name: '首页', icon: 'home' },
+  { path: '/grid', component: 'Grid', name: '责任网络', icon: 'home' },
   {
     path: '/users',
     name: '权限管理',
@@ -50,8 +49,8 @@ export default [
       },
     ]
   },
-  { path: '/map', component: 'MapTest', name: '地图测试', icon: 'home' },
-  { path: '/grid', component: 'Grid', name: '责任网络', icon: 'home' },
+  // { path: '/map', component: 'MapTest', name: '地图测试', icon: 'home' },
+  // { path: '/grid', component: 'Grid', name: '责任网络', icon: 'home' },
   {
     path: '/basicData',
     name: '基本数据',
@@ -62,16 +61,16 @@ export default [
         name: '行政区域',
         component: 'BasicDataRegion'
       },
-      {
-        path: '/basicData/dictionary',
-        name: '字典管理',
-        component: 'BasicDataDictionary'
-      },
-      {
-        path: '/basicData/upload',
-        name: '文件管理',
-        component: 'BasicDataUpload'
-      },
+      // {
+      //   path: '/basicData/dictionary',
+      //   name: '字典管理',
+      //   component: 'BasicDataDictionary'
+      // },
+      // {
+      //   path: '/basicData/upload',
+      //   name: '文件管理',
+      //   component: 'BasicDataUpload'
+      // },
     ]
   },
   { path: '/issue', component: 'Grid', name: '问题台账', icon: 'home' },

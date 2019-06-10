@@ -256,30 +256,32 @@ export default class AdvancedSearchForm extends React.Component {
         </section>
         <section className="antd-pro-pages-list-table-list-tableListOperator">
           <Button icon="plus" type="primary" onClick={e => {
-            this.setState({ visible: true, type: 'add' });
+            this.setState({ initialValue: {}, visible: true, type: 'add' });
           }}>
             新建
           </Button>
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
           <Alert message="Informational Notes" type="info" showIcon style={{ marginBottom: '16px' }} />
-          <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
+          <Table rowKey="id" rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
         </section>
-        <GridModal
-          wrappedComponentRef={formRef => {
-            this.formRef = formRef;
-          }}
-          visible={this.state.visible}
-          type={this.state.type}
-          onOk={this.handleCreate}
-          initialValue={this.state.initialValue}
-          onCancel={() => {
-            this.setState({
-              visible: false
-            })
-          }}
-        >
-        </GridModal>
+        {
+          this.state.visible && <GridModal
+            wrappedComponentRef={formRef => {
+              this.formRef = formRef;
+            }}
+            visible={this.state.visible}
+            type={this.state.type}
+            onOk={this.handleCreate}
+            initialValue={this.state.initialValue}
+            onCancel={() => {
+              this.setState({
+                visible: false
+              })
+            }}
+          >
+          </GridModal>
+        }
       </main>
     );
   }

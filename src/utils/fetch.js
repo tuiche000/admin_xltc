@@ -2,6 +2,7 @@ import queryString from 'query-string'
 import { message } from 'antd'
 
 let BASE = 'http://checking.fothing.com/'
+// let BASE = 'http://lt.loiot.com/'
 
 /**
  * 真正的请求
@@ -19,6 +20,7 @@ async function commonFetcdh(url, options, method = 'GET', query) {
       headers: new Headers({
         // 'Authorization': `Bearer ${localStorage.getItem('folidayToken')}`
         'Authorization': `Bearer UkIY4dN3AU7aVMA0yIza9LK2tLlxxoy7`
+        // 'Authorization': `Bearer 00Qu0CAjtS8txW4GLjHLqaQXpKYzr3pg`
       })
     }
   } else {
@@ -30,6 +32,7 @@ async function commonFetcdh(url, options, method = 'GET', query) {
         'Content-Type': 'application/json;charset=UTF-8',
         // 'Authorization': `Bearer ${localStorage.getItem('folidayToken')}`,
         'Authorization': `Bearer UkIY4dN3AU7aVMA0yIza9LK2tLlxxoy7`
+        // 'Authorization': `Bearer 00Qu0CAjtS8txW4GLjHLqaQXpKYzr3pg`
       }),
       body: JSON.stringify(options)
     }

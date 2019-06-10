@@ -13,6 +13,9 @@ import {
 import {
   issueList, issueId,
 } from './issue'
+import {
+  tachaList, tachaId,
+} from './tacha'
 
 export default {
   regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut,
@@ -20,4 +23,5 @@ export default {
   gridList, gridDel, gridAdd, gridPut,
   userList, userAdd, userDel, userPut,
   issueList, issueId,
+  tachaList, tachaId,
 }

@@ -1,8 +1,27 @@
 import React from 'react'
 import { Modal } from 'antd';
-import Map from '@/components/Map'
+import Map from './map'
 
 export default class IssuseModal extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: {},
+    }
+  }
+
+  componentDidMount() {
+    const { id } = this.props
+    this.fnDetail(id)
+  }
+
+  fnDetail = async (id) => {
+    let data = await window._api.tachaId(id)
+    this.setState({
+      data: data
+    })
+  }
+
   render() {
     return (
       <Modal
@@ -16,7 +35,9 @@ export default class IssuseModal extends React.Component {
         // onOk={this.props.onOk}
         onCancel={this.props.onCancel}
       >
-        <Map></Map>
+        <Map
+          data={this.state.data}
+        ></Map>
       </Modal>
     )
   }

@@ -1,8 +1,9 @@
 import React from 'react'
-import { Form, Col, Input, message, Alert } from 'antd';
-import { Table } from 'antd';
-import IssueModal from './modal'
+import { Form, Col, Input, message, Alert, Row, Table, Button, Icon } from 'antd';
+import TachaModal from './modal'
 import HotTags from '@/components/HotTags'
+
+const Search = Input.Search
 
 // rowSelection object indicates the need for row selection
 const rowSelection = {
@@ -17,34 +18,109 @@ const rowSelection = {
 
 @Form.create()
 export default class AdvancedSearchForm extends React.Component {
+
   state = {
     visible: false,
+    // table start
     tableData: [],
+    totalResults: 1,
+    pageSize: 10,
+    pageNo: 1,
+    keyword: '',
+    loading: false,
+    // table end
     type: 'add',
     initialValue: {}, // form回显的字段
+    id: undefined, // 详情的id
   };
 
-  fnGridList = async () => {
-    let data = await window._api.gridList()
+  // To generate mock Form.Item
+  getFields() {
+    const count = this.state.expand ? 10 : 0;
+    const { getFieldDecorator } = this.props.form;
+    const children = []
+    const fields = [
+      {
+        FieldName: 'name',
+        label: '时间区间',
+        options: {
+        },
+        render() {
+          return <Input placeholder="placeholder" />
+        }
+      },
+      {
+        FieldName: 'name',
+        label: '责任网格',
+        options: {
+        },
+        render() {
+          return <Input placeholder="placeholder" />
+        }
+      },
+      {
+        FieldName: 'name',
+        label: '角色',
+        options: {
+        },
+        render() {
+          return <Input placeholder="placeholder" />
+        }
+      },
+      {
+        FieldName: 'name',
+        label: '责任部门',
+        options: {
+        },
+        render() {
+          return <Input placeholder="placeholder" />
+        }
+      },
+      {
+        FieldName: 'name',
+        label: '行政区域',
+        options: {
+        },
+        render() {
+          return <Input placeholder="placeholder" />
+        }
+      },
+      {
+        FieldName: 'name',
+        label: '是否有地图',
+        options: {
+        },
+        render() {
+          return <Input placeholder="placeholder" />
+        }
+      },
+    ];
+    for (let i = 0; i < fields.length; i++) {
+      children.push(
+        <Col span={8} key={i} style={{ display: i < count ? 'block' : 'none' }}>
+          <Form.Item label={fields[i].label}>
+            {getFieldDecorator(`${fields[i].field}`, fields[i].options)(fields[i].render())}
+          </Form.Item>
+        </Col>,
+      );
+    }
+    return children;
+  }
+
+  fnTachaList = async (json) => {
     this.setState({
-      tableData: data.result
+      loading: true,
     })
-  }
-
-  fnGridAdd = async (opt) => {
-    let { code } = await window._api.gridAdd(opt)
-    if (code == 0) {
-      message.success('添加成功')
-      this.fnGridList()
-    }
-  }
-
-  fnGridEdit = async (opt) => {
-    let { code } = await window._api.gridPut(opt)
-    if (code == 0) {
-      message.success('修改成功')
-      this.fnGridList()
-    }
+    let { pageSize, pageNo, keyword } = this.state
+    let searchVal = (json && json.keyword) || keyword
+    let Size = (json && json.pageSize) || pageSize
+    let Page = (json && json.pageNo) || pageNo
+    let data = await window._api.tachaList({}, { "pageSize": Size, "pageNo": Page, "keyword": searchVal })
+    this.setState({
+      tableData: data.result,
+      totalResults: data.totalResults,
+      loading: false,
+    })
   }
 
   // submit
@@ -69,24 +145,22 @@ export default class AdvancedSearchForm extends React.Component {
     });
   }
 
-  // 删除责任网格
-  fnGridDel = async (record) => {
-    let { code } = await window._api.gridDel(record.id)
-    if (code == 0) {
-      message.success('删除成功')
-      this.fnGridList()
-    }
-    // this.formRef.props.form.resetFields()
-    // this.getRegionChildren(this.state.selectedKeys[0])
-  }
-
   // HotTags
   fnChange(tag) {
     console.log(tag)
   }
 
+  fnTableChange(pageNo, pageSize) {
+    this.setState({
+      pageNo, pageSize
+    })
+    this.fnTachaList({
+      pageNo, pageSize
+    })
+  }
+
   componentDidMount() {
-    this.fnGridList()
+    this.fnTachaList()
   }
 
   render() {
@@ -95,10 +169,11 @@ export default class AdvancedSearchForm extends React.Component {
     const columns = [
       {
         title: '踏查编码',
-        dataIndex: 'name',
-        render: text => <a href="javascript:;" onClick={
+        dataIndex: 'id',
+        render: (text, cord) => <a href="javascript:;" onClick={
           () => {
             _this.setState({
+              id: cord.id,
               visible: true
             })
           }
@@ -106,43 +181,43 @@ export default class AdvancedSearchForm extends React.Component {
       },
       {
         title: '责任网络',
-        dataIndex: 'roadType',
+        dataIndex: 'grid',
       },
       {
         title: '起点',
-        dataIndex: 'address',
+        dataIndex: 'beginAdbegindress',
       },
       {
         title: '终点',
-        dataIndex: 'region',
+        dataIndex: 'endAddress',
       },
       {
         title: '角色',
-        dataIndex: 'region',
+        dataIndex: 'rank',
       },
       {
         title: '姓名',
-        dataIndex: 'region',
+        dataIndex: 'userName',
       },
       {
         title: '踏查时间',
-        dataIndex: 'region',
+        dataIndex: 'beginTime',
       },
       {
         title: '里程(km)',
-        dataIndex: 'region',
+        dataIndex: 'mileage',
       },
       {
         title: '用时(min)',
-        dataIndex: 'region',
+        dataIndex: 'min',
       },
       {
         title: '步数',
-        dataIndex: 'region',
+        dataIndex: 'step',
       },
       {
         title: '问题数(个)',
-        dataIndex: 'region',
+        dataIndex: 'issue',
       },
       // {
       //   title: '操作',
@@ -184,25 +259,40 @@ export default class AdvancedSearchForm extends React.Component {
     ];
     return (
       <main id="Grid_Container">
-        {/* <section className="antd-pro-pages-list-table-list-tableListForm">
+        <section className="antd-pro-pages-list-table-list-tableListForm">
           <Form onSubmit={this.handleSearch}>
-            <Row gutter={24}>{this.getFields()}</Row>
+
             <Row>
-              <Col span={24} style={{ textAlign: 'right' }}>
+              <Col span={8}>
+                <Search placeholder="问题名称/角色/人名/区域" onSearch={value => {
+                  _this.setState({
+                    keyword: value
+                  })
+                  _this.fnTachaList({
+                    keyword: value
+                  })
+                }} enterButton />
+
+              </Col>
+              {/* <Col span={16}>
+              <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
+                  筛选条件 <Icon type={this.state.expand ? 'up' : 'down'} />
+                </a>
                 <Button type="primary" htmlType="submit">
                   查询
             </Button>
                 <Button style={{ marginLeft: 8 }} onClick={() => this.props.form.resetFields()}>
                   重置
             </Button>
-                <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
-                  展开更多 <Icon type={this.state.expand ? 'up' : 'down'} />
-                </a>
-              </Col>
+
+                
+              </Col> */}
+              {/* <Row gutter={24}>{this.getFields()}</Row> */}
             </Row>
           </Form>
         </section>
-        <section className="antd-pro-pages-list-table-list-tableListOperator">
+        <br></br>
+        {/* <section className="antd-pro-pages-list-table-list-tableListOperator">
           <Button icon="plus" type="primary" onClick={e => {
             this.setState({ visible: true, type: 'add' });
           }}>
@@ -222,17 +312,32 @@ export default class AdvancedSearchForm extends React.Component {
             fnChange={this.fnChange}
           ></HotTags>
           <br></br>
-          <Alert message="共有234条数据" type="info" showIcon style={{ marginBottom: '16px' }} />
-          <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
+          {/* <Table
+            fnTableChang={this.fnTableChange} total={this.state.totalResults} rowSelection={rowSelection} columns={columns} tableData={this.state.tableData} /> */}
+          <Table pagination={
+            {
+              "showQuickJumper": true,
+              total: this.state.totalResults,
+              onChange(pageNo, pageSize) {
+                _this.setState({
+                  pageNo: pageNo
+                })
+                _this.fnTachaList({
+                  pageNo
+                })
+              }
+            }
+          } loading={this.state.loading} rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
         </section>
-        <IssueModal
+        {visible && <TachaModal
           onCancel={() => {
             this.setState({
               visible: false
             })
           }}
+          id={this.state.id}
           visible={visible}
-        ></IssueModal>
+        ></TachaModal>}
       </main>
     );
   }

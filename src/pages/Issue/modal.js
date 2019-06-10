@@ -37,45 +37,44 @@ export default class IssuseModal extends React.Component {
         <section>
           <Descriptions title="荣创路17号_问题000 详情">
             <Descriptions.Item label="问题名称">{data.name}</Descriptions.Item>
-            <Descriptions.Item label="状态"><Tag color="#f50">{data.issueStatus}</Tag></Descriptions.Item>
-            <Descriptions.Item label="角色 / 姓名"><Tag color="#2db7f5">一级踏查人 / {data.userName}</Tag></Descriptions.Item>
+            <Descriptions.Item label="状态"><Tag color="#f50">{data.issueStatusName}</Tag></Descriptions.Item>
+            <Descriptions.Item label="角色 / 姓名"><Tag color="#2db7f5">{data.levelName} / {data.userName}</Tag></Descriptions.Item>
             <Descriptions.Item span={3} label="问题描述">{data.description}</Descriptions.Item>
             <Descriptions.Item label={<Icon type="environment" />}>
               {data.address}
-             </Descriptions.Item>
+            </Descriptions.Item>
             <Descriptions.Item label={<Icon type="clock-circle" />}>
               {data.createDate}
-             </Descriptions.Item>
+            </Descriptions.Item>
           </Descriptions>
         </section>
         <section>
           <Card title="流转信息" bordered={false} style={{ width: '100%' }}>
             <Timeline>
-              <Timeline.Item color="green">
-                <p>2019-01-02   12:24</p>
-                <p>一级踏查人     张明全   发现问题</p>
-              </Timeline.Item>
-              <Timeline.Item color="green">Create a services site 2015-09-01</Timeline.Item>
-              <Timeline.Item color="red">
-                <p>Solve initial network problems 1</p>
-                <p>Solve initial network problems 2</p>
-                <p>Solve initial network problems 3 2015-09-01</p>
-              </Timeline.Item>
-              <Timeline.Item>
-                <p>Technical testing 1</p>
-                <p>Technical testing 2</p>
-                <p>Technical testing 3 2015-09-01</p>
-              </Timeline.Item>
+              {data.processes && data.processes.map((item, index) => {
+                return (
+                  <Timeline.Item key={item.id}>
+                    <p>{item.createDate}</p>
+                    <p><span>{item.levelName}</span>&nbsp;&nbsp;&nbsp;<span>{item.userName}</span>&nbsp;&nbsp;&nbsp;<span>{item.issueStatusName}</span></p>
+                  </Timeline.Item>
+                )
+              })}
             </Timeline>
           </Card>
           <Card title="处理完反馈信息" bordered={false} style={{ width: '100%' }}>
             <div>
-              问题已处理完，请领导们查看
+              {
+                data.files && data.files.map(item => {
+                  return (
+                    <img key={item.id} src={item.resource}></img>
+                  )
+                })
+              }
             </div>
           </Card>
           <Card title="评价信息" bordered={false} style={{ width: '100%' }}>
-            <Rate disabled defaultValue={2} />
-            <p>评价意见：不错，继续努力</p>
+            <Rate disabled defaultValue={data.star} />
+            <p>{data.feedback && data.feedback.description}</p>
           </Card>
         </section>
       </Modal>

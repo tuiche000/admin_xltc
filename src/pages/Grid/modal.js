@@ -1,14 +1,12 @@
 import React from 'react'
-import { Modal, Button, Form, Input, Switch, Select, TreeSelect } from 'antd';
+import { Modal, Row, Form, Input, Col, Select, TreeSelect } from 'antd';
 import Map from './map'
 
 const TreeNode = TreeSelect.TreeNode;
 const { Option } = Select;
 
-let mapVisible = true
 @Form.create({
   onValuesChange(props, changedValues, allValues) {
-    mapVisible = changedValues.mapabled
     // if (changedValues.mapabled) mapVisible = changedValues.mapabled
   }
 })
@@ -19,8 +17,9 @@ export default class GridModal extends React.Component {
     regionData: [], // 责任部门tree数据
     value: undefined, // 责任部门tree值
     regionValue: undefined, // 责任部门tree值
-    mapVisible: false, // 地图是否显示
+    // mapVisible: false, // 地图是否显示
     userOpt: [], // 踏查人列表selet选项
+    lineLatlngs: [], // 默认的线
   }
 
   // map组件的编辑/取消编辑
@@ -161,6 +160,9 @@ export default class GridModal extends React.Component {
   // 保存地图坐标
   mapSave = (latlngs) => {
     console.log(latlngs)
+    this.setState({
+      lineLatlngs: latlngs
+    })
     this.props.form.setFieldsValue({
       latlngs
     })
@@ -174,49 +176,79 @@ export default class GridModal extends React.Component {
 
   render() {
     const { form, type, initialValue } = this.props;
+    const { lineLatlngs } = this.state
     // mapVisible = initialValue.mapabled
     const { userOpt } = this.state
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 6 },
+        sm: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 18 },
+        sm: { span: 16 },
       },
     };
     return (
       <Modal
+        width='90%'
+        style={{ top: 0 }}
         title={type === 'add' ? `添加责任网络` : `编辑责任网络`}
         visible={this.props.visible}
         onOk={this.props.onOk}
         onCancel={this.props.onCancel}
       >
         <Form {...formItemLayout} layout="vertical">
-          <Form.Item label="名字">
-            {type === 'detail' ? '第一路和第二路' : getFieldDecorator('name', {
-              rules: [{ required: true, message: 'Please input' }],
-              initialValue: initialValue.name,
-            })(<Input />)}
-          </Form.Item>
-          <Form.Item label="路型等级">
-            {type === 'detail' ? '乡道' : getFieldDecorator('roadType', {
-              rules: [{ required: true, message: 'Please input' }],
-              initialValue: initialValue.roadType,
-            })(
-              <Select placeholder="Please select">
-                <Option value="CITY">国道</Option>
-                <Option value="COUNTY">省道</Option>
-                <Option value="VILLAGE">县道</Option>
-                <Option value="OTHERS">乡道</Option>
-                <Option value="zygl">专用公路</Option>
-                <Option value="sjsq">石景山区</Option>
-              </Select>
-            )}
-          </Form.Item>
-          <Form.Item label="责任路长">
+          <Row gutter={24}>
+            <Col span={8}>
+              <Form.Item label="所属行政区">
+                {type === 'detail' ? '昂昂溪区' : getFieldDecorator('region', {
+                  rules: [{ required: true, message: 'Please input' }],
+                  initialValue: initialValue.region,
+                })(
+                  <TreeSelect
+                    loadData={this.regoinOnLoadData}
+                    // onSelect={this.getRegionChildren}
+                    showSearch
+                    // style={{ width: 300 }}
+                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                    placeholder="Please select"
+                    allowClear
+                    onChange={this.treeonChange}
+                  >
+                    {this.regionRenderTreeNodes(this.state.regionData)}
+                  </TreeSelect>
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="行政级别型等级">
+                {type === 'detail' ? '乡道' : getFieldDecorator('roadType', {
+                  rules: [{ required: true, message: 'Please input' }],
+                  initialValue: initialValue.roadType,
+                })(
+                  <Select placeholder="Please select">
+                    <Option value="CITY">国道</Option>
+                    <Option value="COUNTY">省道</Option>
+                    <Option value="VILLAGE">县道</Option>
+                    <Option value="OTHERS">乡道</Option>
+                    <Option value="zygl">专用公路</Option>
+                    <Option value="sjsq">石景山区</Option>
+                  </Select>
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="请输入责任网络">
+                {type === 'detail' ? '第一路和第二路' : getFieldDecorator('name', {
+                  rules: [{ required: true, message: 'Please input' }],
+                  initialValue: initialValue.name,
+                })(<Input />)}
+              </Form.Item>
+            </Col>
+
+            {/* <Form.Item label="责任路长">
             {type === 'detail' ? '张二明' : getFieldDecorator('users', {
               rules: [{ required: true, message: 'Please input' }],
               initialValue: initialValue.users,
@@ -229,88 +261,53 @@ export default class GridModal extends React.Component {
                 }
               </Select>
             )}
+          </Form.Item> */}
+            <Col span={8}>
+              <Form.Item label="责任部门">
+                {type === 'detail' ? '责任部门' : getFieldDecorator('departments', {
+                  rules: [{ required: true, message: 'Please input' }],
+                  initialValue: initialValue.departments,
+                })(
+                  <TreeSelect
+                    loadData={this.onLoadData}
+                    // onSelect={this.getRegionChildren}
+                    showSearch
+                    multiple
+                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                    placeholder="Please select"
+                    allowClear
+                    onChange={this.treeonChange}
+                  >
+                    {this.renderTreeNodes(this.state.gData)}
+                  </TreeSelect>
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Map
+                togglePolyline={this.fnTogglePolyline}
+                // edit={this.state.edit}
+                save={(latlngs) => {
+                  this.mapSave(latlngs)
+                }}
+                type={this.props.type}
+                // Platlngs={lineLatlngs}
+                Platlngs={initialValue.latlngs}
+              />
+            </Col>
+          </Row>
+          <Form.Item label="地图" style={{width: 0, height: 0}}>
+              {
+                getFieldDecorator('latlngs')(<div></div>)
+              }
           </Form.Item>
-          <Form.Item label="责任部门">
-            {type === 'detail' ? '责任部门' : getFieldDecorator('departments', {
-              rules: [{ required: true, message: 'Please input' }],
-              initialValue: initialValue.departments,
-            })(
-              <TreeSelect
-                loadData={this.onLoadData}
-                // onSelect={this.getRegionChildren}
-                showSearch
-                multiple
-                style={{ width: 300 }}
-                value={this.state.value}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                placeholder="Please select"
-                allowClear
-                onChange={this.treeonChange}
-              >
-                {this.renderTreeNodes(this.state.gData)}
-              </TreeSelect>
-            )}
-          </Form.Item>
-          <Form.Item label="行政区域">
-            {type === 'detail' ? '昂昂溪区' : getFieldDecorator('region', {
-              rules: [{ required: true, message: 'Please input' }],
-              initialValue: initialValue.region,
-            })(
-              <TreeSelect
-                loadData={this.regoinOnLoadData}
-                // onSelect={this.getRegionChildren}
-                showSearch
-                style={{ width: 300 }}
-                value={this.state.regionValue}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                placeholder="Please select"
-                allowClear
-                onChange={this.treeonChange}
-              >
-                {this.regionRenderTreeNodes(this.state.regionData)}
-              </TreeSelect>
-            )}
-          </Form.Item>
-          <Form.Item label="是否有地图">
+          {/* <Form.Item label="是否有地图">
             {type === 'detail' ? '是' : getFieldDecorator('mapabled', {
               // rules: [{ required: true, message: 'Please input' }],
               valuePropName: 'checked',
               initialValue: initialValue.mapabled || true,
             })(<Switch />)}
-          </Form.Item>
-          {
-            <Form.Item label="线路坐标">
-              {
-                getFieldDecorator('latlngs', {
-                  initialValue: initialValue.latlngs,
-                })(
-                  <Map
-                    togglePolyline={this.fnTogglePolyline}
-                    // edit={this.state.edit}
-                    save={(latlngs) => {
-                      this.mapSave(latlngs)
-                    }}
-                    type={this.props.type}
-                    latlngs={initialValue.latlngs}
-                  />
-                )
-              }
-              {/* {type === 'detail' ? (
-              <Map
-                latlngs={[{ latitude: 40.016243, longitude: 116.47498 }, { latitude: 40.016913, longitude: 116.47491 }, { latitude: 40.016921, longitude: 116.474712 }]}
-              />
-            ) : getFieldDecorator('latlngs', {
-              initialValue: initialValue.latlngs,
-            })(
-              <Map
-                togglePolyline={this.fnTogglePolyline}
-                // edit={this.state.edit}
-                type={this.props.type}
-                latlngs={[{ latitude: 40.016243, longitude: 116.47498 }, { latitude: 40.016913, longitude: 116.47491 }, { latitude: 40.016921, longitude: 116.474712 }]}
-              />
-            )} */}
-            </Form.Item>
-          }
+          </Form.Item> */}
         </Form>
       </Modal>
     );

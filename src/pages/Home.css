@@ -1,0 +1,45 @@
+#home {
+  /* width: 1024px;
+  margin: 0 auto; */
+  color: #fff;
+}
+#home .ant-typography {
+  color: #fff;
+}
+
+#home header {
+  background: url('../assets/header.png');
+  height: 600px;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+#home header .header_div {
+  position: absolute;
+  margin-top: 80px;
+  margin-left: 50px;
+  top: 100px;
+}
+
+#home aside {
+  margin-top: 10px;
+}
+#home aside .wecando {
+  text-align: center;
+}
+#home aside .msgBoard {
+  height: 200px;
+  background: #f08300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#home footer {
+  color: #000;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Col, Input, message } from 'antd';
+import { Form, Col, Rate, message } from 'antd';
 import { Table } from 'antd';
 import IssueModal from './modal'
 import HotTags from '@/components/HotTags'
@@ -112,7 +112,11 @@ export default class AdvancedSearchForm extends React.Component {
       },
       {
         title: '角色',
-        dataIndex: 'roles',
+        dataIndex: 'roadManagerRank',
+      },
+      {
+        title: '姓名',
+        dataIndex: 'userName',
       },
       {
         title: '问题描述',
@@ -126,13 +130,34 @@ export default class AdvancedSearchForm extends React.Component {
         title: '问题级别',
         dataIndex: 'issueType',
       },
-      // {
-      //   title: '照片/视频',
-      //   dataIndex: 'star',
-      // },
+      {
+        title: '时间',
+        dataIndex: 'createDate',
+      },
+      {
+        title: '照片/视频',
+        dataIndex: 'star',
+        render: (text, cord) => {
+          return (
+            <a href="javascript:;" onClick={
+              () => {
+                _this.setState({
+                  id: cord.id,
+                  visible: true,
+                })
+              }
+            }>查看详情</a>
+          )
+        }
+      },
       {
         title: '评价',
         dataIndex: 'star',
+        render: (text, cord) => {
+          if (cord.star) return (
+            <Rate disabled defaultValue={cord.star} />
+          )
+        }
       },
       // {
       //   title: '操作',

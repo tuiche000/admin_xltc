@@ -15,6 +15,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': 'http://checking.fothing.com/',
+      // '/api': 'http://lt.loiot.com/',
       // '/admin': 'http://localhost:8080/',
     }
   },
