@@ -56,7 +56,9 @@ export default class App extends Component {
   }
 
   componentDidUpdate() {
-    // this.checkLogin();
+    if (this.props.location.pathname != '/') {
+      this.checkLogin();
+    }
   }
 
   componentDidMount() {

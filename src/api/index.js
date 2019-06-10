@@ -1,11 +1,11 @@
 import {
-  regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut,
+  regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut, regionId,
 } from './region'
 import {
-  departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit,
+  departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit, departmentAll,
 } from './department'
 import {
-  gridList, gridDel, gridAdd, gridPut,
+  gridList, gridDel, gridAdd, gridPut, gridId,
 } from './grid'
 import {
   userList, userAdd, userDel, userPut,
@@ -18,9 +18,9 @@ import {
 } from './tacha'
 
 export default {
-  regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut,
-  departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit,
-  gridList, gridDel, gridAdd, gridPut,
+  regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut, regionId,
+  departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit, departmentAll,
+  gridList, gridDel, gridAdd, gridPut, gridId,
   userList, userAdd, userDel, userPut,
   issueList, issueId,
   tachaList, tachaId,

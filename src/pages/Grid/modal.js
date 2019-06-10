@@ -15,11 +15,12 @@ export default class GridModal extends React.Component {
     edit: true, // 是否允许编辑地图上的线
     gData: [], // 责任部门tree数据
     regionData: [], // 责任部门tree数据
-    value: undefined, // 责任部门tree值
+    departmentsVal: undefined, // 责任部门tree值
     regionValue: undefined, // 责任部门tree值
     // mapVisible: false, // 地图是否显示
     userOpt: [], // 踏查人列表selet选项
     lineLatlngs: [], // 默认的线
+    initialValue: undefined, // 编辑数据 
   }
 
   // map组件的编辑/取消编辑
@@ -140,7 +141,7 @@ export default class GridModal extends React.Component {
   // 选中tree节点
   treeonChange = (value, label, extra) => {
     console.log(value);
-    this.setState({ value });
+    this.setState({ departmentsVal: value });
   };
 
   // region选中tree节点
@@ -151,7 +152,9 @@ export default class GridModal extends React.Component {
 
   // 获取踏查人列表
   fnUserList = async () => {
-    let data = await window._api.userList()
+    let data = await window._api.userList({
+      pageSize: 10000,
+    })
     this.setState({
       userOpt: data.result
     })
@@ -168,16 +171,49 @@ export default class GridModal extends React.Component {
     })
   }
 
+  // 编辑的时候获取回显id详情
+  fnRegoinId = async (id) => {
+    let data = await window._api.regionId(id)
+    data.value = data.id
+    data.label = data.name
+    this.setState({
+      regionValue: data
+    })
+  }
+
+  fnGridId = async (id) => {
+    let data = await window._api.gridId(id)
+    let departmentNames = data.departmentNames.map(item => {
+      item.value = item.id
+      item.label = item.name
+      return item
+    })
+    // departmentNames.value = departmentNames.id
+    // departmentNames.label = departmentNames.name
+    console.log(departmentNames)
+    this.setState({
+      departmentsVal: departmentNames,
+      initialValue: data
+    })
+  }
+
   componentDidMount() {
+    const { type, initialValue } = this.props
+    if (type == 'edit') {
+      this.fnGridId(initialValue.id)
+    }
+    if (initialValue.region) {
+      this.fnRegoinId(initialValue.region)
+    }
     this.fnfirstlevel()
     this.regionFirstlevel()
     this.fnUserList()
   }
 
   render() {
-    const { form, type, initialValue } = this.props;
-    const { lineLatlngs } = this.state
-    // mapVisible = initialValue.mapabled
+    const { form, type } = this.props;
+    const { lineLatlngs, regionValue, departmentsVal, initialValue, } = this.state
+    console.log(initialValue)
     const { userOpt } = this.state
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -199,23 +235,22 @@ export default class GridModal extends React.Component {
         onOk={this.props.onOk}
         onCancel={this.props.onCancel}
       >
-        <Form {...formItemLayout} layout="vertical">
+        {initialValue && <Form {...formItemLayout} layout="vertical">
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item label="所属行政区">
                 {type === 'detail' ? '昂昂溪区' : getFieldDecorator('region', {
                   rules: [{ required: true, message: 'Please input' }],
-                  initialValue: initialValue.region,
+                  initialValue: regionValue,
                 })(
                   <TreeSelect
+                    labelInValue={true}
                     loadData={this.regoinOnLoadData}
-                    // onSelect={this.getRegionChildren}
                     showSearch
-                    // style={{ width: 300 }}
                     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                     placeholder="Please select"
                     allowClear
-                    onChange={this.treeonChange}
+                    onChange={this.regionTreeonChange}
                   >
                     {this.regionRenderTreeNodes(this.state.regionData)}
                   </TreeSelect>
@@ -229,12 +264,12 @@ export default class GridModal extends React.Component {
                   initialValue: initialValue.roadType,
                 })(
                   <Select placeholder="Please select">
-                    <Option value="CITY">国道</Option>
-                    <Option value="COUNTY">省道</Option>
-                    <Option value="VILLAGE">县道</Option>
-                    <Option value="OTHERS">乡道</Option>
-                    <Option value="zygl">专用公路</Option>
-                    <Option value="sjsq">石景山区</Option>
+                    <Option value="STATE">国道</Option>
+                    <Option value="PROVINCE">省道</Option>
+                    <Option value="COUNTY">县道</Option>
+                    <Option value="VILLAGE">乡道</Option>
+                    <Option value="SPECIAL">专用公路</Option>
+                    <Option value="MOUNTAIN">石景山区</Option>
                   </Select>
                 )}
               </Form.Item>
@@ -247,28 +282,38 @@ export default class GridModal extends React.Component {
                 })(<Input />)}
               </Form.Item>
             </Col>
-
-            {/* <Form.Item label="责任路长">
-            {type === 'detail' ? '张二明' : getFieldDecorator('users', {
-              rules: [{ required: true, message: 'Please input' }],
-              initialValue: initialValue.users,
-            })(
-              <Select mode="multiple" placeholder="Please select">
-                {
-                  userOpt.map((item, index) => {
-                    return <Option key={item.id}>{item.name}</Option>
-                  })
-                }
-              </Select>
-            )}
-          </Form.Item> */}
+            <Col span={8}>
+              <Form.Item label="请输入责任范围">
+                {getFieldDecorator('range', {
+                  rules: [{ required: true, message: 'Please input' }],
+                  initialValue: initialValue.range,
+                })(<Input />)}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="责任路长">
+                {type === 'detail' ? '张二明' : getFieldDecorator('users', {
+                  rules: [{ required: true, message: 'Please input' }],
+                  initialValue: initialValue.users,
+                })(
+                  <Select mode="multiple" placeholder="Please select">
+                    {
+                      userOpt.map((item, index) => {
+                        return <Option key={item.id}>{item.name}</Option>
+                      })
+                    }
+                  </Select>
+                )}
+              </Form.Item>
+            </Col>
             <Col span={8}>
               <Form.Item label="责任部门">
                 {type === 'detail' ? '责任部门' : getFieldDecorator('departments', {
                   rules: [{ required: true, message: 'Please input' }],
-                  initialValue: initialValue.departments,
+                  initialValue: departmentsVal,
                 })(
                   <TreeSelect
+                    labelInValue={true}
                     loadData={this.onLoadData}
                     // onSelect={this.getRegionChildren}
                     showSearch
@@ -296,10 +341,10 @@ export default class GridModal extends React.Component {
               />
             </Col>
           </Row>
-          <Form.Item label="地图" style={{width: 0, height: 0}}>
-              {
-                getFieldDecorator('latlngs')(<div></div>)
-              }
+          <Form.Item label="地图" style={{ width: 0, height: 0 }}>
+            {
+              getFieldDecorator('latlngs')(<div></div>)
+            }
           </Form.Item>
           {/* <Form.Item label="是否有地图">
             {type === 'detail' ? '是' : getFieldDecorator('mapabled', {
@@ -308,7 +353,7 @@ export default class GridModal extends React.Component {
               initialValue: initialValue.mapabled || true,
             })(<Switch />)}
           </Form.Item> */}
-        </Form>
+        </Form>}
       </Modal>
     );
   }

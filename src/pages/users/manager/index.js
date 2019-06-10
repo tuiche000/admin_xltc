@@ -92,30 +92,30 @@ export default class AdvancedSearchForm extends React.Component {
         title: '名字',
         dataIndex: 'name',
       },
-      {
-        title: '邮箱',
-        dataIndex: 'email',
-      },
+      // {
+      //   title: '邮箱',
+      //   dataIndex: 'email',
+      // },
       {
         title: '电话',
         dataIndex: 'phone',
       },
       {
         title: '踏查职级',
-        dataIndex: 'roadManagerRank',
+        dataIndex: 'LevelName',
       },
       {
         title: '责任部门',
-        dataIndex: 'department',
+        dataIndex: 'DepartmentName',
       },
-      {
-        title: '启用',
-        dataIndex: 'enable',
-      },
-      {
-        title: '角色',
-        dataIndex: 'roles',
-      },
+      // {
+      //   title: '启用',
+      //   dataIndex: 'enable',
+      // },
+      // {
+      //   title: '角色',
+      //   dataIndex: 'roles',
+      // },
       {
         title: '操作',
         render(text, record) {
@@ -164,7 +164,7 @@ export default class AdvancedSearchForm extends React.Component {
           </Button>
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
-          <Alert message="Informational Notes" type="info" showIcon style={{ marginBottom: '16px' }} />
+          {/* <Alert message="Informational Notes" type="info" showIcon style={{ marginBottom: '16px' }} /> */}
           <Table rowKey="id" rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
         </section>
 

@@ -5,8 +5,8 @@ import { Map, MouseTool, Polyline, PolyEditor } from 'react-amap';
 
 const Search = Input.Search;
 export default class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     const self = this;
     this.state = {
       lineActive: false,
@@ -19,12 +19,12 @@ export default class App extends React.Component {
         // var auto = new AMap.Autocomplete({
         //   input: "tipinput"
         // });
-        console.log('高德地图 Map 实例创建成功；如果你要亲自对实例进行操作，可以从这里开始。比如：');
+        // console.log('高德地图 Map 实例创建成功；如果你要亲自对实例进行操作，可以从这里开始。比如：');
       }
     };
     this.toolEvents = {
       created: (tool) => {
-        console.log(tool)
+        // console.log(tool)
         self.tool = tool;
       },
       draw({ obj }) {
@@ -32,7 +32,9 @@ export default class App extends React.Component {
       }
     }
     this.editorEvents = {
-      created: (ins) => { console.log(ins) },
+      created: (ins) => {
+        //console.log(ins) 
+      },
       addnode: () => { console.log('polyeditor addnode') },
       adjust: () => { console.log('polyeditor adjust') },
       removenode: () => { console.log('polyeditor removenode') },
@@ -47,12 +49,17 @@ export default class App extends React.Component {
         self.props.save(latlngs)
       },
     };
-    this.mapCenter = { longitude: 116.47498, latitude: 40.016243 }
+    const { Platlngs } = props
+    if (Platlngs) {
+
+    }
+
+    // this.mapCenter = { longitude: 116.47498, latitude: 40.016243 }
   }
 
   drawWhat(obj) {
     let text = '';
-    console.log(obj)
+    // console.log(obj)
     switch (obj.CLASS_NAME) {
       case 'AMap.Polyline':
         let paths = obj.getPath()
@@ -72,7 +79,7 @@ export default class App extends React.Component {
 
   // 准备绘制折线
   polyline() {
-    console.log(this.tool)
+    // console.log(this.tool)
     if (this.tool) {
       this.tool.polyline();
       this.setState({
@@ -93,8 +100,8 @@ export default class App extends React.Component {
 
   componentDidMount() {
     const { type, Platlngs } = this.props
-    console.log(type)
     if (type === 'edit') {
+      this.props.save(Platlngs)
       this.setState({
         Slatlngs: Platlngs
       })
@@ -133,7 +140,7 @@ export default class App extends React.Component {
               flexDirection: 'column',
             }}>
               {
-                type == 'add' && <Button onClick={() => { this.polyline() }}>新增地图责任网络</Button>
+                (type == 'add' || true) && <Button onClick={() => { this.polyline() }}>新增地图责任网络</Button>
               }
               {
                 type == 'edit' && <Button onClick={() => {

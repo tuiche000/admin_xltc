@@ -139,14 +139,26 @@ export default class AdvancedSearchForm extends React.Component {
     const { type, initialValue } = this.state
     const form = this.formRef.props.form;
     form.validateFields((err, values) => {
+      values.region = values.region.value
+      if (values.latlngs && values.latlngs.length) {
+        values.mapabled = true
+      } else {
+        values.mapabled = false
+      }
       console.log(values)
       if (err) {
         return;
       }
       if (type == 'add') {
+        values.departments = values.departments.map(item => {
+          return item.value
+        })
         this.fnGridAdd(values)
       } else if (type == 'edit') {
         values.id = initialValue.id
+        values.departments = values.departments.map(item => {
+          return item.value
+        })
         this.fnGridEdit(values)
       }
 
@@ -174,28 +186,32 @@ export default class AdvancedSearchForm extends React.Component {
   render() {
     const _this = this
     const columns = [
+      // {
+      //   title: '名字',
+      //   dataIndex: 'name',
+      //   render: text => <a href="javascript:;">{text}</a>,
+      // },
       {
-        title: '名字',
+        title: '责任网格',
         dataIndex: 'name',
-        render: text => <a href="javascript:;">{text}</a>,
       },
       {
-        title: '路型等级',
-        dataIndex: 'roadType',
+        title: '行政区域名称',
+        dataIndex: 'regionFullName',
       },
       {
-        title: '责任路长',
-        dataIndex: 'address',
-      },
-      {
-        title: '行政区域',
-        dataIndex: 'region',
-      },
-      {
-        title: '是否有地图',
+        title: '地图责任网格',
         dataIndex: 'mapabled',
         render: text => <span href="javascript:;">{text.mapabled ? '是' : '否'}</span>
       },
+      {
+        title: '行政级别型等级',
+        dataIndex: 'roadTypeName',
+      },
+      // {
+      //   title: '责任部门',
+      //   dataIndex: 'departments',
+      // },
       {
         title: '操作',
         render(text, record) {
@@ -262,7 +278,7 @@ export default class AdvancedSearchForm extends React.Component {
           </Button>
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
-          <Alert message="Informational Notes" type="info" showIcon style={{ marginBottom: '16px' }} />
+          {/* <Alert message="Informational Notes" type="info" showIcon style={{ marginBottom: '16px' }} /> */}
           <Table rowKey="id" rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
         </section>
         {

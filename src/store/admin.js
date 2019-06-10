@@ -8,6 +8,7 @@ export default function (state = { login: false, token: {} }, action) {
       return { ...state, token: action.value, login: true }
     case LOGIN_OUT:
       localStorage.clear()
+      window.location.reload()
       return { login: false, token: {} };
     default:
       return state;
