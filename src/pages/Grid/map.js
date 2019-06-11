@@ -140,7 +140,7 @@ export default class App extends React.Component {
               flexDirection: 'column',
             }}>
               {
-                (type == 'add' || true) && <Button onClick={() => { this.polyline() }}>新增地图责任网络</Button>
+                (type == 'add' || true) && <Button onClick={() => { this.polyline() }}>新增地图责任网格</Button>
               }
               {
                 type == 'edit' && <Button onClick={() => {

@@ -1,5 +1,5 @@
 import Login from '@/pages/Login';
-// 责任网络
+// 责任网格
 import Grid from '@/pages/Grid';
 // 问题台账
 import Issue from '@/pages/Issue';
@@ -31,11 +31,11 @@ export const allRouters = [
 ]
 export default [
   // { path: '/', component: 'Banner', name: '首页', icon: 'home' },
-  { path: '/grid', component: 'Grid', name: '责任网络', icon: 'home' },
+  { path: '/grid', component: 'Grid', name: '责任网格' },
   {
     path: '/users',
     name: '权限管理',
-    icon: 'user',
+    // icon: 'user',
     routes: [
       {
         path: '/users/manager',
@@ -50,11 +50,11 @@ export default [
     ]
   },
   // { path: '/map', component: 'MapTest', name: '地图测试', icon: 'home' },
-  // { path: '/grid', component: 'Grid', name: '责任网络', icon: 'home' },
+  // { path: '/grid', component: 'Grid', name: '责任网格', icon: 'home' },
   {
     path: '/basicData',
     name: '基本数据',
-    icon: 'user',
+    // icon: 'user',
     routes: [
       {
         path: '/basicData/region',
@@ -73,11 +73,11 @@ export default [
       // },
     ]
   },
-  { path: '/issue', component: 'Grid', name: '问题台账', icon: 'home' },
+  { path: '/issue', component: 'Grid', name: '问题台账', },
   {
     path: '/tacha',
     name: '踏查管理',
-    icon: 'user',
+    // icon: 'user',
     component: Tacha,
   },
 ]

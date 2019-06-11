@@ -42,7 +42,7 @@ export default class Home extends Component {
         <header >
           <Row style={{ width: '1024px', marginTop: 30 }} type="flex" justify="space-between">
             <Col span={12}>
-              <Title level={2}>市政管理巡查责任网络平台</Title>
+              <Title level={2}>市政管理巡查责任网格平台</Title>
             </Col>
             <Col span={12}>
               {

@@ -180,7 +180,7 @@ export default class AdvancedSearchForm extends React.Component {
       //   }>{text}</a>,
       // },
       {
-        title: '责任网络',
+        title: '责任网格',
         dataIndex: 'gridName',
       },
       {

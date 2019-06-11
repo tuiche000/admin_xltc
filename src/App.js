@@ -5,10 +5,9 @@ import { message as Message } from 'antd'
 /*eslint-enable no-unused-vars*/
 
 import { connect } from 'react-redux';
-import Layout from './layout/index';
-
 import { setLogin } from './actions';
 
+import Layout from './layout/index';
 import Home from '@/pages/Home';
 
 import api from './api/index'

@@ -27,7 +27,7 @@ export default class IssuseModal extends React.Component {
     let { data } = this.state
     return (
       <Modal
-        // title={type === 'add' ? `添加责任网络` : `编辑责任网络`}
+        // title={type === 'add' ? `添加责任网格` : `编辑责任网格`}
         visible={this.props.visible}
         width="80%"
         footer={null}

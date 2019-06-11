@@ -8,7 +8,7 @@ import {
   gridList, gridDel, gridAdd, gridPut, gridId,
 } from './grid'
 import {
-  userList, userAdd, userDel, userPut,
+  userList, userAdd, userDel, userPut, userSelf,
 } from './user'
 import {
   issueList, issueId,
@@ -21,7 +21,7 @@ export default {
   regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut, regionId,
   departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit, departmentAll,
   gridList, gridDel, gridAdd, gridPut, gridId,
-  userList, userAdd, userDel, userPut,
+  userList, userAdd, userDel, userPut, userSelf,
   issueList, issueId,
   tachaList, tachaId,
 }

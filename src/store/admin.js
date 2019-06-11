@@ -1,6 +1,6 @@
-import { SET_LOGIN, LOGIN_OUT } from '../actions';
+import { SET_LOGIN, LOGIN_OUT, USER_INFO } from '../actions';
 
-export default function (state = { login: false, token: {} }, action) {
+export default function (state = { login: false, token: {}, user_info: {} }, action) {
   switch (action.type) {
     case SET_LOGIN:
       localStorage.setItem('login', true)
@@ -10,6 +10,9 @@ export default function (state = { login: false, token: {} }, action) {
       localStorage.clear()
       window.location.reload()
       return { login: false, token: {} };
+    case USER_INFO:
+      localStorage.setItem(USER_INFO, JSON.stringify(action.value))
+      return { ...state, user_info: action.value };
     default:
       return state;
   }

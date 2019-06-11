@@ -212,8 +212,8 @@ export default class GridModal extends React.Component {
 
   render() {
     const { form, type } = this.props;
-    const { lineLatlngs, regionValue, departmentsVal, initialValue, } = this.state
-    console.log(initialValue)
+    let { lineLatlngs, regionValue, departmentsVal, initialValue, } = this.state
+    if (!initialValue) initialValue = {}
     const { userOpt } = this.state
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -230,12 +230,12 @@ export default class GridModal extends React.Component {
       <Modal
         width='90%'
         style={{ top: 0 }}
-        title={type === 'add' ? `添加责任网络` : `编辑责任网络`}
+        title={type === 'add' ? `添加责任网格` : `编辑责任网格`}
         visible={this.props.visible}
         onOk={this.props.onOk}
         onCancel={this.props.onCancel}
       >
-        {initialValue && <Form {...formItemLayout} layout="vertical">
+        {<Form {...formItemLayout} layout="vertical">
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item label="所属行政区">
@@ -275,7 +275,7 @@ export default class GridModal extends React.Component {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item label="请输入责任网络">
+              <Form.Item label="请输入责任网格">
                 {type === 'detail' ? '第一路和第二路' : getFieldDecorator('name', {
                   rules: [{ required: true, message: 'Please input' }],
                   initialValue: initialValue.name,

@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Row, Col, Avatar, Button } from 'antd';
 import { Route, Link } from 'react-router-dom';
 import './index.css'
 import Routes from '@/routes'
 import { allRouters } from '@/routes'
 
+import { connect } from 'react-redux';
+import { userInfo, loginOut } from '@/actions';
+
 const { Header, Sider, Content } = Layout;
 const SubMenu = Menu.SubMenu;
 
+@connect((state, props) => Object.assign({}, props, state), {
+  userInfo, loginOut
+})
 export default class BasicLayout extends Component {
   constructor(...args) {
     super(...args)
@@ -63,6 +69,11 @@ export default class BasicLayout extends Component {
     )
   }
 
+  userSelf = async () => {
+    let data = await window._api.userSelf()
+    this.props.userInfo(data)
+  }
+
   componentWillMount() {
     let pathname = this.props.location.pathname
     let pathSnippets = pathname.split('/').filter(item => item)
@@ -73,9 +84,12 @@ export default class BasicLayout extends Component {
         defaultSelectedKeys: [`${pathname}`]
       }
     })
+    this.userSelf()
   }
 
   render() {
+    const _this = this
+    const { name, avatar, levelName, } = this.props.admin.user_info
     return (
       <Layout id="components-layout-demo-custom-trigger">
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
@@ -86,11 +100,29 @@ export default class BasicLayout extends Component {
         </Sider>
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }}>
-            <Icon
-              className="trigger"
-              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={this.toggle}
-            />
+            <Row type="flex" justify="space-between">
+              <Col>
+                <Icon
+                  className="trigger"
+                  type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                  onClick={this.toggle}
+                />
+              </Col>
+              <Col style={{ marginRight: 24 }}>
+                <Row gutter={10} type="flex">
+                  <Col>
+                    <Avatar src={avatar} icon="user" />
+                  </Col>
+                  <Col>{name}</Col>
+                  {levelName && <Col>{levelName}</Col>}
+                  <Col><Button style={{padding: 0}} type="link" onClick={
+                    () => {
+                      _this.props.loginOut()
+                    }
+                  }>退出</Button></Col>
+                </Row>
+              </Col>
+            </Row>
           </Header>
           <Content
             style={{
