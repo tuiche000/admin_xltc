@@ -72,7 +72,7 @@ export default class Login extends Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 },
+        sm: { span: 6 },
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -87,7 +87,7 @@ export default class Login extends Component {
         },
         sm: {
           span: 16,
-          offset: 8,
+          offset: 6,
         },
       },
     };
@@ -100,7 +100,7 @@ export default class Login extends Component {
       >
         <Row align="middle" type="flex" justify="center" gutter={10} style={{ marginBottom: 50 }}>
           <Col><img src={fang} /></Col>
-          <Col>{type == 'login' ? (<Title level={2} style={{ marginBottom: 0, color: '#e67e22' }}>登录</Title>) : (<Title level={2}>注册</Title>)}</Col>
+          <Col>{type == 'login' ? (<Title level={2} style={{ marginBottom: 0, color: '#e67e22' }}>登录</Title>) : (<Title style={{ marginBottom: 0, color: '#e67e22' }} level={2}>注册</Title>)}</Col>
           <Col><img src={fang} /></Col>
         </Row>
         {

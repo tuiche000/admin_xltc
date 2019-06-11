@@ -135,7 +135,7 @@ export default class RegistrationForm extends React.Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 },
+        sm: { span: 6 },
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -150,7 +150,7 @@ export default class RegistrationForm extends React.Component {
         },
         sm: {
           span: 16,
-          offset: 8,
+          offset: 6,
         },
       },
     };
@@ -247,7 +247,7 @@ export default class RegistrationForm extends React.Component {
           })(<Input />)}
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit">
+          <Button style={{ background: '#e67e22', color: '#fff' }} size="large" block htmlType="submit">
             注册
           </Button>
         </Form.Item>
