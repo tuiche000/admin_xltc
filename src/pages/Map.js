@@ -18,6 +18,7 @@ export default class MaoTest extends React.Component {
     this.state = {
       what: '点击下方按钮开始绘制'
     };
+    this.loadUI()
     this.toolEvents = {
       created: (tool) => {
         console.log(tool)
@@ -27,10 +28,17 @@ export default class MaoTest extends React.Component {
         self.drawWhat(obj);
       }
     }
+    
     this.mapPlugins = ['ToolBar'];
     this.mapCenter = { longitude: 120, latitude: 35 };
   }
 
+  loadUI() {
+    window.AMapUI.loadUI(['overlay/SimpleMarker'], (SimpleMarker) => {
+      this.initPage(SimpleMarker);
+    })
+  }
+  
   drawWhat(obj) {
     let text = '';
     console.log(obj)

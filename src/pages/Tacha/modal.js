@@ -35,9 +35,10 @@ export default class IssuseModal extends React.Component {
         // onOk={this.props.onOk}
         onCancel={this.props.onCancel}
       >
-        <Map
+        {Object.keys(this.state.data).length && <Map
           data={this.state.data}
-        ></Map>
+        ></Map>}
+
       </Modal>
     )
   }

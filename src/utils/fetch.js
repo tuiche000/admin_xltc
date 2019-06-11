@@ -42,7 +42,7 @@ async function commonFetcdh(url, options, method = 'GET', query) {
     let res = await fetch((BASE + url), initObj)
     if (res.status == 401) {
       Modal.error({
-        title: '401',
+        // title: '401',
         content: '登录过期了,请重新登录.',
         onOk() {
           localStorage.clear()

@@ -5,7 +5,7 @@ export default class IssuseModal extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: {}
+      data: undefined
     }
   }
 
@@ -34,6 +34,8 @@ export default class IssuseModal extends React.Component {
         // onOk={this.props.onOk}
         onCancel={this.props.onCancel}
       >
+      {data && (<div>
+
         <section>
           <Descriptions title="荣创路17号_问题000 详情">
             <Descriptions.Item label="问题名称">{data.name}</Descriptions.Item>
@@ -77,6 +79,8 @@ export default class IssuseModal extends React.Component {
             <p>{data.feedback && data.feedback.description}</p>
           </Card>
         </section>
+      </div>)}
+        
       </Modal>
     )
   }
