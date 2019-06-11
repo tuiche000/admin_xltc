@@ -1,10 +1,9 @@
 import React from 'react'
 import { Form, Col, Rate, message } from 'antd';
-import { Table } from 'antd';
 import IssueModal from './modal'
+import MyTable from '@/components/Table'
 import HotTags from '@/components/HotTags'
 
-// rowSelection object indicates the need for row selection
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -23,12 +22,21 @@ export default class AdvancedSearchForm extends React.Component {
     type: 'add',
     id: undefined, // 点击详情的id
     initialValue: {}, // form回显的字段
+    //
+    pageNo: 1,
+    pageSize: 10,
+    totalResults: 1,
+    tableLoading: false,
+    //
   };
 
-  fnIssueList = async () => {
-    let data = await window._api.issueList()
+  fnIssueList = async (pageNo, pageSize) => {
+    let data = await window._api.issueList({}, {
+      pageNo, pageSize
+    })
     this.setState({
-      tableData: data.result
+      tableData: data.result,
+      totalResults: data.totalResults
     })
   }
 
@@ -75,7 +83,7 @@ export default class AdvancedSearchForm extends React.Component {
     let { code } = await window._api.gridDel(record.id)
     if (code == 0) {
       message.success('删除成功')
-      this.fnGridList()
+      this.fnIssueList()
     }
     // this.formRef.props.form.resetFields()
     // this.getRegionChildren(this.state.selectedKeys[0])
@@ -84,6 +92,10 @@ export default class AdvancedSearchForm extends React.Component {
   // HotTags
   fnChange(tag) {
     console.log(tag)
+  }
+
+  fnTableChange = (pageNo, pageSize) => {
+    this.fnIssueList(pageNo, pageSize)
   }
 
   componentDidMount() {
@@ -237,7 +249,16 @@ export default class AdvancedSearchForm extends React.Component {
             fnChange={this.fnChange}
           ></HotTags>
           <br></br>
-          <Table rowKey="id" rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
+          <MyTable
+            total={this.state.totalResults}
+            rowSelection={rowSelection}
+            columns={columns}
+            loading={this.state.tableLoading}
+            fnTableChange={(pageNo, pageSize) => {
+              this.fnTableChange(pageNo, pageSize)
+            }}
+            tableData={this.state.tableData}
+          ></MyTable>
         </section>
         {
           visible && <IssueModal

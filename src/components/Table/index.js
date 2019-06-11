@@ -14,19 +14,24 @@ export default class MyTable extends React.Component {
 
   render() {
     const { total, fnTableChange, rowSelection, columns, tableData } = this.props
-    console.log(tableData)
     return (
       <div>
-        <Alert message={`共有${total}条数据`} type="info" showIcon style={{ marginBottom: '16px' }} />
-        <Table pagination={
-          {
-            "showQuickJumper": true,
-            total,
-            onChange(page, pageSize) {
-              fnTableChange(page, pageSize)
+        {/* <Alert message={`共有${total}条数据`} type="info" showIcon style={{ marginBottom: '16px' }} /> */}
+        <Table
+          pagination={
+            {
+              "showQuickJumper": true,
+              total,
+              onChange(page, pageSize) {
+                fnTableChange(page, pageSize)
+              }
             }
           }
-        } rowSelection={rowSelection} columns={columns} dataSource={tableData} />
+          rowKey="id"
+          rowSelection={rowSelection}
+          columns={columns}
+          dataSource={tableData}
+        />
       </div>
     );
   }

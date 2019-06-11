@@ -1,9 +1,8 @@
 import React from 'react'
-import { Form, Alert, Button, Popconfirm, message } from 'antd';
-import { Table } from 'antd';
+import { Form, Button, Popconfirm, message } from 'antd';
 import ModalForm from './form'
+import MyTable from '@/components/Table'
 
-// rowSelection object indicates the need for row selection
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -22,13 +21,21 @@ export default class AdvancedSearchForm extends React.Component {
     initialValue: {},
     tableData: [],
     type: 'add',
+    //
+    pageNo: 1,
+    pageSize: 10,
+    totalResults: 1,
+    tableLoading: false,
+    //
   };
 
-  fnUserList = async () => {
-    let data = await window._api.userList()
-    console.log(data)
+  fnUserList = async (pageNo, pageSize) => {
+    let data = await window._api.userList({
+      pageNo, pageSize
+    })
     this.setState({
-      tableData: data.result
+      tableData: data.result,
+      totalResults: data.totalResults,
     })
   }
 
@@ -75,6 +82,13 @@ export default class AdvancedSearchForm extends React.Component {
       this.setState({ visible: false });
     });
   };
+
+  fnTableChange = (pageNo, pageSize) => {
+    this.setState({
+      pageNo, pageSize
+    })
+    this.fnUserList(pageNo, pageSize)
+  }
 
   componentDidMount() {
     this.fnUserList()
@@ -164,8 +178,16 @@ export default class AdvancedSearchForm extends React.Component {
           </Button>
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
-          {/* <Alert message="Informational Notes" type="info" showIcon style={{ marginBottom: '16px' }} /> */}
-          <Table rowKey="id" rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
+        <MyTable
+            total={this.state.totalResults}
+            rowSelection={rowSelection}
+            columns={columns}
+            loading={this.state.tableLoading}
+            fnTableChange={(pageNo, pageSize) => {
+              this.fnTableChange(pageNo, pageSize)
+            }}
+            tableData={this.state.tableData}
+          ></MyTable>
         </section>
 
         <ModalForm

@@ -1,20 +1,8 @@
 import React from 'react'
-import { Form, Row, Col, Input, Alert, Button, Icon, Popconfirm, message } from 'antd';
+import { Form, Row, Col, Input, Button, Icon, Popconfirm, message } from 'antd';
 import './index.css'
-import { Table } from 'antd';
-// import ModalForm from './form'
+import MyTable from '@/components/Table'
 import GridModal from './modal'
-
-// rowSelection object indicates the need for row selection
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-  getCheckboxProps: record => ({
-    disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    name: record.name,
-  }),
-};
 
 @Form.create()
 export default class AdvancedSearchForm extends React.Component {
@@ -24,6 +12,12 @@ export default class AdvancedSearchForm extends React.Component {
     tableData: [],
     type: 'add',
     initialValue: {}, // form回显的字段
+    //
+    pageNo: 1,
+    pageSize: 10,
+    totalResults: 1,
+    tableLoading: false,
+    //
   };
 
   // To generate mock Form.Item
@@ -106,10 +100,13 @@ export default class AdvancedSearchForm extends React.Component {
     });
   };
 
-  fnGridList = async () => {
-    let data = await window._api.gridList()
+  fnGridList = async (pageNo, pageSize) => {
+    let data = await window._api.gridList({
+      pageNo, pageSize
+    })
     this.setState({
-      tableData: data.result
+      tableData: data.result,
+      totalResults: data.totalResults
     })
   }
 
@@ -168,6 +165,10 @@ export default class AdvancedSearchForm extends React.Component {
     });
   }
 
+  fnTableChange = (pageNo, pageSize) => {
+    this.fnGridList(pageNo, pageSize)
+  }
+
   // 删除责任网格
   fnGridDel = async (record) => {
     let { code } = await window._api.gridDel(record.id)
@@ -185,6 +186,15 @@ export default class AdvancedSearchForm extends React.Component {
 
   render() {
     const _this = this
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      },
+      getCheckboxProps: record => ({
+        disabled: record.name === 'Disabled User', // Column configuration not to be checked
+        name: record.name,
+      }),
+    };
     const columns = [
       // {
       //   title: '名字',
@@ -278,8 +288,16 @@ export default class AdvancedSearchForm extends React.Component {
           </Button>
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
-          {/* <Alert message="Informational Notes" type="info" showIcon style={{ marginBottom: '16px' }} /> */}
-          <Table rowKey="id" rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
+          <MyTable
+            total={this.state.totalResults}
+            rowSelection={rowSelection}
+            columns={columns}
+            loading={this.state.tableLoading}
+            fnTableChange={(pageNo, pageSize) => {
+              this.fnTableChange(pageNo, pageSize)
+            }}
+            tableData={this.state.tableData}
+          ></MyTable>
         </section>
         {
           this.state.visible && <GridModal

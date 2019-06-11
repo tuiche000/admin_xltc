@@ -49,11 +49,10 @@ export default class App extends React.Component {
         self.props.save(latlngs)
       },
     };
-    const { Platlngs } = props
-    if (Platlngs) {
-
-    }
-
+    // const { Platlngs } = this.props
+    // if (Platlngs) {
+    //   this.mapCenter = { longitude: Platlngs.latlngs[0].longitude, latitude: Platlngs.latlngs[0].latitude }
+    // }
     // this.mapCenter = { longitude: 116.47498, latitude: 40.016243 }
   }
 

@@ -182,6 +182,14 @@ export default class AdvancedSearchForm extends React.Component {
       {
         title: '责任网格',
         dataIndex: 'gridName',
+        render: (text, cord) => <a href="javascript:;" onClick={
+          () => {
+            _this.setState({
+              id: cord.id,
+              visible: true
+            })
+          }
+        }>{text}</a>,
       },
       {
         title: '起点',
