@@ -51,6 +51,7 @@ export default class App extends React.Component {
         self.props.save(latlngs)
       },
     };
+    this.mapCenter = { longitude: 119.5658900000, latitude: 39.9092000000 }
   }
 
   drawWhat(obj) {
