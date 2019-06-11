@@ -1,8 +1,10 @@
 import React from 'react'
-import { Form, Row, Col, Input, Button, Icon, Popconfirm, message } from 'antd';
+import { Form, Row, Col, Input, Button, Popconfirm, message } from 'antd';
 import './index.css'
 import MyTable from '@/components/Table'
 import GridModal from './modal'
+
+const Search = Input.Search
 
 @Form.create()
 export default class AdvancedSearchForm extends React.Component {
@@ -17,6 +19,7 @@ export default class AdvancedSearchForm extends React.Component {
     pageSize: 10,
     totalResults: 1,
     tableLoading: false,
+    keyword: ''
     //
   };
 
@@ -100,13 +103,13 @@ export default class AdvancedSearchForm extends React.Component {
     });
   };
 
-  fnGridList = async (pageNo, pageSize) => {
+  fnGridList = async (pageNo, pageSize, keyword) => {
     let data = await window._api.gridList({
-      pageNo, pageSize
+      pageNo, pageSize, keyword
     })
     this.setState({
       tableData: data.result,
-      totalResults: data.totalResults
+      totalResults: data.totalResults,
     })
   }
 
@@ -206,13 +209,17 @@ export default class AdvancedSearchForm extends React.Component {
         dataIndex: 'name',
       },
       {
+        title: '责任范围',
+        dataIndex: 'range',
+      },
+      {
         title: '行政区域名称',
         dataIndex: 'regionFullName',
       },
       {
         title: '地图责任网格',
         dataIndex: 'mapabled',
-        render: text => <span href="javascript:;">{text.mapabled ? '是' : '否'}</span>
+        render: (text, cord) => <span href="javascript:;">{cord.mapabled ? '是' : '否'}</span>
       },
       {
         title: '行政级别型等级',
@@ -264,9 +271,20 @@ export default class AdvancedSearchForm extends React.Component {
       <main id="Grid_Container">
         <section className="antd-pro-pages-list-table-list-tableListForm">
           <Form onSubmit={this.handleSearch}>
-            <Row gutter={24}>{this.getFields()}</Row>
+
+            {/* <Row gutter={24}>{this.getFields()}</Row> */}
             <Row>
-              <Col span={24} style={{ textAlign: 'right' }}>
+              <Col span={8}>
+                <Search placeholder="搜索" onSearch={value => {
+                  let { pageNo, pageSize } = this.state
+                  _this.setState({
+                    keyword: value
+                  })
+                  _this.fnGridList(pageNo, pageSize, value)
+                }} enterButton />
+
+              </Col>
+              {/* <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit">
                   查询
             </Button>
@@ -276,10 +294,11 @@ export default class AdvancedSearchForm extends React.Component {
                 <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
                   展开更多 <Icon type={this.state.expand ? 'up' : 'down'} />
                 </a>
-              </Col>
+              </Col> */}
             </Row>
           </Form>
         </section>
+        <br></br>
         <section className="antd-pro-pages-list-table-list-tableListOperator">
           <Button icon="plus" type="primary" onClick={e => {
             this.setState({ initialValue: {}, visible: true, type: 'add' });

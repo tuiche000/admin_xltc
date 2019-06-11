@@ -188,9 +188,6 @@ export default class GridModal extends React.Component {
       item.label = item.name
       return item
     })
-    // departmentNames.value = departmentNames.id
-    // departmentNames.label = departmentNames.name
-    console.log(departmentNames)
     this.setState({
       departmentsVal: departmentNames,
       initialValue: data
@@ -212,7 +209,8 @@ export default class GridModal extends React.Component {
 
   render() {
     const { form, type } = this.props;
-    let { lineLatlngs, regionValue, departmentsVal, initialValue, } = this.state
+    let { regionValue, departmentsVal, initialValue, } = this.state
+    console.log(initialValue)
     if (!initialValue) initialValue = {}
     const { userOpt } = this.state
     const { getFieldDecorator } = form;
@@ -329,16 +327,29 @@ export default class GridModal extends React.Component {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Map
-                togglePolyline={this.fnTogglePolyline}
-                // edit={this.state.edit}
-                save={(latlngs) => {
-                  this.mapSave(latlngs)
-                }}
-                type={this.props.type}
+              {
+                (type == 'edit' && Object.keys(initialValue).length) && <Map
+                  togglePolyline={this.fnTogglePolyline}
+                  // edit={this.state.edit}
+                  save={(latlngs) => {
+                    this.mapSave(latlngs)
+                  }}
+                  type={this.props.type}
+                  // Platlngs={lineLatlngs}
+                  Platlngs={initialValue.latlngs}
+                />
+              }
+              {
+                type == 'add' && <Map
+                  togglePolyline={this.fnTogglePolyline}
+                  // edit={this.state.edit}
+                  save={(latlngs) => {
+                    this.mapSave(latlngs)
+                  }}
+                  type={this.props.type}
                 // Platlngs={lineLatlngs}
-                Platlngs={initialValue.latlngs}
-              />
+                />
+              }
             </Col>
           </Row>
           <Form.Item label="地图" style={{ width: 0, height: 0 }}>

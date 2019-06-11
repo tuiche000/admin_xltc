@@ -14,6 +14,8 @@ export default class App extends React.Component {
     };
     this.amapEvents = {
       created: (mapInstance) => {
+        console.log('高德地图 Map 实例:', mapInstance)
+        self.instance = mapInstance
         // console.log(window.AMap)
         // //输入提示
         // var auto = new AMap.Autocomplete({
@@ -49,11 +51,6 @@ export default class App extends React.Component {
         self.props.save(latlngs)
       },
     };
-    // const { Platlngs } = this.props
-    // if (Platlngs) {
-    //   this.mapCenter = { longitude: Platlngs.latlngs[0].longitude, latitude: Platlngs.latlngs[0].latitude }
-    // }
-    // this.mapCenter = { longitude: 116.47498, latitude: 40.016243 }
   }
 
   drawWhat(obj) {
@@ -97,14 +94,17 @@ export default class App extends React.Component {
     this.props.save([])
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const { type, Platlngs } = this.props
+    console.log(Platlngs)
     if (type === 'edit') {
       this.props.save(Platlngs)
       this.setState({
         Slatlngs: Platlngs
       })
+      this.mapCenter = { longitude: Platlngs[0].longitude, latitude: Platlngs[0].latitude }
     } else {
+      console.log(self.instance)
       this.setState({
         Slatlngs: []
       })
@@ -115,6 +115,7 @@ export default class App extends React.Component {
     const { type } = this.props
     const { Slatlngs } = this.state
     const latlngs = Slatlngs
+    // console.log(latlngs)
     const plugins = ['ToolBar']
     return (
       <div>
