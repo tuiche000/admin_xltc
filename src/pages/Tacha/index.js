@@ -167,41 +167,45 @@ export default class AdvancedSearchForm extends React.Component {
     const _this = this
     const { visible } = _this.state
     const columns = [
-      {
-        title: '踏查编码',
-        dataIndex: 'id',
-        render: (text, cord) => <a href="javascript:;" onClick={
-          () => {
-            _this.setState({
-              id: cord.id,
-              visible: true
-            })
-          }
-        }>{text}</a>,
-      },
+      // {
+      //   title: '踏查编码',
+      //   dataIndex: 'id',
+      //   render: (text, cord) => <a href="javascript:;" onClick={
+      //     () => {
+      //       _this.setState({
+      //         id: cord.id,
+      //         visible: true
+      //       })
+      //     }
+      //   }>{text}</a>,
+      // },
       {
         title: '责任网络',
-        dataIndex: 'grid',
+        dataIndex: 'gridName',
       },
       {
         title: '起点',
-        dataIndex: 'beginAdbegindress',
+        dataIndex: 'beginAddress',
       },
       {
         title: '终点',
         dataIndex: 'endAddress',
       },
-      {
-        title: '角色',
-        dataIndex: 'rank',
-      },
+      // {
+      //   title: '角色',
+      //   dataIndex: 'rank',
+      // },
       {
         title: '姓名',
         dataIndex: 'userName',
       },
       {
-        title: '踏查时间',
+        title: '开始时间',
         dataIndex: 'beginTime',
+      },
+      {
+        title: '结束时间',
+        dataIndex: 'endTime',
       },
       {
         title: '里程(km)',

@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import { Modal, Button, Form, Input, Icon, message as Message } from 'antd';
+import { Modal, Button, Form, Input, Icon, message as Message, Row, Typography, Col } from 'antd';
 import {
   withRouter
 } from "react-router-dom"
 import { connect } from 'react-redux';
 import { _POST } from '@/utils/fetch'
+import fang from '@/assets/fang.png'
 
 import fetchJson from '../utils/fetch';
 import Register from './Register'
 
 import { setLogin } from '../actions';
+const { Title } = Typography
 
 @connect((state, props) => Object.assign({}, props, state), {
   setLogin
@@ -40,7 +42,7 @@ export default class Login extends Component {
   // }
   login = async (json) => {
     let data = await _POST('api/oss/user/login', json)
-    
+
     if (data) {
       Message.success('登录成功');
       this.props.fnCancel()
@@ -96,7 +98,11 @@ export default class Login extends Component {
         onCancel={this.props.fnCancel}
         footer={null}
       >
-        <h2>{type == 'login' ? '登录' : '注册'}</h2>
+        <Row align="middle" type="flex" justify="center" gutter={10} style={{ marginBottom: 50 }}>
+          <Col><img src={fang} /></Col>
+          <Col>{type == 'login' ? (<Title level={2} style={{ marginBottom: 0, color: '#e67e22' }}>登录</Title>) : (<Title level={2}>注册</Title>)}</Col>
+          <Col><img src={fang} /></Col>
+        </Row>
         {
           type == 'login' ? <Form {...formItemLayout} onSubmit={this.handleSubmit}>
             <Form.Item label="用户名" hasFeedback>
@@ -123,7 +129,7 @@ export default class Login extends Component {
               })(<Input.Password />)}
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>
-              <Button type="primary" htmlType="submit">
+              <Button style={{ background: '#e67e22', color: '#fff' }} size="large" block htmlType="submit">
                 登录
           </Button>
             </Form.Item>

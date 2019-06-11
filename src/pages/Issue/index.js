@@ -108,11 +108,11 @@ export default class AdvancedSearchForm extends React.Component {
       },
       {
         title: '状态',
-        dataIndex: 'issueStatus',
+        dataIndex: 'issueStatusName',
       },
       {
         title: '角色',
-        dataIndex: 'roadManagerRank',
+        dataIndex: 'levelName',
       },
       {
         title: '姓名',
@@ -122,43 +122,43 @@ export default class AdvancedSearchForm extends React.Component {
         title: '问题描述',
         dataIndex: 'description',
       },
-      {
-        title: '地址',
-        dataIndex: 'address',
-      },
+      // {
+      //   title: '地址',
+      //   dataIndex: 'address',
+      // },
       {
         title: '问题级别',
-        dataIndex: 'issueType',
+        dataIndex: 'issueTypeName',
       },
       {
         title: '时间',
         dataIndex: 'createDate',
       },
-      {
-        title: '照片/视频',
-        dataIndex: 'star',
-        render: (text, cord) => {
-          return (
-            <a href="javascript:;" onClick={
-              () => {
-                _this.setState({
-                  id: cord.id,
-                  visible: true,
-                })
-              }
-            }>查看详情</a>
-          )
-        }
-      },
-      {
-        title: '评价',
-        dataIndex: 'star',
-        render: (text, cord) => {
-          if (cord.star) return (
-            <Rate disabled defaultValue={cord.star} />
-          )
-        }
-      },
+      // {
+      //   title: '照片/视频',
+      //   dataIndex: 'star',
+      //   render: (text, cord) => {
+      //     return (
+      //       <a href="javascript:;" onClick={
+      //         () => {
+      //           _this.setState({
+      //             id: cord.id,
+      //             visible: true,
+      //           })
+      //         }
+      //       }>查看详情</a>
+      //     )
+      //   }
+      // },
+      // {
+      //   title: '评价',
+      //   dataIndex: 'star',
+      //   render: (text, cord) => {
+      //     if (cord.star) return (
+      //       <Rate disabled defaultValue={cord.star} />
+      //     )
+      //   }
+      // },
       // {
       //   title: '操作',
       //   render(text, record) {
