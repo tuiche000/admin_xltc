@@ -73,10 +73,8 @@ export default class Home extends Component {
             </Col>
             <div className="header_div">
               <Title level={3}>网格精细化治理城市的探索与实践</Title>
-              <p style={{fontSize:18}}>
-                首家路长责任制度软件实践
-              <br></br>
-                保障国家责任制度落地
+              <p style={{ fontSize: 18 }}>
+                首家路长责任制的软件化实施
               </p>
               <div>
                 <Button ghost size="large" onClick={() => {
@@ -84,7 +82,7 @@ export default class Home extends Component {
                     type: 'login',
                     visible: true,
                   })
-                }}>首家路长责任制的软件化实施</Button>
+                }}>马上体验</Button>
               </div>
             </div>
           </Row>
@@ -100,7 +98,7 @@ export default class Home extends Component {
                 <Title level={4}>你有什么想对我们说的么？</Title>
                 <Search
                   style={{ width: 300 }}
-                  
+
                   enterButton="联系我们"
                   size="large"
                   onSearch={value => {
