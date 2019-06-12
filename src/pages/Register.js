@@ -52,10 +52,10 @@ export default class RegistrationForm extends React.Component {
         }
         let regionId = values.regionId
         values.regionId = regionId[regionId.length - 1]
-        // values.clientId = "5IxFXXu4sgaz6zHrSgUZ8O"
-        // values.clientSecret = "VwdtfBwbbhMPmU7B7lEid3rs8U8XR0XA"
-        values.clientId = "2RLBDDGZd4rmQRkkRvHSZp"
-        values.clientSecret = "Oo6zHfT68VTzGF05g2u1uS6zVBPbcigK"
+        values.clientId = "5IxFXXu4sgaz6zHrSgUZ8O"
+        values.clientSecret = "VwdtfBwbbhMPmU7B7lEid3rs8U8XR0XA"
+        // values.clientId = "2RLBDDGZd4rmQRkkRvHSZp"
+        // values.clientSecret = "Oo6zHfT68VTzGF05g2u1uS6zVBPbcigK"
         this.register({...values, ...this.state.step1Values})
       }
     });

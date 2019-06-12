@@ -1,8 +1,8 @@
 import queryString from 'query-string'
 import { message, Modal } from 'antd'
 
-// let BASE = 'http://checking.fothing.com/'
-let BASE = 'http://lt.loiot.com/'
+let BASE = 'http://checking.fothing.com/'
+// let BASE = 'http://lt.loiot.com/'
 
 /**
  * 真正的请求
