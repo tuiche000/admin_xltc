@@ -72,8 +72,8 @@ export default class Home extends Component {
               }
             </Col>
             <div className="header_div">
-              <Title level={3}>我们制作了一个平滑的小程序</Title>
-              <p>
+              <Title level={3}>网格精细化治理城市的探索与实践</Title>
+              <p style={{fontSize:18}}>
                 首家路长责任制度软件实践
               <br></br>
                 保障国家责任制度落地
@@ -84,7 +84,7 @@ export default class Home extends Component {
                     type: 'login',
                     visible: true,
                   })
-                }}>点我马上体验</Button>
+                }}>首家路长责任制的软件化实施</Button>
               </div>
             </div>
           </Row>
