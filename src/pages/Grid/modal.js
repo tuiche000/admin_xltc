@@ -297,7 +297,8 @@ export default class GridModal extends React.Component {
                   <Select mode="multiple" >
                     {
                       userOpt.map((item, index) => {
-                        return <Option key={item.id}>{item.name}</Option>
+                        // return <Option key={item.id}>{item.name}</Option>
+                        return <Option key={item.id}>{`${item.name}    /    ${item.levelName}`}</Option>
                       })
                     }
                   </Select>
