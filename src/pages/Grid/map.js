@@ -1,9 +1,9 @@
 import React from 'react'
 import { Button, Input } from 'antd'
-import AMap from 'react-amap'
 import { Map, MouseTool, Polyline, PolyEditor } from 'react-amap';
 
 const Search = Input.Search;
+let AMap = null;
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -16,12 +16,8 @@ export default class App extends React.Component {
       created: (mapInstance) => {
         console.log('高德地图 Map 实例:', mapInstance)
         self.instance = mapInstance
-        // console.log(window.AMap)
-        // //输入提示
-        // var auto = new AMap.Autocomplete({
-        //   input: "tipinput"
-        // });
-        // console.log('高德地图 Map 实例创建成功；如果你要亲自对实例进行操作，可以从这里开始。比如：');
+        AMap = window.AMap
+        this.pluginSearch(mapInstance)
       }
     };
     this.toolEvents = {
@@ -52,6 +48,22 @@ export default class App extends React.Component {
       },
     };
     this.mapCenter = { longitude: 119.5658900000, latitude: 39.9092000000 }
+  }
+
+  pluginSearch(mapInstance) {
+    AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch'], function () {
+      var autocomplete = new AMap.Autocomplete({
+        input: "keyword"
+      })
+      var placeSearch = new AMap.PlaceSearch({
+        map: mapInstance
+      })
+      AMap.event.addListener(autocomplete, 'select', function (e) {
+        //TODO 针对选中的poi实现自己的功能
+        placeSearch.setCity(e.poi.adcode);
+        placeSearch.search(e.poi.name)
+      })
+    })
   }
 
   drawWhat(obj) {
@@ -120,8 +132,11 @@ export default class App extends React.Component {
     const plugins = ['ToolBar']
     return (
       <div>
+        <div style={{textAlign: 'center'}}>
+          <Search id="keyword" style={{ width: 300 }} placeholder="地图搜索" enterButton />
+        </div>
         <div style={{ width: '100%', height: '600px' }}>
-          <Map version={'1.4.14'} zoom={17} center={this.mapCenter} plugins={plugins} events={this.amapEvents}>
+          <Map version={'1.4.4'} zoom={17} center={this.mapCenter} plugins={plugins} events={this.amapEvents}>
             <MouseTool events={this.toolEvents} />
             <Polyline path={latlngs}>
               <PolyEditor active={this.state.lineActive} events={this.editorEvents} />
@@ -131,7 +146,7 @@ export default class App extends React.Component {
               top: '10px',
               left: '10px',
             }}>
-              <Search style={{ width: 300 }} placeholder="搜索" onSearch={value => console.log(value)} enterButton />
+              {/* <Search id="keyword" style={{ width: 300 }} placeholder="搜索" onSearch={value => console.log(value)} enterButton /> */}
             </div>
             <div style={{
               position: 'absolute',

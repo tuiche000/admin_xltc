@@ -11,6 +11,7 @@ const layerStyle = {
   left: '10px'
 };
 
+// let AMap = null;
 export default class MaoTest extends React.Component {
   constructor() {
     super();
@@ -18,27 +19,53 @@ export default class MaoTest extends React.Component {
     this.state = {
       what: '点击下方按钮开始绘制'
     };
-    this.loadUI()
     this.toolEvents = {
       created: (tool) => {
-        console.log(tool)
         self.tool = tool;
       },
       draw({ obj }) {
         self.drawWhat(obj);
       }
     }
-    
+    this.amapEvents = {
+      created: (mapInstance) => {
+        // AMap = window.AMap
+        // this.loadUI()
+        // this.pluginSearch(mapInstance)
+        console.log('高德地图 Map 实例创建成功；如果你要亲自对实例进行操作，可以从这里开始。比如：');
+      }
+    };
+
     this.mapPlugins = ['ToolBar'];
     this.mapCenter = { longitude: 120, latitude: 35 };
   }
 
-  loadUI() {
-    window.AMapUI.loadUI(['overlay/SimpleMarker'], (SimpleMarker) => {
-      this.initPage(SimpleMarker);
+  pluginSearch(mapInstance) {
+    AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch'], function () {
+      var autocomplete = new AMap.Autocomplete({
+        input: "keyword"
+      })
+      console.log(mapInstance)
+      var placeSearch = new AMap.PlaceSearch({
+        map: mapInstance
+      })
+      AMap.event.addListener(autocomplete, 'select', function (e) {
+        console.log(e)
+        //TODO 针对选中的poi实现自己的功能
+        placeSearch.setCity(e.poi.adcode);
+        placeSearch.search(e.poi.name)
+      })
     })
   }
-  
+
+  loadUI() {
+    
+    // console.log(AMap)
+    // window.AMapUI.loadUI(['overlay/SimpleMarker'], (SimpleMarker) => {
+    //   this.initPage(SimpleMarker);
+    // })
+  }
+
   drawWhat(obj) {
     let text = '';
     console.log(obj)
@@ -121,17 +148,25 @@ export default class MaoTest extends React.Component {
     });
   }
 
+  componentDidMount() {
+  }
+
   render() {
     return <div>
       <div style={{ width: '100%', height: '570px' }}>
         <Map
           plugins={this.mapPlugins}
+          version={'1.4.4'}//amap版本
           center={this.mapCenter}
+          useAMapUI
+          events={this.amapEvents}
         >
           <MouseTool events={this.toolEvents} />
+          {/* <div style={layerStyle}><input type="text" id="keyword" name="keyword" /></div> */}
           <div style={layerStyle}>{this.state.what}</div>
         </Map>
       </div>
+      <div><input type="text" id="keyword" name="keyword" /></div>
       <button onClick={() => { this.drawMarker() }}>Draw Marker</button>
       <button onClick={() => { this.drawRectangle() }}>Draw Rectangle</button>
       <button onClick={() => { this.drawCircle() }}>Draw Circle</button>
