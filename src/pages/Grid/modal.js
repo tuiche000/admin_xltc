@@ -246,7 +246,7 @@ export default class GridModal extends React.Component {
                     loadData={this.regoinOnLoadData}
                     showSearch
                     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                    placeholder="Please select"
+                    placeholder="请输入内容"
                     allowClear
                     onChange={this.regionTreeonChange}
                   >
@@ -261,7 +261,7 @@ export default class GridModal extends React.Component {
                   rules: [{ required: true, message: 'Please input' }],
                   initialValue: initialValue.roadType,
                 })(
-                  <Select placeholder="Please select">
+                  <Select placeholder="请输入内容">
                     <Option value="STATE">国道</Option>
                     <Option value="PROVINCE">省道</Option>
                     <Option value="COUNTY">县道</Option>
@@ -294,7 +294,7 @@ export default class GridModal extends React.Component {
                   rules: [{ required: true, message: 'Please input' }],
                   initialValue: initialValue.users,
                 })(
-                  <Select mode="multiple" placeholder="Please select">
+                  <Select mode="multiple" placeholder="请输入内容">
                     {
                       userOpt.map((item, index) => {
                         return <Option key={item.id}>{item.name}</Option>
@@ -317,7 +317,7 @@ export default class GridModal extends React.Component {
                     showSearch
                     multiple
                     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                    placeholder="Please select"
+                    placeholder="请输入内容"
                     allowClear
                     onChange={this.treeonChange}
                   >

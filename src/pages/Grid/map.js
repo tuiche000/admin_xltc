@@ -133,7 +133,7 @@ export default class App extends React.Component {
     return (
       <div>
         <div style={{textAlign: 'center'}}>
-          <Search id="keyword" style={{ width: 300 }} placeholder="地图搜索" enterButton />
+          <Search id="keyword" style={{ width: 300 }} placeholder="请输入内容" enterButton />
         </div>
         <div style={{ width: '100%', height: '600px' }}>
           <Map version={'1.4.4'} zoom={17} center={this.mapCenter} plugins={plugins} events={this.amapEvents}>
@@ -146,7 +146,7 @@ export default class App extends React.Component {
               top: '10px',
               left: '10px',
             }}>
-              {/* <Search id="keyword" style={{ width: 300 }} placeholder="搜索" onSearch={value => console.log(value)} enterButton /> */}
+              {/* <Search id="keyword" style={{ width: 300 }} placeholder="请输入内容" onSearch={value => console.log(value)} enterButton /> */}
             </div>
             <div style={{
               position: 'absolute',

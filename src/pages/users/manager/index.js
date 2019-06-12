@@ -179,11 +179,11 @@ export default class AdvancedSearchForm extends React.Component {
           }}>
             新建
           </Button>
-          <Button icon="reload" type="primary" onClick={e => {
+          {/* <Button icon="reload" type="primary" onClick={e => {
             this.fnUserList()
           }}>
             刷新
-          </Button>
+          </Button> */}
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
         <MyTable

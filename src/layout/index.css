@@ -28,9 +28,13 @@ a {
 }
 
 #components-layout-demo-custom-trigger .logo {
-    height: 32px;
-    background: rgba(255, 255, 255, 0.2);
+    height: 70px;
     margin: 16px;
+    color: #fff;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    font-size: 10px;
 }
 
 #components-layout-demo-custom-trigger .ant-layout-sider {

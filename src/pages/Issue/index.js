@@ -133,6 +133,7 @@ export default class AdvancedSearchForm extends React.Component {
       {
         title: '问题描述',
         dataIndex: 'description',
+        width: 400,
       },
       // {
       //   title: '地址',

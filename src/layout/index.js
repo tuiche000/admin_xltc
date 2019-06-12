@@ -7,6 +7,7 @@ import { allRouters } from '@/routes'
 
 import { connect } from 'react-redux';
 import { userInfo, loginOut } from '@/actions';
+import LogoImg from '@/assets/logo.png'
 
 const { Header, Sider, Content } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -93,7 +94,10 @@ export default class BasicLayout extends Component {
     return (
       <Layout id="components-layout-demo-custom-trigger">
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-          <div className="logo" />
+          <div className="logo">
+            <div><img width="50" src={LogoImg}></img></div>
+            <div>市政管理巡查责任制网格平台</div>
+          </div>
           {
             this.fnMenuList()
           }

@@ -209,7 +209,7 @@ export default class regiosForm extends React.Component {
             {getFieldDecorator('gender', {
               // rules: [{ required: true, message: '请输入', whitespace: true }],
               initialValue: initialValue.gender
-            })(<Select placeholder="Please select a regionType">
+            })(<Select placeholder="请输入内容">
               <Option value="MALE">男</Option>
               <Option value="FEMALE">女</Option>
             </Select>)}
@@ -218,7 +218,7 @@ export default class regiosForm extends React.Component {
             {getFieldDecorator('roadManagerRank', {
               rules: [{ required: true, message: '请输入', whitespace: true }],
               initialValue: initialValue.roadManagerRank
-            })(<Select placeholder="Please select a regionType">
+            })(<Select placeholder="请输入内容">
               <Option value="FIRST">一级踏查人</Option>
               <Option value="SECOND">二级踏查人</Option>
               <Option value="THIRD">三级踏查人</Option>
@@ -238,7 +238,7 @@ export default class regiosForm extends React.Component {
                 style={{ width: 300 }}
                 // value={this.state.value}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                placeholder="Please select"
+                placeholder="请输入内容"
                 allowClear
                 onChange={this.treeonChange}
               >
