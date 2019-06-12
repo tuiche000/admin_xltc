@@ -1,6 +1,5 @@
 import React from 'react'
-import { Form, Row, Col, Input, Tree, Button, Icon, Dropdown, Select, InputNumber, Cascader, Menu, message, Popconfirm } from 'antd';
-import Table from '@/components/Table';
+import { Form, Row, Col, Input, Tree, Button, Icon, Dropdown, Select, InputNumber, Cascader, Menu, message, Popconfirm, Table } from 'antd';
 import ModalForm from './form'
 
 const { TreeNode } = Tree;
@@ -357,7 +356,11 @@ class AdvancedSearchForm extends React.Component {
               )}
             </section>
             <section className="antd-pro-components-standard-table-index-standardTable">
-              <Table data={this.state.tableData} columns={this.state.columns} />
+              <Table pagination={
+            {
+              defaultPageSize: 20
+            }
+          } rowKey="id" dataSource={this.state.tableData} columns={this.state.columns} />
             </section>
           </Col>
         </Row>

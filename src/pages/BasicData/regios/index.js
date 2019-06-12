@@ -1,7 +1,6 @@
 import React from 'react'
-import { Tree, Popconfirm, Row, Col, Button, message } from 'antd';
+import { Tree, Popconfirm, Row, Col, Button, message, Table } from 'antd';
 
-import Table from '@/components/Table';
 import ModalForm from './form'
 
 const { TreeNode } = Tree;
@@ -295,7 +294,11 @@ export default class SearchTree extends React.Component {
                 </span>
               )} */}
             </div>
-            <Table data={this.state.TablePropData} columns={this.state.columns} pagination={false} />
+            <Table pagination={
+            {
+              defaultPageSize: 20
+            }
+          } rowKey="id" dataSource={this.state.TablePropData} columns={this.state.columns} />
           </Col>
 
         </Row>

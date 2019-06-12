@@ -111,16 +111,24 @@ export default class AdvancedSearchForm extends React.Component {
       //   dataIndex: 'email',
       // },
       {
-        title: '电话',
-        dataIndex: 'phone',
+        title: '性别',
+        dataIndex: 'gender',
+        render: text => <span>
+          {text == 'MALE' && '男'}
+          {text == 'FEMALE' && '女'}
+        </span>
+      },
+      {
+        title: '电电子邮箱',
+        dataIndex: 'email',
       },
       {
         title: '踏查职级',
-        dataIndex: 'LevelName',
+        dataIndex: 'levelName',
       },
       {
         title: '责任部门',
-        dataIndex: 'DepartmentName',
+        dataIndex: 'departmentName',
       },
       // {
       //   title: '启用',
