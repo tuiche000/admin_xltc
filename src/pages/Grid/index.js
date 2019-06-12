@@ -35,7 +35,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input placeholder="请输入内容" />
+          return <Input  />
         }
       },
       {
@@ -44,7 +44,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input placeholder="请输入内容" />
+          return <Input  />
         }
       },
       {
@@ -53,7 +53,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input placeholder="请输入内容" />
+          return <Input  />
         }
       },
       {
@@ -62,7 +62,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input placeholder="请输入内容" />
+          return <Input  />
         }
       },
       {
@@ -71,7 +71,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input placeholder="请输入内容" />
+          return <Input  />
         }
       },
       {
@@ -80,7 +80,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input placeholder="请输入内容" />
+          return <Input  />
         }
       },
     ];
@@ -275,7 +275,7 @@ export default class AdvancedSearchForm extends React.Component {
             {/* <Row gutter={24}>{this.getFields()}</Row> */}
             <Row>
               <Col span={8}>
-                <Search placeholder="请输入内容" onSearch={value => {
+                <Search  onSearch={value => {
                   let { pageNo, pageSize } = this.state
                   _this.setState({
                     keyword: value

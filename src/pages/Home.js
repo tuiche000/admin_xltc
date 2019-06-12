@@ -100,7 +100,7 @@ export default class Home extends Component {
                 <Title level={4}>你有什么想对我们说的么？</Title>
                 <Search
                   style={{ width: 300 }}
-                  placeholder="请输入内容"
+                  
                   enterButton="联系我们"
                   size="large"
                   onSearch={value => {

@@ -157,40 +157,40 @@ export default class regiosForm extends React.Component {
         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
           <Form.Item label="用户名">
             {getFieldDecorator('username', {
-              rules: [{ required: true, message: '请输入', whitespace: true }],
+              rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.username
             })(<Input />)}
           </Form.Item>
           <Form.Item label="名字">
             {getFieldDecorator('name', {
-              rules: [{ required: true, message: '请输入', whitespace: true }],
+              rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.name
             })(<Input />)}
           </Form.Item>
           <Form.Item label="邮箱">
             {getFieldDecorator('email', {
-              // rules: [{ required: true, message: '请输入', whitespace: true }, {
+              // rules: [{ required: true, message: '请输入内容', whitespace: true }, {
               //   type: 'email',
-              //   message: 'The input is not valid E-mail!',
+              //   message: '请输入内容',
               // },],
               initialValue: initialValue.email
             })(<Input />)}
           </Form.Item>
           <Form.Item label="电话">
             {getFieldDecorator('phone', {
-              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.phone
             })(<Input />)}
           </Form.Item>
           <Form.Item label="身份证号码">
             {getFieldDecorator('idcard', {
-              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.idcard
             })(<Input />)}
           </Form.Item>
           <Form.Item label="头像">
             {getFieldDecorator('avatar', {
-              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.avatar,
               getValueFromEvent: this.normFile,
             })(<Upload name="logo" action="/upload.do" listType="picture">
@@ -201,24 +201,24 @@ export default class regiosForm extends React.Component {
           </Form.Item>
           <Form.Item label="生日">
             {getFieldDecorator('birthday', {
-              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
               // initialValue: initialValue.birthday
             })(<DatePicker onChange={onChange} />)}
           </Form.Item>
           <Form.Item label="性别">
             {getFieldDecorator('gender', {
-              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.gender
-            })(<Select placeholder="请输入内容">
+            })(<Select >
               <Option value="MALE">男</Option>
               <Option value="FEMALE">女</Option>
             </Select>)}
           </Form.Item>
           <Form.Item label="踏查职级">
             {getFieldDecorator('roadManagerRank', {
-              rules: [{ required: true, message: '请输入', whitespace: true }],
+              rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.roadManagerRank
-            })(<Select placeholder="请输入内容">
+            })(<Select >
               <Option value="FIRST">一级踏查人</Option>
               <Option value="SECOND">二级踏查人</Option>
               <Option value="THIRD">三级踏查人</Option>
@@ -228,7 +228,7 @@ export default class regiosForm extends React.Component {
           </Form.Item>
           <Form.Item label="责任部门">
             {getFieldDecorator('department', {
-              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.department
             })(
               <TreeSelect
@@ -238,7 +238,7 @@ export default class regiosForm extends React.Component {
                 style={{ width: 300 }}
                 // value={this.state.value}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                placeholder="请输入内容"
+                
                 allowClear
                 onChange={this.treeonChange}
               >
@@ -248,13 +248,13 @@ export default class regiosForm extends React.Component {
           </Form.Item>
           <Form.Item label="启用">
             {getFieldDecorator('enable', {
-              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.name
             })(<Switch />)}
           </Form.Item>
           <Form.Item label="角色">
             {getFieldDecorator('roles', {
-              // rules: [{ required: true, message: '请输入', whitespace: true }],
+              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.roles
             })(<Checkbox.Group style={{ width: '100%' }}>
               <Row>

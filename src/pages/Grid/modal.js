@@ -238,7 +238,7 @@ export default class GridModal extends React.Component {
             <Col span={8}>
               <Form.Item label="所属行政区">
                 {type === 'detail' ? '昂昂溪区' : getFieldDecorator('region', {
-                  rules: [{ required: true, message: 'Please input' }],
+                  rules: [{ required: true, message: '请输入内容' }],
                   initialValue: regionValue,
                 })(
                   <TreeSelect
@@ -246,7 +246,7 @@ export default class GridModal extends React.Component {
                     loadData={this.regoinOnLoadData}
                     showSearch
                     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                    placeholder="请输入内容"
+                    
                     allowClear
                     onChange={this.regionTreeonChange}
                   >
@@ -258,10 +258,10 @@ export default class GridModal extends React.Component {
             <Col span={8}>
               <Form.Item label="行政级别型等级">
                 {type === 'detail' ? '乡道' : getFieldDecorator('roadType', {
-                  rules: [{ required: true, message: 'Please input' }],
+                  rules: [{ required: true, message: '请输入内容' }],
                   initialValue: initialValue.roadType,
                 })(
-                  <Select placeholder="请输入内容">
+                  <Select >
                     <Option value="STATE">国道</Option>
                     <Option value="PROVINCE">省道</Option>
                     <Option value="COUNTY">县道</Option>
@@ -275,7 +275,7 @@ export default class GridModal extends React.Component {
             <Col span={8}>
               <Form.Item label="请输入责任网格">
                 {type === 'detail' ? '第一路和第二路' : getFieldDecorator('name', {
-                  rules: [{ required: true, message: 'Please input' }],
+                  rules: [{ required: true, message: '请输入内容' }],
                   initialValue: initialValue.name,
                 })(<Input />)}
               </Form.Item>
@@ -283,7 +283,7 @@ export default class GridModal extends React.Component {
             <Col span={8}>
               <Form.Item label="请输入责任范围">
                 {getFieldDecorator('range', {
-                  rules: [{ required: true, message: 'Please input' }],
+                  rules: [{ required: true, message: '请输入内容' }],
                   initialValue: initialValue.range,
                 })(<Input />)}
               </Form.Item>
@@ -291,10 +291,10 @@ export default class GridModal extends React.Component {
             <Col span={8}>
               <Form.Item label="责任路长">
                 {type === 'detail' ? '张二明' : getFieldDecorator('users', {
-                  rules: [{ required: true, message: 'Please input' }],
+                  rules: [{ required: true, message: '请输入内容' }],
                   initialValue: initialValue.users,
                 })(
-                  <Select mode="multiple" placeholder="请输入内容">
+                  <Select mode="multiple" >
                     {
                       userOpt.map((item, index) => {
                         return <Option key={item.id}>{item.name}</Option>
@@ -307,7 +307,7 @@ export default class GridModal extends React.Component {
             <Col span={8}>
               <Form.Item label="责任部门">
                 {type === 'detail' ? '责任部门' : getFieldDecorator('departments', {
-                  rules: [{ required: true, message: 'Please input' }],
+                  rules: [{ required: true, message: '请输入内容' }],
                   initialValue: departmentsVal,
                 })(
                   <TreeSelect
@@ -317,7 +317,7 @@ export default class GridModal extends React.Component {
                     showSearch
                     multiple
                     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                    placeholder="请输入内容"
+                    
                     allowClear
                     onChange={this.treeonChange}
                   >
@@ -359,7 +359,7 @@ export default class GridModal extends React.Component {
           </Form.Item>
           {/* <Form.Item label="是否有地图">
             {type === 'detail' ? '是' : getFieldDecorator('mapabled', {
-              // rules: [{ required: true, message: 'Please input' }],
+              // rules: [{ required: true, message: '请输入内容' }],
               valuePropName: 'checked',
               initialValue: initialValue.mapabled || true,
             })(<Switch />)}

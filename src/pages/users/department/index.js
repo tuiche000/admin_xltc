@@ -99,7 +99,7 @@ class AdvancedSearchForm extends React.Component {
         name: 'code',
         element() {
           return (
-            <Input placeholder="请输入内容" />
+            <Input  />
           )
         }
       },
@@ -108,7 +108,7 @@ class AdvancedSearchForm extends React.Component {
         name: 'regionId',
         element() {
           return (
-            <Cascader options={options} onChange={this.onChange} changeOnSelect placeholder="请输入内容" />
+            <Cascader options={options} onChange={this.onChange} changeOnSelect  />
           )
         }
       },
@@ -117,7 +117,7 @@ class AdvancedSearchForm extends React.Component {
         name: 'name',
         element() {
           return (
-            <Input placeholder="请输入内容" />
+            <Input  />
           )
         }
       },
@@ -126,7 +126,7 @@ class AdvancedSearchForm extends React.Component {
         name: 'departmentType',
         element() {
           return (
-            <Select placeholder="请输入内容">
+            <Select >
               <Option value="CITY">省/市</Option>
               <Option value="COUNTY">区/县</Option>
               <Option value="VILLAGE">街/村</Option>
@@ -140,7 +140,7 @@ class AdvancedSearchForm extends React.Component {
         name: 'enabled',
         element() {
           return (
-            <Select placeholder="请输入内容">
+            <Select >
               <Option value="CITY">是</Option>
               <Option value="COUNTY">否</Option>
             </Select>

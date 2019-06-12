@@ -107,11 +107,11 @@ export default class Login extends Component {
           type == 'login' ? <Form {...formItemLayout} onSubmit={this.handleSubmit}>
             <Form.Item label="用户名" hasFeedback>
               {getFieldDecorator('phone', {
-                rules: [{ required: true, message: 'Please input your username!' }],
+                rules: [{ required: true, message: '请输入内容' }],
               })(
                 <Input
                   prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                  placeholder="请输入内容"
+                  
                 />,
               )}
             </Form.Item>
@@ -120,7 +120,7 @@ export default class Login extends Component {
                 rules: [
                   {
                     required: true,
-                    message: 'Please input your password!',
+                    message: '请输入内容',
                   },
                   {
                     validator: this.validateToNextPassword,

@@ -78,7 +78,7 @@ class regiosForm extends React.Component {
         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
           <Form.Item label="部门类型" hasFeedback>
             {getFieldDecorator('departmentType', { initialValue: initialValue.regionType })(
-              <Select placeholder="请输入内容">
+              <Select >
                 <Option value="CITY">省/市</Option>
                 <Option value="COUNTY">区/县</Option>
                 <Option value="VILLAGE">街/村</Option>
@@ -93,7 +93,7 @@ class regiosForm extends React.Component {
             }
           >
             {getFieldDecorator('name', {
-              rules: [{ required: true, message: '请输入名字!', whitespace: true }],
+              rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.name
             })(<Input />)}
           </Form.Item>
@@ -103,8 +103,8 @@ class regiosForm extends React.Component {
             })(<Input style={{ width: '100%' }} />)}
           </Form.Item>
           <Form.Item label="行政区域" hasFeedback>
-            {getFieldDecorator('regionType', { rules: [{ required: true, message: '请选择regionType!' }], initialValue: initialValue.departmentType })(
-              <Select placeholder="请输入内容">
+            {getFieldDecorator('regionType', { rules: [{ required: true, message: '请输入内容' }], initialValue: initialValue.departmentType })(
+              <Select >
                 <Option value="CITY">省/市</Option>
                 <Option value="COUNTY">区/县</Option>
                 <Option value="VILLAGE">街/村</Option>

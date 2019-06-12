@@ -182,7 +182,7 @@ export default class RegistrationForm extends React.Component {
         {step == 1 && <div>
           <Form.Item label="手机号码">
             {getFieldDecorator('phone', {
-              rules: [{ required: true, message: 'Please input your phone number!' }],
+              rules: [{ required: true, message: '请输入内容' }],
             })(<Input style={{ width: '100%' }} />)}
           </Form.Item>
           <Form.Item label="登录密码" hasFeedback>
@@ -190,7 +190,7 @@ export default class RegistrationForm extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input your password!',
+                  message: '请输入内容',
                 },
                 {
                   validator: this.validateToNextPassword,
@@ -203,7 +203,7 @@ export default class RegistrationForm extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please confirm your password!',
+                  message: '请输入内容',
                 },
                 {
                   validator: this.compareToFirstPassword,
@@ -219,20 +219,20 @@ export default class RegistrationForm extends React.Component {
               label="真实姓名"
             >
               {getFieldDecorator('name', {
-                rules: [{ required: true, message: 'Please input your realname!', whitespace: true }],
+                rules: [{ required: true, message: '请输入内容', whitespace: true }],
               })(<Input />)}
             </Form.Item>
             <Form.Item
               label="身份证号"
             >
               {getFieldDecorator('idcard', {
-                rules: [{ required: true, message: 'Please input your idcard!', whitespace: true }],
+                rules: [{ required: true, message: '请输入内容', whitespace: true }],
               })(<Input />)}
             </Form.Item>
             <Form.Item label="所在地区">
               {getFieldDecorator('regionId', {
                 rules: [
-                  { type: 'array', required: true, message: 'Please select your regoin!' },
+                  { type: 'array', required: true, message: '请输入内容' },
                 ],
               })(<Cascader
                 options={regoinOpt}
@@ -244,7 +244,7 @@ export default class RegistrationForm extends React.Component {
               label="所在单位"
             >
               {getFieldDecorator('departmentName', {
-                rules: [{ required: true, message: '请填写所在单位!', whitespace: true }],
+                rules: [{ required: true, message: '请输入内容', whitespace: true }],
               })(<Input />)}
             </Form.Item>
             <Form.Item label="使用邮箱">
@@ -252,11 +252,11 @@ export default class RegistrationForm extends React.Component {
                 rules: [
                   {
                     type: 'email',
-                    message: 'The input is not valid E-mail!',
+                    message: '请输入内容',
                   },
                   {
                     required: true,
-                    message: 'Please input your E-mail!',
+                    message: '请输入内容',
                   },
                 ],
               })(<Input />)}
@@ -265,7 +265,7 @@ export default class RegistrationForm extends React.Component {
               label="企业信用编号"
             >
               {getFieldDecorator('taxcode', {
-                rules: [{ required: true, message: '请填写企业信用编号!', whitespace: true }],
+                rules: [{ required: true, message: '请输入内容', whitespace: true }],
               })(<Input />)}
             </Form.Item>
           </div>
