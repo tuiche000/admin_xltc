@@ -1,4 +1,7 @@
 import {
+  commonEnum,
+} from './common'
+import {
   regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut, regionId,
 } from './region'
 import {
@@ -18,6 +21,7 @@ import {
 } from './tacha'
 
 export default {
+  commonEnum,
   regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut, regionId,
   departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit, departmentAll,
   gridList, gridDel, gridAdd, gridPut, gridId,

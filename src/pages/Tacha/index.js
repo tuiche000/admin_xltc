@@ -1,14 +1,15 @@
 import React from 'react'
-import { Form, Col, Input, message, Alert, Row, Table, Button, Icon } from 'antd';
+import { Form, Col, Input, Row, Table, Divider, Icon, Button, DatePicker, Checkbox } from 'antd';
 import TachaModal from './modal'
 import HotTags from '@/components/HotTags'
 
 const Search = Input.Search
+const { RangePicker } = DatePicker;
 
 // rowSelection object indicates the need for row selection
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
-    
+
   },
   getCheckboxProps: record => ({
     disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -21,6 +22,7 @@ export default class AdvancedSearchForm extends React.Component {
 
   state = {
     visible: false,
+    filterVisible: false,
     // table start
     tableData: [],
     totalResults: 1,
@@ -46,7 +48,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input  />
+          return <Input />
         }
       },
       {
@@ -55,7 +57,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input  />
+          return <Input />
         }
       },
       {
@@ -64,7 +66,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input  />
+          return <Input />
         }
       },
       {
@@ -73,7 +75,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input  />
+          return <Input />
         }
       },
       {
@@ -82,7 +84,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input  />
+          return <Input />
         }
       },
       {
@@ -91,7 +93,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input  />
+          return <Input />
         }
       },
     ];
@@ -123,12 +125,17 @@ export default class AdvancedSearchForm extends React.Component {
     })
   }
 
+  fnCommonEnum = async (name) => {
+    let data = await window._api.commonEnum(name)
+    console.log(data)
+  }
+
   // submit
   handleCreate = () => {
     const { type, initialValue } = this.state
     const form = this.formRef.props.form;
     form.validateFields((err, values) => {
-      
+
       if (err) {
         return;
       }
@@ -139,7 +146,7 @@ export default class AdvancedSearchForm extends React.Component {
         this.fnGridEdit(values)
       }
 
-      
+
       form.resetFields();
       this.setState({ visible: false });
     });
@@ -147,7 +154,7 @@ export default class AdvancedSearchForm extends React.Component {
 
   // HotTags
   fnChange(tag) {
-    
+
   }
 
   fnTableChange(pageNo, pageSize) {
@@ -161,11 +168,12 @@ export default class AdvancedSearchForm extends React.Component {
 
   componentDidMount() {
     this.fnTachaList()
+    // this.fnCommonEnum()
   }
 
   render() {
     const _this = this
-    const { visible } = _this.state
+    const { visible, filterVisible } = _this.state
     const columns = [
       // {
       //   title: '踏查编码',
@@ -191,14 +199,14 @@ export default class AdvancedSearchForm extends React.Component {
           }
         }>{text}</a>,
       },
-      {
-        title: '起点',
-        dataIndex: 'beginAddress',
-      },
-      {
-        title: '终点',
-        dataIndex: 'endAddress',
-      },
+      // {
+      //   title: '起点',
+      //   dataIndex: 'beginAddress',
+      // },
+      // {
+      //   title: '终点',
+      //   dataIndex: 'endAddress',
+      // },
       // {
       //   title: '角色',
       //   dataIndex: 'rank',
@@ -269,24 +277,51 @@ export default class AdvancedSearchForm extends React.Component {
       //   }
       // },
     ];
+
+    const config = {
+      rules: [{ type: 'object', required: true, message: 'Please select time!' }],
+    };
+    const rangeConfig = {
+      rules: [{ type: 'array', required: true, message: 'Please select time!' }],
+    };
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 3 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 9 },
+      },
+      labelAlign: 'left'
+    };
+    const { getFieldDecorator } = this.props.form;
     return (
       <main id="Grid_Container">
         <section className="antd-pro-pages-list-table-list-tableListForm">
-          <Form onSubmit={this.handleSearch}>
 
-            <Row>
-              <Col span={8}>
-                <Search  onSearch={value => {
-                  _this.setState({
-                    keyword: value
-                  })
-                  _this.fnTachaList({
-                    keyword: value
-                  })
-                }} enterButton />
 
-              </Col>
-              {/* <Col span={16}>
+          <Row type="flex" align="middle">
+            <Col span={8}>
+              <Search placeholder="责任网格/姓名/区域" onSearch={value => {
+                _this.setState({
+                  keyword: value
+                })
+                _this.fnTachaList({
+                  keyword: value
+                })
+              }} enterButton />
+            </Col>
+            <Col push={1}>
+              <a className="ant-dropdown-link" href="javascript:void(0)" onClick={() => {
+                this.setState({
+                  filterVisible: !filterVisible
+                })
+              }}>
+                筛选条件 <Icon type="down" />
+              </a>
+            </Col>
+            {/* <Col span={16}>
               <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
                   筛选条件 <Icon type={this.state.expand ? 'up' : 'down'} />
                 </a>
@@ -299,11 +334,66 @@ export default class AdvancedSearchForm extends React.Component {
 
                 
               </Col> */}
-              {/* <Row gutter={24}>{this.getFields()}</Row> */}
-            </Row>
-          </Form>
+
+          </Row>
+          {
+            filterVisible && (
+              <Row style={{ padding: '0 10', background: '#fff' }}>
+                <Col span={24}><Divider /></Col>
+                <Col span={24}>
+                  <Form {...formItemLayout} onSubmit={this.handleSearch}>
+                    <Form.Item label="时间区间">
+                      {getFieldDecorator('date-picker', config)(<RangePicker />)}
+                    </Form.Item>
+                    <Form.Item label="责任网格">
+                      {getFieldDecorator('month-picker', config)(<div></div>)}
+                    </Form.Item>
+                    <Form.Item label="角色">
+                      {getFieldDecorator('range-picker', rangeConfig)(
+                        <Checkbox.Group style={{ width: '100%' }} onChange={(checkedValues) => {
+                          console.log('checked = ', checkedValues);
+                        }} >
+                          <Row>
+                            <Col span={2}>
+                              <Checkbox value="A">A</Checkbox>
+                            </Col>
+                            <Col span={2}>
+                              <Checkbox value="B">B</Checkbox>
+                            </Col>
+                            <Col span={2}>
+                              <Checkbox value="C">C</Checkbox>
+                            </Col>
+                            <Col span={2}>
+                              <Checkbox value="D">D</Checkbox>
+                            </Col>
+                            <Col span={2}>
+                              <Checkbox value="E">E</Checkbox>
+                            </Col>
+                          </Row>
+                        </Checkbox.Group>
+                      )}
+                    </Form.Item>
+                    <Form.Item
+                      wrapperCol={{
+                        xs: { span: 24, offset: 0 },
+                        sm: { span: 16, offset: 3 },
+                      }}
+                    >
+                      <Button onClick={
+                        () => {
+                          this.props.form.resetFields();
+                        }
+                      }>重置</Button>
+                      <Button type="primary" htmlType="submit" style={{ marginLeft: 10 }}>确定</Button>
+                    </Form.Item>
+                  </Form>
+                </Col>
+              </Row>
+            )
+          }
         </section>
-        <br></br>
+        {/* <br></br> */}
+        <Divider />
         {/* <section className="antd-pro-pages-list-table-list-tableListOperator">
           <Button icon="plus" type="primary" onClick={e => {
             this.setState({ visible: true, type: 'add' });
