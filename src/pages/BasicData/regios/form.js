@@ -29,7 +29,7 @@ export default class regiosForm extends React.Component {
 
   fnRegionAdd = async (opt, query) => {
     let data = await window._api.regionAdd(opt, query)
-    console.log(data)
+    
   }
 
   componentDidMount() {
@@ -65,7 +65,7 @@ export default class regiosForm extends React.Component {
     const amapkey = "e6356bced344d01851e9d87b2ad188fe"
     const mapEvents = {
       created: (mapInstance) => {
-        console.log(mapInstance);
+        
       },
       click: (params) => {
         const { lat, lng } = params.lnglat

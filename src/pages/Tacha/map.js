@@ -14,17 +14,17 @@ export default class App extends React.Component {
     };
     this.amapEvents = {
       created: (mapInstance) => {
-        // console.log(window.AMap)
+        // 
         // //输入提示
         // var auto = new AMap.Autocomplete({
         //   input: "tipinput"
         // });
-        console.log('高德地图 Map 实例创建成功；如果你要亲自对实例进行操作，可以从这里开始。比如：');
+        ;
       }
     };
     this.toolEvents = {
       created: (tool) => {
-        console.log(tool)
+        
         self.tool = tool;
       },
       draw({ obj }) {
@@ -32,10 +32,10 @@ export default class App extends React.Component {
       }
     }
     this.editorEvents = {
-      created: (ins) => { console.log(ins) },
-      addnode: () => { console.log('polyeditor addnode') },
-      adjust: () => { console.log('polyeditor adjust') },
-      removenode: () => { console.log('polyeditor removenode') },
+      created: (ins) => {  },
+      addnode: () => {  },
+      adjust: () => {  },
+      removenode: () => {  },
       end: (obj) => {
         let paths = obj.target.getPath()
         let latlngs = paths.map(item => {
@@ -58,7 +58,7 @@ export default class App extends React.Component {
 
   drawWhat(obj) {
     let text = '';
-    console.log(obj)
+    
     switch (obj.CLASS_NAME) {
       case 'AMap.Polyline':
         let paths = obj.getPath()
@@ -78,7 +78,7 @@ export default class App extends React.Component {
 
   // 准备绘制折线
   polyline() {
-    console.log(this.tool)
+    
     if (this.tool) {
       this.tool.polyline();
       this.setState({
@@ -99,7 +99,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     const { type, Platlngs } = this.props
-    console.log(type)
+    
     if (type === 'edit') {
       this.setState({
         Slatlngs: Platlngs
@@ -113,7 +113,7 @@ export default class App extends React.Component {
 
   render() {
     const { data } = this.props
-    console.log(data.latlngs)
+    
     // let arr = [
     //   { latitude: 40.017016, longitude: 116.47616 },
     //   { latitude: 40.017114, longitude: 116.479679 },

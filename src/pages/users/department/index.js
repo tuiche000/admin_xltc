@@ -173,7 +173,7 @@ class AdvancedSearchForm extends React.Component {
   }
 
   onChange = val => {
-    console.log(val)
+    
   }
 
   fnEdit = (record) => {
@@ -187,7 +187,7 @@ class AdvancedSearchForm extends React.Component {
   handleSearch = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log('Received values of form: ', values);
+      
     });
   };
 
@@ -209,7 +209,7 @@ class AdvancedSearchForm extends React.Component {
   }
 
   fnDepartmentDel = async (record) => {
-    console.log(record)
+    
     let { code } = await window._api.departmentDel(record.id)
     if (code == 0) {
       message.success('删除成功')
@@ -232,22 +232,22 @@ class AdvancedSearchForm extends React.Component {
   };
 
   fnDepartmentAdd = async (opt, query) => {
-    console.log(this.state.selected)
+    
     let { region } = this.state.selected
     let data = await window._api.departmentAdd(region, opt, query)
-    console.log(data)
+    
   }
 
   fnDepartmentEdit = async (opt, query) => {
-    console.log(this.state.initialValue)
+    
     let regionId = this.state.initialValue.region
     let data = await window._api.departmentEdit(regionId, opt, query)
-    console.log(data)
+    
   }
 
   // 根据主键获取下一级责任部门列表
   fnGetChildren = async (arr, e) => {
-    console.log(e)
+    
     let data = await window._api.departmentId(arr[0])
     this.setState({
       tableData: data,
@@ -268,7 +268,7 @@ class AdvancedSearchForm extends React.Component {
           this.setState({
             gData: [...this.state.gData],
           });
-          console.log(arr)
+          
           resolve();
           return;
         })
@@ -294,7 +294,7 @@ class AdvancedSearchForm extends React.Component {
         this.fnDepartmentEdit(values, query)
       }
 
-      console.log('Received values of form: ', values);
+      
       form.resetFields();
       this.setState({ visible: false });
     });

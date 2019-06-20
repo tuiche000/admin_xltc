@@ -14,7 +14,7 @@ export default class App extends React.Component {
     };
     this.amapEvents = {
       created: (mapInstance) => {
-        console.log('高德地图 Map 实例:', mapInstance)
+        
         self.instance = mapInstance
         AMap = window.AMap
         this.pluginSearch(mapInstance)
@@ -22,7 +22,7 @@ export default class App extends React.Component {
     };
     this.toolEvents = {
       created: (tool) => {
-        // console.log(tool)
+        // 
         self.tool = tool;
       },
       draw({ obj }) {
@@ -31,12 +31,13 @@ export default class App extends React.Component {
     }
     this.editorEvents = {
       created: (ins) => {
-        //console.log(ins) 
+        // 
       },
-      addnode: () => { console.log('polyeditor addnode') },
-      adjust: () => { console.log('polyeditor adjust') },
-      removenode: () => { console.log('polyeditor removenode') },
+      addnode: () => {  },
+      adjust: () => {  },
+      removenode: () => {  },
       end: (obj) => {
+        let distance = obj.target.getLength()
         let paths = obj.target.getPath()
         let latlngs = paths.map(item => {
           return {
@@ -44,7 +45,7 @@ export default class App extends React.Component {
             "longitude": item.lng
           }
         })
-        self.props.save(latlngs)
+        self.props.save(latlngs, distance)
       },
     };
     this.mapCenter = { longitude: 119.5658900000, latitude: 39.9092000000 }
@@ -66,19 +67,21 @@ export default class App extends React.Component {
     })
   }
 
+  // 新增折线图
   drawWhat(obj) {
     let text = '';
-    // console.log(obj)
+    // 
     switch (obj.CLASS_NAME) {
       case 'AMap.Polyline':
+        let distance = obj.getLength()
         let paths = obj.getPath()
         let latlngs = paths.map(item => {
           return {
             "latitude": item.lat,
-            "longitude": item.lng
+            "longitude": item.lng,
           }
         })
-        this.props.save(latlngs)
+        this.props.save(latlngs, distance)
         // text = `你绘制了折线，有${obj.getPath().length}个端点`;
         break;
       default:
@@ -88,7 +91,7 @@ export default class App extends React.Component {
 
   // 准备绘制折线
   polyline() {
-    // console.log(this.tool)
+    // 
     if (this.tool) {
       this.tool.polyline();
       this.setState({
@@ -109,7 +112,7 @@ export default class App extends React.Component {
 
   componentWillMount() {
     const { type, Platlngs } = this.props
-    console.log(Platlngs)
+    
     if (type === 'edit') {
       this.props.save(Platlngs)
       this.setState({
@@ -117,7 +120,7 @@ export default class App extends React.Component {
       })
       this.mapCenter = { longitude: Platlngs[0].longitude, latitude: Platlngs[0].latitude }
     } else {
-      console.log(self.instance)
+      
       this.setState({
         Slatlngs: []
       })
@@ -128,12 +131,12 @@ export default class App extends React.Component {
     const { type } = this.props
     const { Slatlngs } = this.state
     const latlngs = Slatlngs
-    // console.log(latlngs)
+    // 
     const plugins = ['ToolBar']
     return (
       <div>
         <div style={{textAlign: 'center'}}>
-          <Search id="keyword" style={{ width: 300 }}  enterButton />
+          <Search placeholder="请输入路名选择地图位置" id="keyword" style={{ width: 300 }}  enterButton />
         </div>
         <div style={{ width: '100%', height: '600px' }}>
           <Map version={'1.4.4'} zoom={17} center={this.mapCenter} plugins={plugins} events={this.amapEvents}>
@@ -146,7 +149,7 @@ export default class App extends React.Component {
               top: '10px',
               left: '10px',
             }}>
-              {/* <Search id="keyword" style={{ width: 300 }}  onSearch={value => console.log(value)} enterButton /> */}
+              {/* <Search id="keyword" style={{ width: 300 }}  onSearch={value => } enterButton /> */}
             </div>
             <div style={{
               position: 'absolute',

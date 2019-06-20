@@ -32,7 +32,7 @@ export default class MaoTest extends React.Component {
         // AMap = window.AMap
         // this.loadUI()
         // this.pluginSearch(mapInstance)
-        console.log('高德地图 Map 实例创建成功；如果你要亲自对实例进行操作，可以从这里开始。比如：');
+        
       }
     };
 
@@ -45,12 +45,12 @@ export default class MaoTest extends React.Component {
       var autocomplete = new AMap.Autocomplete({
         input: "keyword"
       })
-      console.log(mapInstance)
+      
       var placeSearch = new AMap.PlaceSearch({
         map: mapInstance
       })
       AMap.event.addListener(autocomplete, 'select', function (e) {
-        console.log(e)
+        
         //TODO 针对选中的poi实现自己的功能
         placeSearch.setCity(e.poi.adcode);
         placeSearch.search(e.poi.name)
@@ -60,7 +60,7 @@ export default class MaoTest extends React.Component {
 
   loadUI() {
     
-    // console.log(AMap)
+    // 
     // window.AMapUI.loadUI(['overlay/SimpleMarker'], (SimpleMarker) => {
     //   this.initPage(SimpleMarker);
     // })
@@ -68,22 +68,22 @@ export default class MaoTest extends React.Component {
 
   drawWhat(obj) {
     let text = '';
-    console.log(obj)
+    
     switch (obj.CLASS_NAME) {
       case 'AMap.Marker':
         text = `你绘制了一个标记，坐标位置是 {${obj.getPosition()}}`;
         break;
       case 'AMap.Polygon':
-        console.log(obj.getPath())
+        
         text = `你绘制了一个多边形，有${obj.getPath().length}个端点`;
         break;
       case 'AMap.Circle':
-        console.log(obj.getCenter())
-        console.log(obj.getRadius())
+        
+        
         text = `你绘制了一个圆形，圆心位置为{${obj.getCenter()}}`;
         break;
       case 'AMap.Polyline':
-        console.log(obj.getPath())
+        
         text = `你绘制了折线，有${obj.getPath().length}个端点`;
         break;
       default:

@@ -6,7 +6,7 @@ import HotTags from '@/components/HotTags'
 
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    
   },
   getCheckboxProps: record => ({
     disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -61,7 +61,7 @@ export default class AdvancedSearchForm extends React.Component {
     const { type, initialValue } = this.state
     const form = this.formRef.props.form;
     form.validateFields((err, values) => {
-      console.log(values)
+      
       if (err) {
         return;
       }
@@ -72,7 +72,7 @@ export default class AdvancedSearchForm extends React.Component {
         this.fnGridEdit(values)
       }
 
-      console.log('Received values of form: ', values);
+      
       form.resetFields();
       this.setState({ visible: false });
     });
@@ -91,7 +91,7 @@ export default class AdvancedSearchForm extends React.Component {
 
   // HotTags
   fnChange(tag) {
-    console.log(tag)
+    
   }
 
   fnTableChange = (pageNo, pageSize) => {

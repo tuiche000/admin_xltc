@@ -85,14 +85,14 @@ export default class SearchTree extends React.Component {
   };
 
   handleOk = e => {
-    console.log(e);
+    
     this.setState({
       visible: false,
     });
   };
 
   handleCancel = e => {
-    console.log(e);
+    
     this.setState({
       visible: false,
     });
@@ -140,7 +140,7 @@ export default class SearchTree extends React.Component {
           this.setState({
             gData: [...this.state.gData],
           });
-          console.log(arr)
+          
           resolve();
           return;
         })
@@ -228,7 +228,7 @@ export default class SearchTree extends React.Component {
         this.fnRegionEdit(values)
       }
       
-      console.log('Received values of form: ', values);
+      
       form.resetFields();
       this.setState({ visible: false });
     });

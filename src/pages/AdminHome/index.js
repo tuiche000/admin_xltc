@@ -50,7 +50,7 @@ export default class HomeModal extends React.Component {
             top: '10px',
             left: '10px',
           }}>
-            <Search style={{ width: 300 }} placeholder="角色/人名/区域" onSearch={value => this.fnTachaList(value)} enterButton />
+            <Search style={{ width: 300 }} placeholder="责任网格/行政区域" onSearch={value => this.fnTachaList(value)} enterButton />
           </div>
         </Map>
         {visible && <Modal

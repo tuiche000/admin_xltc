@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Select, Button, Switch, Upload, Modal, Icon, DatePicker, Checkbox, Row, TreeSelect } from 'antd';
+import { Form, Input, Select, Button, Switch, Upload, Modal, Icon, DatePicker, Checkbox, Row, TreeSelect, message } from 'antd';
 import { Map } from 'react-amap';
 
 const TreeNode = TreeSelect.TreeNode;
@@ -24,7 +24,7 @@ export default class regiosForm extends React.Component {
   }
 
   normFile = e => {
-    console.log('Upload event:', e);
+
     if (Array.isArray(e)) {
       return e;
     }
@@ -33,7 +33,7 @@ export default class regiosForm extends React.Component {
 
   // 选中tree节点
   treeonChange = (value, label, extra) => {
-    console.log(value);
+
     this.setState({ value });
   };
 
@@ -50,7 +50,7 @@ export default class regiosForm extends React.Component {
           this.setState({
             gData: [...this.state.gData],
           });
-          console.log(arr)
+
           resolve();
           return;
         })
@@ -70,7 +70,7 @@ export default class regiosForm extends React.Component {
 
   // 根据主键获取下一级责任部门列表
   fnGetChildren = async (arr, e) => {
-    console.log(e)
+
     let data = await window._api.departmentId(arr[0])
     this.setState({
       tableData: data,
@@ -127,7 +127,7 @@ export default class regiosForm extends React.Component {
     const amapkey = "e6356bced344d01851e9d87b2ad188fe"
     const mapEvents = {
       created: (mapInstance) => {
-        console.log(mapInstance);
+
       },
       click: (params) => {
         const { lat, lng } = params.lnglat
@@ -137,7 +137,52 @@ export default class regiosForm extends React.Component {
       },
     }
     function onChange(date, dateString) {
-      console.log(date, dateString);
+
+    }
+    const uploadprops = {
+      name: 'uploadFile',
+      action: 'http://checking.fothing.com/api/v1/user/avator',
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token')).access_token}`
+      },
+      listType: "picture",
+      beforeUpload: beforeUpload,
+      onChange(info) {
+        if (info.file.status === 'uploading') {
+          console.log(info.file);
+        }
+        if (info.file.status === 'done') {
+          message.success(`${info.file.name} 文件上传成功`);
+          // Get this url from response in real world.
+          getBase64(info.file.originFileObj, imageUrl =>
+            this.setState({
+              imageUrl,
+              loading: false,
+            }),
+          );
+        } else if (info.file.status === 'error') {
+          message.error(`${info.file.name} 文件上传失败`);
+        }
+      },
+    };
+
+    function getBase64(img, callback) {
+      const reader = new FileReader();
+      reader.addEventListener('load', () => callback(reader.result));
+      reader.readAsDataURL(img);
+    }
+
+    function beforeUpload(file) {
+      const isJPG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
+      if (!(isJPG || isPNG)) {
+        message.error('You can only upload JPG or PNG file!');
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        message.error('Image must smaller than 2MB!');
+      }
+      return isJPG && isLt2M;
     }
     return (
       <Modal
@@ -193,7 +238,7 @@ export default class regiosForm extends React.Component {
               // rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.avatar,
               getValueFromEvent: this.normFile,
-            })(<Upload name="logo" action="/upload.do" listType="picture">
+            })(<Upload {...uploadprops}>
               <Button>
                 <Icon type="upload" /> Click to upload
             </Button>
@@ -238,7 +283,7 @@ export default class regiosForm extends React.Component {
                 style={{ width: 300 }}
                 // value={this.state.value}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                
+
                 allowClear
                 onChange={this.treeonChange}
               >

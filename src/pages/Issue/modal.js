@@ -17,7 +17,7 @@ export default class IssuseModal extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.id)
+    
     if (this.props.id) {
       this.fnIssueId(this.props.id)
     }

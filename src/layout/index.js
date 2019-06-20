@@ -96,7 +96,9 @@ export default class BasicLayout extends Component {
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
           <div className="logo">
             <div><img width="50" src={LogoImg}></img></div>
-            <div>市政管理巡查责任制网格平台</div>
+            {
+              !this.state.collapsed && <div>市政管理巡查责任制网格平台</div>
+            }
           </div>
           {
             this.fnMenuList()

@@ -43,7 +43,7 @@ export default class GridModal extends React.Component {
           this.setState({
             gData: [...this.state.gData],
           });
-          console.log(arr)
+          
           resolve();
           return;
         })
@@ -65,7 +65,7 @@ export default class GridModal extends React.Component {
           this.setState({
             gData: [...this.state.gData],
           });
-          console.log(arr)
+          
           resolve();
           return;
         })
@@ -93,7 +93,7 @@ export default class GridModal extends React.Component {
 
   // 根据主键获取下一级责任部门列表
   fnGetChildren = async (arr, e) => {
-    console.log(e)
+    
     let data = await window._api.departmentId(arr[0])
     this.setState({
       selectedKeys: arr,
@@ -140,13 +140,13 @@ export default class GridModal extends React.Component {
 
   // 选中tree节点
   treeonChange = (value, label, extra) => {
-    console.log(value);
+    
     this.setState({ departmentsVal: value });
   };
 
   // region选中tree节点
   regionTreeonChange = (value, label, extra) => {
-    console.log(value);
+    
     this.setState({ regionValue: value });
   };
 
@@ -161,13 +161,14 @@ export default class GridModal extends React.Component {
   }
 
   // 保存地图坐标
-  mapSave = (latlngs) => {
-    console.log(latlngs)
+  mapSave = (latlngs, distance) => {
     this.setState({
-      lineLatlngs: latlngs
+      lineLatlngs: latlngs,
+      distance
     })
     this.props.form.setFieldsValue({
-      latlngs
+      latlngs,
+      distance
     })
   }
 
@@ -210,7 +211,7 @@ export default class GridModal extends React.Component {
   render() {
     const { form, type } = this.props;
     let { regionValue, departmentsVal, initialValue, } = this.state
-    console.log(initialValue)
+    
     if (!initialValue) initialValue = {}
     const { userOpt } = this.state
     const { getFieldDecorator } = form;
@@ -275,7 +276,7 @@ export default class GridModal extends React.Component {
             <Col span={8}>
               <Form.Item label="请输入责任网格">
                 {type === 'detail' ? '第一路和第二路' : getFieldDecorator('name', {
-                  rules: [{ required: true, message: '请输入内容' }],
+                  rules: [{ required: true, message: '输入内容，不得超过30个字符', max: 30 }],
                   initialValue: initialValue.name,
                 })(<Input />)}
               </Form.Item>
@@ -283,7 +284,7 @@ export default class GridModal extends React.Component {
             <Col span={8}>
               <Form.Item label="请输入责任范围">
                 {getFieldDecorator('range', {
-                  rules: [{ required: true, message: '请输入内容' }],
+                  rules: [{ required: true, message: '输入内容，不得超过30个字符', max: 30 }],
                   initialValue: initialValue.range,
                 })(<Input />)}
               </Form.Item>
@@ -332,8 +333,8 @@ export default class GridModal extends React.Component {
                 (type == 'edit' && Object.keys(initialValue).length) && <Map
                   togglePolyline={this.fnTogglePolyline}
                   // edit={this.state.edit}
-                  save={(latlngs) => {
-                    this.mapSave(latlngs)
+                  save={(latlngs, distance) => {
+                    this.mapSave(latlngs, distance)
                   }}
                   type={this.props.type}
                   // Platlngs={lineLatlngs}
@@ -344,8 +345,8 @@ export default class GridModal extends React.Component {
                 type == 'add' && <Map
                   togglePolyline={this.fnTogglePolyline}
                   // edit={this.state.edit}
-                  save={(latlngs) => {
-                    this.mapSave(latlngs)
+                  save={(latlngs, distance) => {
+                    this.mapSave(latlngs, distance)
                   }}
                   type={this.props.type}
                 // Platlngs={lineLatlngs}
@@ -356,6 +357,11 @@ export default class GridModal extends React.Component {
           <Form.Item label="地图" style={{ width: 0, height: 0 }}>
             {
               getFieldDecorator('latlngs')(<div></div>)
+            }
+          </Form.Item>
+          <Form.Item label="距离（米）" style={{ width: 0, height: 0 }}>
+            {
+              getFieldDecorator('distance')(<div></div>)
             }
           </Form.Item>
           {/* <Form.Item label="是否有地图">

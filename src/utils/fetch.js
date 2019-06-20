@@ -1,8 +1,8 @@
 import queryString from 'query-string'
 import { message, Modal } from 'antd'
 
-// let BASE = 'http://checking.fothing.com/'
-let BASE = 'http://lt.loiot.com/'
+let BASE = 'http://checking.fothing.com/'
+// let BASE = 'http://lt.loiot.com/'
 
 /**
  * 真正的请求
@@ -46,8 +46,7 @@ async function commonFetcdh(url, options, method = 'GET', query) {
         content: '登录过期了,请重新登录.',
         onOk() {
           localStorage.clear()
-          message.warning('登录过期')
-          window.history.go('/')
+          window.location.href = '/'
         }
       });
     }
@@ -63,7 +62,7 @@ async function commonFetcdh(url, options, method = 'GET', query) {
       throw new Error();
     }
   } catch (e) {
-    console.log(e)
+    
   } finally {
   }
 }

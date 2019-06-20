@@ -99,7 +99,7 @@ export default class AdvancedSearchForm extends React.Component {
   handleSearch = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log('Received values of form: ', values);
+      
     });
   };
 
@@ -145,7 +145,7 @@ export default class AdvancedSearchForm extends React.Component {
       } else {
         values.mapabled = false
       }
-      console.log(values)
+      
       if (err) {
         return;
       }
@@ -162,7 +162,7 @@ export default class AdvancedSearchForm extends React.Component {
         this.fnGridEdit(values)
       }
 
-      console.log('Received values of form: ', values);
+      
       form.resetFields();
       this.setState({ visible: false });
     });
@@ -191,7 +191,7 @@ export default class AdvancedSearchForm extends React.Component {
     const _this = this
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        
       },
       getCheckboxProps: record => ({
         disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -207,10 +207,12 @@ export default class AdvancedSearchForm extends React.Component {
       {
         title: '责任网格',
         dataIndex: 'name',
+        width: 200,
       },
       {
         title: '责任范围',
         dataIndex: 'range',
+        width: 200,
       },
       {
         title: '行政区域名称',
@@ -219,11 +221,13 @@ export default class AdvancedSearchForm extends React.Component {
       {
         title: '地图责任网格',
         dataIndex: 'mapabled',
-        render: (text, cord) => <span href="javascript:;">{cord.mapabled ? '是' : '否'}</span>
+        render: (text, cord) => <span href="javascript:;">{cord.mapabled ? '是' : '否'}</span>,
+        align: "center"
       },
       {
         title: '行政级别型等级',
         dataIndex: 'roadTypeName',
+        align: "center"
       },
       // {
       //   title: '责任部门',
@@ -275,7 +279,7 @@ export default class AdvancedSearchForm extends React.Component {
             {/* <Row gutter={24}>{this.getFields()}</Row> */}
             <Row>
               <Col span={8}>
-                <Search  onSearch={value => {
+                <Search placeholder="责任网格/行政区域" onSearch={value => {
                   let { pageNo, pageSize } = this.state
                   _this.setState({
                     keyword: value
