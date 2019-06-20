@@ -37,7 +37,7 @@ export default class IssuseModal extends React.Component {
       {data && (<div>
 
         <section>
-          <Descriptions title="荣创路17号_问题000 详情">
+          <Descriptions title={`${data.name} 详情`}>
             <Descriptions.Item label="问题名称">{data.name}</Descriptions.Item>
             <Descriptions.Item label="状态"><Tag color="#f50">{data.issueStatusName}</Tag></Descriptions.Item>
             <Descriptions.Item label="角色 / 姓名"><Tag color="#2db7f5">{data.levelName} / {data.userName}</Tag></Descriptions.Item>

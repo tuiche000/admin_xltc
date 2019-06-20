@@ -47,7 +47,7 @@ export default class Login extends Component {
       Message.success('登录成功');
       this.props.fnCancel()
       this.props.setLogin(data);
-      this.props.history.push('/grid', {});
+      this.props.history.push('/home', {});
     }
   }
 

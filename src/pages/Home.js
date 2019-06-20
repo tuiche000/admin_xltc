@@ -49,7 +49,7 @@ export default class Home extends Component {
                 this.props.admin.login ? (
                   <Row type="flex" justify="end">
                     <Button ghost onClick={() => {
-                      this.props.history.push('/grid', {});
+                      this.props.history.push('/home', {});
                     }}>进入后台</Button>
                     <Button style={{ marginLeft: 10 }} ghost onClick={() => {
                       _this.props.loginOut()
@@ -78,7 +78,7 @@ export default class Home extends Component {
               </p>
               <div>
                 <Button ghost size="large" onClick={() => {
-                  this.props.admin.login ? this.props.history.push('/grid', {}) : _this.setState({
+                  this.props.admin.login ? this.props.history.push('/home', {}) : _this.setState({
                     type: 'login',
                     visible: true,
                   })
