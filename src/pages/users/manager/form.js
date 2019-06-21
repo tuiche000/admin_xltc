@@ -141,12 +141,12 @@ export default class regiosForm extends React.Component {
     }
     const uploadprops = {
       name: 'uploadFile',
-      action: 'http://checking.fothing.com/api/v1/user/avator',
+      action: 'http://checking.fothing.com/api/oss/user/avator',
       headers: {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem('token')).access_token}`
       },
       listType: "picture",
-      beforeUpload: beforeUpload,
+      // beforeUpload: beforeUpload,
       onChange(info) {
         if (info.file.status === 'uploading') {
           console.log(info.file);
@@ -154,12 +154,7 @@ export default class regiosForm extends React.Component {
         if (info.file.status === 'done') {
           message.success(`${info.file.name} 文件上传成功`);
           // Get this url from response in real world.
-          getBase64(info.file.originFileObj, imageUrl =>
-            this.setState({
-              imageUrl,
-              loading: false,
-            }),
-          );
+          console.log(info.file.response.data.resource)
         } else if (info.file.status === 'error') {
           message.error(`${info.file.name} 文件上传失败`);
         }
@@ -223,7 +218,7 @@ export default class regiosForm extends React.Component {
           </Form.Item>
           <Form.Item label="电话">
             {getFieldDecorator('phone', {
-              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
+              rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.phone
             })(<Input />)}
           </Form.Item>
@@ -235,7 +230,7 @@ export default class regiosForm extends React.Component {
           </Form.Item>
           <Form.Item label="头像">
             {getFieldDecorator('avatar', {
-              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
+              rules: [{ required: true, message: '请输入内容' }],
               initialValue: initialValue.avatar,
               getValueFromEvent: this.normFile,
             })(<Upload {...uploadprops}>
@@ -252,7 +247,7 @@ export default class regiosForm extends React.Component {
           </Form.Item>
           <Form.Item label="性别">
             {getFieldDecorator('gender', {
-              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
+              rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.gender
             })(<Select >
               <Option value="MALE">男</Option>
@@ -299,7 +294,7 @@ export default class regiosForm extends React.Component {
           </Form.Item>
           <Form.Item label="角色">
             {getFieldDecorator('roles', {
-              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
+              rules: [{ required: true, message: '请输入内容' }],
               initialValue: initialValue.roles
             })(<Checkbox.Group style={{ width: '100%' }}>
               <Row>

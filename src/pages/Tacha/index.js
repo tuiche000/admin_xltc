@@ -32,6 +32,7 @@ export default class AdvancedSearchForm extends React.Component {
     loading: false,
     // table end
     type: 'add',
+    tagsFromServer: {}, // tags选项
     initialValue: {}, // form回显的字段
     id: undefined, // 详情的id
   };
@@ -127,7 +128,9 @@ export default class AdvancedSearchForm extends React.Component {
 
   fnCommonEnum = async (name) => {
     let data = await window._api.commonEnum(name)
-    console.log(data)
+    this.setState({
+      tagsFromServer: data
+    })
   }
 
   // submit
@@ -168,12 +171,19 @@ export default class AdvancedSearchForm extends React.Component {
 
   componentDidMount() {
     this.fnTachaList()
-    // this.fnCommonEnum()
+    this.fnCommonEnum('ROUTE_SORT')
   }
 
   render() {
     const _this = this
-    const { visible, filterVisible } = _this.state
+    const { visible, filterVisible, tagsFromServer } = _this.state
+    let tagsVal = []
+    let tagsKey = []
+    if (Object.keys(tagsFromServer).length) {
+      tagsVal = Object.values(tagsFromServer)
+      tagsKey = Object.keys(tagsFromServer)
+    }
+    tagsFromServer
     const columns = [
       // {
       //   title: '踏查编码',
@@ -351,7 +361,7 @@ export default class AdvancedSearchForm extends React.Component {
                     <Form.Item label="角色">
                       {getFieldDecorator('range-picker', rangeConfig)(
                         <Checkbox.Group style={{ width: '100%' }} onChange={(checkedValues) => {
-                          console.log('checked = ', checkedValues);
+
                         }} >
                           <Row>
                             <Col span={2}>
@@ -403,13 +413,8 @@ export default class AdvancedSearchForm extends React.Component {
         </section> */}
         <section className="antd-pro-components-standard-table-index-standardTable">
           <HotTags
-            tagsFromServer={[
-              '踏查时间',
-              '踏查用时',
-              '踏查里程',
-              '踏查步数',
-              '问题数',
-            ]}
+            tagsKey={tagsKey}
+            tagsVal={tagsVal}
             title="排序方式："
             fnChange={this.fnChange}
           ></HotTags>
