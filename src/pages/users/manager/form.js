@@ -203,7 +203,7 @@ export default class regiosForm extends React.Component {
           </Form.Item>
           <Form.Item label="名字">
             {getFieldDecorator('name', {
-              rules: [{ required: true, message: '请输入内容', whitespace: true }],
+              rules: [{ required: true, message: '请输入内容,不得大于6个字符', whitespace: true, max: 6 }],
               initialValue: initialValue.name
             })(<Input />)}
           </Form.Item>

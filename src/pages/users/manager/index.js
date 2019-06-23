@@ -5,7 +5,7 @@ import MyTable from '@/components/Table'
 
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
-    
+
   },
   getCheckboxProps: record => ({
     disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -67,7 +67,7 @@ export default class AdvancedSearchForm extends React.Component {
     const { type } = this.state
     const form = this.formRef.props.form;
     form.validateFields((err, values) => {
-      
+
 
       if (err) {
         return;
@@ -82,7 +82,7 @@ export default class AdvancedSearchForm extends React.Component {
         this.fnUserPut(values)
       }
 
-      
+
       form.resetFields();
       this.setState({ visible: false });
     });
@@ -180,7 +180,7 @@ export default class AdvancedSearchForm extends React.Component {
       <main id="Grid_Container">
         <section className="antd-pro-pages-list-table-list-tableListOperator">
           <Button icon="plus" type="primary" onClick={e => {
-            this.setState({ visible: true, type: 'add' });
+            this.setState({ initialValue: {}, visible: true, type: 'add' });
           }}>
             新建
           </Button>
@@ -191,7 +191,7 @@ export default class AdvancedSearchForm extends React.Component {
           </Button> */}
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
-        <MyTable
+          <MyTable
             total={this.state.totalResults}
             rowSelection={rowSelection}
             columns={columns}
@@ -202,20 +202,22 @@ export default class AdvancedSearchForm extends React.Component {
             tableData={this.state.tableData}
           ></MyTable>
         </section>
+        {
+          this.state.visible && <ModalForm
+            wrappedComponentRef={formRef => {
+              this.formRef = formRef;
+            }}
+            initialValue={this.state.initialValue}
+            visible={this.state.visible}
+            onCancel={e => {
+              _this.setState({
+                visible: false,
+              });
+            }}
+            onCreate={this.handleCreate}
+          />
+        }
 
-        <ModalForm
-          wrappedComponentRef={formRef => {
-            this.formRef = formRef;
-          }}
-          initialValue={this.state.initialValue}
-          visible={this.state.visible}
-          onCancel={e => {
-            this.setState({
-              visible: false,
-            });
-          }}
-          onCreate={this.handleCreate}
-        />
       </main>
     );
   }

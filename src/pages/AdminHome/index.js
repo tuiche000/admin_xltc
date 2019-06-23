@@ -8,11 +8,18 @@ const Search = Input.Search
 export default class HomeModal extends React.Component {
   constructor(props) {
     super(props)
+    let self = this
     this.state = {
       visible: false,
       data: [],
       center: { longitude: 119.5658900000, latitude: 39.9092000000 }
     }
+    this.amapEvents = {
+      created: (mapInstance) => {
+        self.instance = mapInstance
+        AMap = window.AMap
+      }
+    };
   }
 
   fnTachaList = async (searchVal) => {
@@ -21,6 +28,7 @@ export default class HomeModal extends React.Component {
       data: data.result,
       center: data.result[0].latlngs[0]
     })
+    this.instance.setZoom(15)
   }
 
   componentDidMount() {
@@ -29,11 +37,11 @@ export default class HomeModal extends React.Component {
 
   render() {
     const _this = this
-    let { data, center, visible, id } = this.state
+    let { data, center, visible, id, zoom } = this.state
     const plugins = ['ToolBar']
     return (
       <div style={{ height: '100%' }}>
-        <Map version={'1.4.14'} zoom={15} center={center} plugins={plugins} >
+        <Map events={this.amapEvents} version={'1.4.14'} zoom={15} center={center} plugins={plugins} >
           {
             data.length && data.map(item => {
               return (

@@ -72,7 +72,7 @@ export default class SearchTree extends React.Component {
   }
 
   fnDel = async (record) => {
-    let {code} = await window._api.regionDel(record.id)
+    let { code } = await window._api.regionDel(record.id)
     if (code == 0) {
       message.success('删除成功')
     }
@@ -81,19 +81,23 @@ export default class SearchTree extends React.Component {
   }
 
   fnForm = () => {
-    this.setState({ visible: true, type: 'add' });
+    this.setState({
+      initialValue: {},
+      visible: true, type: 'add'
+    });
   };
 
   handleOk = e => {
-    
+
     this.setState({
       visible: false,
     });
   };
 
   handleCancel = e => {
-    
+
     this.setState({
+      initialValue: {},
       visible: false,
     });
   };
@@ -140,7 +144,7 @@ export default class SearchTree extends React.Component {
           this.setState({
             gData: [...this.state.gData],
           });
-          
+
           resolve();
           return;
         })
@@ -227,8 +231,8 @@ export default class SearchTree extends React.Component {
         values.id = initialValue.id
         this.fnRegionEdit(values)
       }
-      
-      
+
+
       form.resetFields();
       this.setState({ visible: false });
     });
@@ -273,8 +277,8 @@ export default class SearchTree extends React.Component {
               onSelect={this.getRegionChildren}
               onExpand={this.onExpand}
             >
-              <TreeNode key='xzqy' title="行政区域" isLeaf={true} >
-              </TreeNode>
+              {/* <TreeNode key='xzqy' title="行政区域" isLeaf={true} >
+              </TreeNode> */}
               {this.renderTreeNodes(this.state.gData)}
             </Tree>
           </Col>
@@ -295,20 +299,22 @@ export default class SearchTree extends React.Component {
               )} */}
             </div>
             <Table pagination={
-            {
-              defaultPageSize: 20
-            }
-          } rowKey="id" dataSource={this.state.TablePropData} columns={this.state.columns} />
+              {
+                defaultPageSize: 20
+              }
+            } rowKey="id" dataSource={this.state.TablePropData} columns={this.state.columns} />
           </Col>
 
         </Row>
-        <ModalForm
-          wrappedComponentRef={this.saveFormRef}
-          initialValue={this.state.initialValue}
-          visible={this.state.visible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
-        />
+        {
+          this.state.visible && <ModalForm
+            wrappedComponentRef={this.saveFormRef}
+            initialValue={this.state.initialValue}
+            visible={this.state.visible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCreate}
+          />
+        }
       </main>
     );
   }

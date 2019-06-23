@@ -316,7 +316,6 @@ export default class GridModal extends React.Component {
                     labelInValue={true}
                     loadData={this.onLoadData}
                     // onSelect={this.getRegionChildren}
-                    showSearch
                     multiple
                     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                     

@@ -3,6 +3,8 @@ import { Form, Col, Row, Input, DatePicker, Radio, Cascader, Button, message, Ic
 import IssueModal from './modal'
 import MyTable from '@/components/Table'
 import HotTags from '@/components/HotTags'
+import moment from 'moment';
+import queryString from 'query-string'
 
 const Search = Input.Search
 const { RangePicker } = DatePicker;
@@ -52,14 +54,20 @@ export default class AdvancedSearchForm extends React.Component {
       loading: true,
     })
     let { pageSize, pageNo, keyword, opt } = this.state
-    let data = await window._api.issueList(opt, {
-      pageNo, pageSize, keyword
-    })
-    this.setState({
-      loading: false,
-      tableData: data.result,
-      totalResults: data.totalResults
-    })
+    try {
+      let data = await window._api.issueList(opt, {
+        pageNo, pageSize, keyword
+      })
+      this.setState({
+        tableData: data.result,
+        totalResults: data.totalResults
+      })
+    } catch (e) {
+    } finally {
+      this.setState({
+        loading: false,
+      })
+    }
   }
 
   fnGridAdd = async (opt) => {
@@ -76,6 +84,31 @@ export default class AdvancedSearchForm extends React.Component {
       message.success('修改成功')
       this.fnGridList()
     }
+  }
+
+  // search
+  handleSearch = () => {
+    const form = this.props.form
+
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+
+      this.setState((s, p) => {
+        return {
+          opt: {
+            ...s.opt,
+            roadManagerRank: values.roadManagerRank,
+            gridId: values.gridId ? parseInt(values.gridId[values.gridId.length - 1]) : undefined,
+            fromDate: values.date ? moment(values.date[0]).format('YYYY-MM-DD') : undefined,
+            thruDate: values.date ? moment(values.date[1]).format('YYYY-MM-DD') : undefined
+          }
+        }
+      }, () => {
+        this.fnIssueList()
+      })
+    })
   }
 
   // submit
@@ -109,6 +142,14 @@ export default class AdvancedSearchForm extends React.Component {
     }
     // this.formRef.props.form.resetFields()
     // this.getRegionChildren(this.state.selectedKeys[0])
+  }
+
+  fnGridFilter = async () => {
+    let data = await window._api.gridFilter()
+
+    this.setState({
+      grids: data
+    })
   }
 
   fnCommonEnum = async (name) => {
@@ -152,6 +193,7 @@ export default class AdvancedSearchForm extends React.Component {
 
   componentDidMount() {
     this.fnIssueList()
+    this.fnGridFilter()
     this.fnCommonEnum('ISSUE_STATUS')
     this.fnCommonEnum('ROLE_TYPE')
   }
@@ -201,10 +243,6 @@ export default class AdvancedSearchForm extends React.Component {
         dataIndex: 'description',
         width: 400,
       },
-      // {
-      //   title: '地址',
-      //   dataIndex: 'address',
-      // },
       {
         title: '问题级别',
         dataIndex: 'issueTypeName',
@@ -213,68 +251,6 @@ export default class AdvancedSearchForm extends React.Component {
         title: '时间',
         dataIndex: 'createDate',
       },
-      // {
-      //   title: '照片/视频',
-      //   dataIndex: 'star',
-      //   render: (text, cord) => {
-      //     return (
-      //       <a href="javascript:;" onClick={
-      //         () => {
-      //           _this.setState({
-      //             id: cord.id,
-      //             visible: true,
-      //           })
-      //         }
-      //       }>查看详情</a>
-      //     )
-      //   }
-      // },
-      // {
-      //   title: '评价',
-      //   dataIndex: 'star',
-      //   render: (text, cord) => {
-      //     if (cord.star) return (
-      //       <Rate disabled defaultValue={cord.star} />
-      //     )
-      //   }
-      // },
-      // {
-      //   title: '操作',
-      //   render(text, record) {
-      //     return (
-      //       <div>
-      //         {/* <a href="javascript:;" onClick={() => {
-      //           _this.setState({
-      //             visible: true,
-      //             type: 'detail'
-      //           })
-      //         }}>查看</a> */}
-      //         <a href="javascript:;" style={{ marginLeft: 10 }} onClick={() => {
-      //           _this.setState({
-      //             type: 'edit',
-      //             initialValue: record,
-      //             visible: true,
-      //           })
-      //         }}>编辑</a>
-      //         <Popconfirm
-      //           title="Are you sure delete this task?"
-      //           onConfirm={() => {
-      //             _this.fnGridDel(record)
-      //           }}
-      //           onCancel={
-      //             () => {
-      //               message.error('Click on No');
-      //             }
-      //           }
-      //           okText="Yes"
-      //           cancelText="No"
-      //         >
-      //           <a style={{ marginLeft: 10 }} href="javascript:;">删除</a>
-      //         </Popconfirm>
-      //       </div>
-      //     )
-      //   }
-      // },
     ];
     return (
       <main id="Grid_Container">
@@ -302,7 +278,8 @@ export default class AdvancedSearchForm extends React.Component {
             <Col push={11} span={2}>
               <Button type="primary" onClick={
                 () => {
-                  window.open(`http://checking.fothing.com/api/oss/route/query/export`)
+                  const query = queryString.stringify(this.state.opt)
+                  window.open(`http://checking.fothing.com/api/oss/issue/query/export?${query}`)
                 }
               }>导出查询结果</Button>
             </Col>
@@ -367,11 +344,10 @@ export default class AdvancedSearchForm extends React.Component {
             total={this.state.totalResults}
             rowSelection={rowSelection}
             columns={columns}
-            loading={this.state.tableLoading}
+            loading={this.state.loading}
             fnTableChange={(pageNo, pageSize) => {
               this.fnTableChange(pageNo, pageSize)
             }}
-            loading={this.state.loading}
             tableData={this.state.tableData}
           ></MyTable>
         </section>

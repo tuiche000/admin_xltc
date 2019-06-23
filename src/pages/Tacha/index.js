@@ -1,8 +1,10 @@
 import React from 'react'
-import { Form, Col, Input, Row, Table, Divider, Icon, Button, DatePicker, Radio, Cascader } from 'antd';
+import { Form, Col, Input, Row, Divider, Icon, Button, DatePicker, Radio, Cascader } from 'antd';
 import TachaModal from './modal'
 import HotTags from '@/components/HotTags'
+import MyTable from '@/components/Table'
 import moment from 'moment';
+import queryString from 'query-string'
 
 const Search = Input.Search
 const { RangePicker } = DatePicker;
@@ -56,12 +58,20 @@ export default class AdvancedSearchForm extends React.Component {
       loading: true,
     })
     let { pageSize, pageNo, keyword, opt } = this.state
-    let data = await window._api.tachaList(opt, { pageSize, pageNo, keyword })
-    this.setState({
-      tableData: data.result,
-      totalResults: data.totalResults,
-      loading: false,
-    })
+    try {
+      let data = await window._api.tachaList(opt, { pageSize, pageNo, keyword })
+      this.setState({
+        tableData: data.result,
+        totalResults: data.totalResults,
+      })
+    } catch (e) {
+
+    } finally {
+      this.setState({
+        loading: false,
+      })
+    }
+
   }
 
   fnGridFilter = async () => {
@@ -96,7 +106,7 @@ export default class AdvancedSearchForm extends React.Component {
       if (err) {
         return;
       }
-      
+
       this.setState((s, p) => {
         return {
           opt: {
@@ -312,7 +322,8 @@ export default class AdvancedSearchForm extends React.Component {
             <Col push={11} span={2}>
               <Button type="primary" onClick={
                 () => {
-                  window.open(`http://checking.fothing.com/api/oss/route/query/export`)
+                  const query = queryString.stringify(this.state.opt)
+                  window.open(`http://checking.fothing.com/api/oss/route/query/export?${query}`)
                 }
               }>导出查询结果</Button>
             </Col>
@@ -373,19 +384,16 @@ export default class AdvancedSearchForm extends React.Component {
             fnChange={this.fnChange}
           ></HotTags>
           <br></br>
-          <Table rowKey="id" pagination={
-            {
-              "showQuickJumper": true,
-              total: this.state.totalResults,
-              onChange(pageNo, pageSize) {
-                _this.setState({
-                  pageNo: pageNo
-                }, () => {
-                  _this.fnTachaList()
-                })
-              }
-            }
-          } loading={this.state.loading} rowSelection={rowSelection} columns={columns} dataSource={this.state.tableData} />
+          <MyTable
+            total={this.state.totalResults}
+            rowSelection={rowSelection}
+            columns={columns}
+            loading={this.state.loading}
+            fnTableChange={(pageNo, pageSize) => {
+              this.fnTableChange(pageNo, pageSize)
+            }}
+            tableData={this.state.tableData}
+          ></MyTable>
         </section>
         {visible && <TachaModal
           onCancel={() => {

@@ -29,7 +29,7 @@ export default class MyTable extends React.Component {
           }
           loading={loading}
           rowKey="id"
-          rowSelection={rowSelection}
+          // rowSelection={rowSelection}
           columns={columns}
           dataSource={tableData}
         />
