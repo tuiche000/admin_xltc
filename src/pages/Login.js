@@ -33,7 +33,7 @@ export default class Login extends Component {
   //     });
 
   //     this.props.setLogin(true);
-  //     localStorage.login = true;
+  //     sessionStorage.login = true;
 
   //     this.props.history.push('/', {});
   //   } catch (e) {

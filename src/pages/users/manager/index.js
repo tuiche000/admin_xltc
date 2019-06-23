@@ -67,7 +67,7 @@ export default class AdvancedSearchForm extends React.Component {
     const { type } = this.state
     const form = this.formRef.props.form;
     form.validateFields((err, values) => {
-      console.log(values)
+      
 
       if (err) {
         return;

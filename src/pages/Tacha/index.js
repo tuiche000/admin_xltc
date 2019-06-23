@@ -1,7 +1,8 @@
 import React from 'react'
-import { Form, Col, Input, Row, Table, Divider, Icon, Button, DatePicker, Checkbox } from 'antd';
+import { Form, Col, Input, Row, Table, Divider, Icon, Button, DatePicker, Radio, Cascader } from 'antd';
 import TachaModal from './modal'
 import HotTags from '@/components/HotTags'
+import moment from 'moment';
 
 const Search = Input.Search
 const { RangePicker } = DatePicker;
@@ -23,6 +24,12 @@ export default class AdvancedSearchForm extends React.Component {
   state = {
     visible: false,
     filterVisible: false,
+    type: 'add',
+    tags: [], // tags选项
+    roles: [], // 角色选项
+    grids: [], // 责任
+    initialValue: {}, // form回显的字段
+    id: undefined, // 详情的id
     // table start
     tableData: [],
     totalResults: 1,
@@ -31,94 +38,25 @@ export default class AdvancedSearchForm extends React.Component {
     keyword: '',
     loading: false,
     // table end
-    type: 'add',
-    tagsFromServer: {}, // tags选项
-    initialValue: {}, // form回显的字段
-    id: undefined, // 详情的id
-  };
-
-  // To generate mock Form.Item
-  getFields() {
-    const count = this.state.expand ? 10 : 0;
-    const { getFieldDecorator } = this.props.form;
-    const children = []
-    const fields = [
-      {
-        FieldName: 'name',
-        label: '时间区间',
-        options: {
-        },
-        render() {
-          return <Input />
-        }
-      },
-      {
-        FieldName: 'name',
-        label: '责任网格',
-        options: {
-        },
-        render() {
-          return <Input />
-        }
-      },
-      {
-        FieldName: 'name',
-        label: '角色',
-        options: {
-        },
-        render() {
-          return <Input />
-        }
-      },
-      {
-        FieldName: 'name',
-        label: '责任部门',
-        options: {
-        },
-        render() {
-          return <Input />
-        }
-      },
-      {
-        FieldName: 'name',
-        label: '行政区域',
-        options: {
-        },
-        render() {
-          return <Input />
-        }
-      },
-      {
-        FieldName: 'name',
-        label: '是否有地图',
-        options: {
-        },
-        render() {
-          return <Input />
-        }
-      },
-    ];
-    for (let i = 0; i < fields.length; i++) {
-      children.push(
-        <Col span={8} key={i} style={{ display: i < count ? 'block' : 'none' }}>
-          <Form.Item label={fields[i].label}>
-            {getFieldDecorator(`${fields[i].field}`, fields[i].options)(fields[i].render())}
-          </Form.Item>
-        </Col>,
-      );
+    // list opt
+    opt: {
+      routeSort: undefined, // 排序
+      roadManagerRank: undefined, // 踏查职级
+      issueStatus: undefined, // 问题状态
+      gridId: undefined, // 责任网格主键
+      regionId: undefined, // 行政区域主键
+      fromDate: undefined, // 开始日期
+      thruDate: undefined, // 结束日期
     }
-    return children;
-  }
+    // list opt end
+  };
 
   fnTachaList = async (json) => {
     this.setState({
       loading: true,
     })
-    let { pageSize, pageNo, keyword } = this.state
-    let searchVal = (json && json.keyword) || keyword
-    let Size = (json && json.pageSize) || pageSize
-    let Page = (json && json.pageNo) || pageNo
-    let data = await window._api.tachaList({}, { "pageSize": Size, "pageNo": Page, "keyword": searchVal })
+    let { pageSize, pageNo, keyword, opt } = this.state
+    let data = await window._api.tachaList(opt, { pageSize, pageNo, keyword })
     this.setState({
       tableData: data.result,
       totalResults: data.totalResults,
@@ -126,10 +64,52 @@ export default class AdvancedSearchForm extends React.Component {
     })
   }
 
+  fnGridFilter = async () => {
+    let data = await window._api.gridFilter()
+
+    this.setState({
+      grids: data
+    })
+  }
+
   fnCommonEnum = async (name) => {
     let data = await window._api.commonEnum(name)
-    this.setState({
-      tagsFromServer: data
+    switch (name) {
+      case 'ROUTE_SORT':
+        this.setState({
+          tags: data
+        })
+        return
+      case 'ROLE_TYPE':
+        this.setState({
+          roles: data
+        })
+        return
+    }
+  }
+
+  // search
+  handleSearch = () => {
+    const form = this.props.form
+
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      
+      this.setState((s, p) => {
+        return {
+          opt: {
+            ...s.opt,
+            roadManagerRank: values.roadManagerRank,
+            gridId: values.gridId ? parseInt(values.gridId[values.gridId.length - 1]) : undefined,
+            fromDate: values.date ? moment(values.date[0]).format('YYYY-MM-DD') : undefined,
+            thruDate: values.date ? moment(values.date[1]).format('YYYY-MM-DD') : undefined
+          }
+        }
+      }, () => {
+        this.fnTachaList()
+      })
     })
   }
 
@@ -156,34 +136,38 @@ export default class AdvancedSearchForm extends React.Component {
   }
 
   // HotTags
-  fnChange(tag) {
-
+  fnChange = (tag) => {
+    this.setState((s, p) => {
+      return {
+        opt: {
+          ...s.opt,
+          routeSort: tag
+        }
+      }
+    }, () => {
+      this.fnTachaList()
+    })
   }
 
   fnTableChange(pageNo, pageSize) {
     this.setState({
       pageNo, pageSize
-    })
-    this.fnTachaList({
-      pageNo, pageSize
+    }, () => {
+      this.fnTachaList()
     })
   }
 
   componentDidMount() {
     this.fnTachaList()
+    this.fnGridFilter()
     this.fnCommonEnum('ROUTE_SORT')
+    this.fnCommonEnum('ROLE_TYPE')
   }
 
   render() {
     const _this = this
-    const { visible, filterVisible, tagsFromServer } = _this.state
-    let tagsVal = []
-    let tagsKey = []
-    if (Object.keys(tagsFromServer).length) {
-      tagsVal = Object.values(tagsFromServer)
-      tagsKey = Object.keys(tagsFromServer)
-    }
-    tagsFromServer
+    const { visible, filterVisible, tags, roles, grids } = _this.state
+
     const columns = [
       // {
       //   title: '踏查编码',
@@ -288,12 +272,6 @@ export default class AdvancedSearchForm extends React.Component {
       // },
     ];
 
-    const config = {
-      rules: [{ type: 'object', required: true, message: 'Please select time!' }],
-    };
-    const rangeConfig = {
-      rules: [{ type: 'array', required: true, message: 'Please select time!' }],
-    };
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -317,12 +295,12 @@ export default class AdvancedSearchForm extends React.Component {
                 _this.setState({
                   keyword: value
                 })
-                _this.fnTachaList({
+                _this.fnTachaList({}, {
                   keyword: value
                 })
               }} enterButton />
             </Col>
-            <Col push={1}>
+            <Col push={1} span={2}>
               <a className="ant-dropdown-link" href="javascript:void(0)" onClick={() => {
                 this.setState({
                   filterVisible: !filterVisible
@@ -331,20 +309,13 @@ export default class AdvancedSearchForm extends React.Component {
                 筛选条件 <Icon type="down" />
               </a>
             </Col>
-            {/* <Col span={16}>
-              <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
-                  筛选条件 <Icon type={this.state.expand ? 'up' : 'down'} />
-                </a>
-                <Button type="primary" htmlType="submit">
-                  查询
-            </Button>
-                <Button style={{ marginLeft: 8 }} onClick={() => this.props.form.resetFields()}>
-                  重置
-            </Button>
-
-                
-              </Col> */}
-
+            <Col push={11} span={2}>
+              <Button type="primary" onClick={
+                () => {
+                  window.open(`http://checking.fothing.com/api/oss/route/query/export`)
+                }
+              }>导出查询结果</Button>
+            </Col>
           </Row>
           {
             filterVisible && (
@@ -353,34 +324,26 @@ export default class AdvancedSearchForm extends React.Component {
                 <Col span={24}>
                   <Form {...formItemLayout} onSubmit={this.handleSearch}>
                     <Form.Item label="时间区间">
-                      {getFieldDecorator('date-picker', config)(<RangePicker />)}
+                      {getFieldDecorator('date')(<RangePicker />)}
                     </Form.Item>
                     <Form.Item label="责任网格">
-                      {getFieldDecorator('month-picker', config)(<div></div>)}
+                      {getFieldDecorator('gridId')(
+                        <Cascader fieldNames={{ label: 'name', value: 'key', children: 'children' }} style={{ width: 300 }} options={grids} onChange={(value) => {
+                          console.log(value);
+                        }} placeholder="Please select" />
+                      )}
                     </Form.Item>
                     <Form.Item label="角色">
-                      {getFieldDecorator('range-picker', rangeConfig)(
-                        <Checkbox.Group style={{ width: '100%' }} onChange={(checkedValues) => {
-
-                        }} >
-                          <Row>
-                            <Col span={2}>
-                              <Checkbox value="A">A</Checkbox>
-                            </Col>
-                            <Col span={2}>
-                              <Checkbox value="B">B</Checkbox>
-                            </Col>
-                            <Col span={2}>
-                              <Checkbox value="C">C</Checkbox>
-                            </Col>
-                            <Col span={2}>
-                              <Checkbox value="D">D</Checkbox>
-                            </Col>
-                            <Col span={2}>
-                              <Checkbox value="E">E</Checkbox>
-                            </Col>
-                          </Row>
-                        </Checkbox.Group>
+                      {getFieldDecorator('roadManagerRank')(
+                        <Radio.Group buttonStyle="solid">
+                          {
+                            roles.map(item => {
+                              return (
+                                <Radio.Button key={item.key} value={item.key}>{item.name}</Radio.Button>
+                              )
+                            })
+                          }
+                        </Radio.Group>
                       )}
                     </Form.Item>
                     <Form.Item
@@ -402,35 +365,23 @@ export default class AdvancedSearchForm extends React.Component {
             )
           }
         </section>
-        {/* <br></br> */}
         <Divider />
-        {/* <section className="antd-pro-pages-list-table-list-tableListOperator">
-          <Button icon="plus" type="primary" onClick={e => {
-            this.setState({ visible: true, type: 'add' });
-          }}>
-            新建
-          </Button>
-        </section> */}
         <section className="antd-pro-components-standard-table-index-standardTable">
           <HotTags
-            tagsKey={tagsKey}
-            tagsVal={tagsVal}
+            tags={tags}
             title="排序方式："
             fnChange={this.fnChange}
           ></HotTags>
           <br></br>
-          {/* <Table
-            fnTableChang={this.fnTableChange} total={this.state.totalResults} rowSelection={rowSelection} columns={columns} tableData={this.state.tableData} /> */}
-          <Table pagination={
+          <Table rowKey="id" pagination={
             {
               "showQuickJumper": true,
               total: this.state.totalResults,
               onChange(pageNo, pageSize) {
                 _this.setState({
                   pageNo: pageNo
-                })
-                _this.fnTachaList({
-                  pageNo
+                }, () => {
+                  _this.fnTachaList()
                 })
               }
             }

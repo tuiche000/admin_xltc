@@ -143,18 +143,18 @@ export default class regiosForm extends React.Component {
       name: 'uploadFile',
       action: 'http://checking.fothing.com/api/oss/user/avator',
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token')).access_token}`
+        Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('token')).access_token}`
       },
       listType: "picture",
       // beforeUpload: beforeUpload,
       onChange(info) {
         if (info.file.status === 'uploading') {
-          console.log(info.file);
+          sessionStorage;
         }
         if (info.file.status === 'done') {
           message.success(`${info.file.name} 文件上传成功`);
           // Get this url from response in real world.
-          console.log(info.file.response.data.resource)
+          
         } else if (info.file.status === 'error') {
           message.error(`${info.file.name} 文件上传失败`);
         }

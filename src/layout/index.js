@@ -90,7 +90,7 @@ export default class BasicLayout extends Component {
 
   render() {
     const _this = this
-    const { name, avatar, levelName, } = this.props.admin.user_info
+    const { name, avatar, levelName, } = this.props.admin.user_info || {}
     return (
       <Layout id="components-layout-demo-custom-trigger">
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>

@@ -13,8 +13,8 @@ let BASE = 'http://checking.fothing.com/'
 async function commonFetcdh(url, options, method = 'GET', query) {
   const searchStr = queryString.stringify(options)
   let initObj = {}
-  // const token = JSON.parse(localStorage.getItem('token')) && JSON.parse(localStorage.getItem('token')).access_token || 'UkIY4dN3AU7aVMA0yIza9LK2tLlxxoy7'
-  const token = JSON.parse(localStorage.getItem('token')) && JSON.parse(localStorage.getItem('token')).access_token || 'UkIY4dN3AU7aVMA0yIza9LK2tLlxxoy7'
+  // const token = JSON.parse(sessionStorage.getItem('token')) && JSON.parse(sessionStorage.getItem('token')).access_token || 'UkIY4dN3AU7aVMA0yIza9LK2tLlxxoy7'
+  const token = JSON.parse(sessionStorage.getItem('token')) && JSON.parse(sessionStorage.getItem('token')).access_token || 'UkIY4dN3AU7aVMA0yIza9LK2tLlxxoy7'
 
   if (method === 'GET') { // 如果是GET请求，拼接url
     url += '?' + searchStr
@@ -45,10 +45,11 @@ async function commonFetcdh(url, options, method = 'GET', query) {
         // title: '401',
         content: '登录过期了,请重新登录.',
         onOk() {
-          localStorage.clear()
+          sessionStorage.clear()
           window.location.href = '/'
         }
       });
+      return
     }
     let { code, status, data, message } = await res.json();
     if (code === '0' && status === 'OK') {

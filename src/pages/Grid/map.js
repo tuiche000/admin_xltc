@@ -118,7 +118,7 @@ export default class App extends React.Component {
       this.setState({
         Slatlngs: Platlngs
       })
-      this.mapCenter = { longitude: Platlngs[0].longitude, latitude: Platlngs[0].latitude }
+      if (Platlngs[0]) this.mapCenter = { longitude: Platlngs[0].longitude, latitude: Platlngs[0].latitude }
     } else {
       
       this.setState({

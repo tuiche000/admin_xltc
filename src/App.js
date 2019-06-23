@@ -26,8 +26,9 @@ export default class App extends Component {
   }
 
   checkLogin() {
-    let token = JSON.parse(localStorage.getItem('token'))
-    let login = localStorage.getItem('login')
+    
+    let token = JSON.parse(sessionStorage.getItem('token'))
+    let login = sessionStorage.getItem('login')
     let Plogin = this.props.admin.login
     if (!Plogin) {
       if (!login) {
