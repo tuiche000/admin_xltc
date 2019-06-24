@@ -86,7 +86,8 @@ export default class AdvancedSearchForm extends React.Component {
   }
 
   // search
-  handleSearch = () => {
+  handleSearch = e => {
+    e.preventDefault();
     const form = this.props.form
 
     form.validateFields((err, values) => {
