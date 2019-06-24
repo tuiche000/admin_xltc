@@ -28,18 +28,18 @@ export default class SearchTree extends React.Component {
           title: '区划代码',
           dataIndex: 'areacode',
         },
-        {
-          title: '邮编',
-          dataIndex: '3',
-        },
-        {
-          title: '级别',
-          dataIndex: 'level',
-        },
-        {
-          title: '显示顺序',
-          dataIndex: 'displayOrder',
-        },
+        // {
+        //   title: '邮编',
+        //   dataIndex: '3',
+        // },
+        // {
+        //   title: '级别',
+        //   dataIndex: 'level',
+        // },
+        // {
+        //   title: '显示顺序',
+        //   dataIndex: 'displayOrder',
+        // },
         {
           title: '操作',
           dataIndex: '6',

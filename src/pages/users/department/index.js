@@ -29,13 +29,22 @@ class AdvancedSearchForm extends React.Component {
     type: 'add', // add=>添加 edit=>编辑
     gData: [], //树形数据
     columns: [
-      {
-        title: '代码',
-        dataIndex: 'code',
-      },
+      // {
+      //   title: '代码',
+      //   dataIndex: 'code',
+      // },
       {
         title: '部门类型',
         dataIndex: 'departmentType',
+        render(text, cord) {
+          const Enum = {
+            "CITY": '市级',
+            "COUNTY": '区县级',
+            "TOWNSHIP": '街乡镇',
+            "COMMUNITY": '社区级',
+          }
+          return <span>{Enum[text]}</span>
+        }
       },
       {
         title: '名字',
@@ -45,22 +54,22 @@ class AdvancedSearchForm extends React.Component {
         title: '行政区域',
         dataIndex: 'regionId',
       },
-      {
-        title: '启用',
-        dataIndex: 'enabled',
-        render: (text) => {
-          if (text) return (
-            <div>是</div>
-          )
-          if (!text) return (
-            <div>否</div>
-          )
-        }
-      },
-      {
-        title: '显示顺序',
-        dataIndex: 'displayOrder',
-      },
+      // {
+      //   title: '启用',
+      //   dataIndex: 'enabled',
+      //   render: (text) => {
+      //     if (text) return (
+      //       <div>是</div>
+      //     )
+      //     if (!text) return (
+      //       <div>否</div>
+      //     )
+      //   }
+      // },
+      // {
+      //   title: '显示顺序',
+      //   dataIndex: 'displayOrder',
+      // },
       {
         title: '操作',
         render: (text, record) => (
@@ -99,7 +108,7 @@ class AdvancedSearchForm extends React.Component {
         name: 'code',
         element() {
           return (
-            <Input  />
+            <Input />
           )
         }
       },
@@ -108,7 +117,7 @@ class AdvancedSearchForm extends React.Component {
         name: 'regionId',
         element() {
           return (
-            <Cascader options={options} onChange={this.onChange} changeOnSelect  />
+            <Cascader options={options} onChange={this.onChange} changeOnSelect />
           )
         }
       },
@@ -117,7 +126,7 @@ class AdvancedSearchForm extends React.Component {
         name: 'name',
         element() {
           return (
-            <Input  />
+            <Input />
           )
         }
       },
@@ -173,7 +182,7 @@ class AdvancedSearchForm extends React.Component {
   }
 
   onChange = val => {
-    
+
   }
 
   fnEdit = (record) => {
@@ -187,7 +196,7 @@ class AdvancedSearchForm extends React.Component {
   handleSearch = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      
+
     });
   };
 
@@ -209,7 +218,7 @@ class AdvancedSearchForm extends React.Component {
   }
 
   fnDepartmentDel = async (record) => {
-    
+
     let { code } = await window._api.departmentDel(record.id)
     if (code == 0) {
       message.success('删除成功')
@@ -232,22 +241,23 @@ class AdvancedSearchForm extends React.Component {
   };
 
   fnDepartmentAdd = async (opt, query) => {
-    
-    let { region } = this.state.selected
-    let data = await window._api.departmentAdd(region, opt, query)
-    
+
+    let {code} = await window._api.departmentAdd(opt, query)
+    if (code == 0) {
+      message.success('添加成功')
+    }
   }
 
   fnDepartmentEdit = async (opt, query) => {
-    
+
     let regionId = this.state.initialValue.region
     let data = await window._api.departmentEdit(regionId, opt, query)
-    
+
   }
 
   // 根据主键获取下一级责任部门列表
   fnGetChildren = async (arr, e) => {
-    
+
     let data = await window._api.departmentId(arr[0])
     this.setState({
       tableData: data,
@@ -268,7 +278,7 @@ class AdvancedSearchForm extends React.Component {
           this.setState({
             gData: [...this.state.gData],
           });
-          
+
           resolve();
           return;
         })
@@ -294,7 +304,7 @@ class AdvancedSearchForm extends React.Component {
         this.fnDepartmentEdit(values, query)
       }
 
-      
+
       form.resetFields();
       this.setState({ visible: false });
     });
@@ -357,10 +367,10 @@ class AdvancedSearchForm extends React.Component {
             </section>
             <section className="antd-pro-components-standard-table-index-standardTable">
               <Table pagination={
-            {
-              defaultPageSize: 20
-            }
-          } rowKey="id" dataSource={this.state.tableData} columns={this.state.columns} />
+                {
+                  defaultPageSize: 20
+                }
+              } rowKey="id" dataSource={this.state.tableData} columns={this.state.columns} />
             </section>
           </Col>
         </Row>

@@ -51,7 +51,7 @@ class regiosForm extends React.Component {
     const amapkey = "e6356bced344d01851e9d87b2ad188fe"
     const mapEvents = {
       created: (mapInstance) => {
-        
+
       },
       click: (params) => {
         const { lat, lng } = params.lnglat
@@ -79,10 +79,10 @@ class regiosForm extends React.Component {
           <Form.Item label="部门类型" hasFeedback>
             {getFieldDecorator('departmentType', { initialValue: initialValue.regionType })(
               <Select >
-                <Option value="CITY">省/市</Option>
-                <Option value="COUNTY">区/县</Option>
-                <Option value="VILLAGE">街/村</Option>
-                <Option value="OTHERS">其他</Option>
+                <Option value="CITY">市级</Option>
+                <Option value="COUNTY">区县级</Option>
+                <Option value="TOWNSHIP">街乡镇</Option>
+                <Option value="COMMUNITY">社区级</Option>
               </Select>)}
           </Form.Item>
           <Form.Item
@@ -97,11 +97,11 @@ class regiosForm extends React.Component {
               initialValue: initialValue.name
             })(<Input />)}
           </Form.Item>
-          <Form.Item label="企业信用编号">
+          {/* <Form.Item label="企业信用编号">
             {getFieldDecorator('taxcode', {
               initialValue: initialValue.taxcode
             })(<Input style={{ width: '100%' }} />)}
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="行政区域" hasFeedback>
             {getFieldDecorator('regionType', { rules: [{ required: true, message: '请输入内容' }], initialValue: initialValue.departmentType })(
               <Select >
@@ -111,7 +111,7 @@ class regiosForm extends React.Component {
                 <Option value="OTHERS">其他</Option>
               </Select>)}
           </Form.Item>
-          <Form.Item label="邮编">
+          {/* <Form.Item label="邮编">
             {getFieldDecorator('postcode', { initialValue: initialValue.postcode })(<Input style={{ width: '100%' }} />)}
           </Form.Item>
           <Form.Item label="启用">
@@ -119,7 +119,7 @@ class regiosForm extends React.Component {
           </Form.Item>
           <Form.Item label="显示顺序">
             {getFieldDecorator('displayOrder', { initialValue: initialValue.displayOrder })(<InputNumber min={1} max={10} initialValue={3} />)}
-          </Form.Item>
+          </Form.Item> */}
         </Form>
       </Modal>
 

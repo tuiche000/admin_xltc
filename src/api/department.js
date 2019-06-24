@@ -4,5 +4,5 @@ export const departmentId = (departmentId) => _GET(`api/oss/department/${departm
 `)
 export const departmentAll = () => _GET(`api/oss/department/all`)
 export const departmentDel = (departmentId) => _DELETE(`api/oss/department/${departmentId}`)
-export const departmentAdd = (regionId, opt, query) => _POST(`api/oss/department/${regionId ? regionId : ''}`, opt, query)
+export const departmentAdd = (opt, query) => _POST(`api/oss/department`, opt, query)
 export const departmentEdit = (regionId, opt, query) => _PUT(`api/oss/department/${regionId}`, opt, query)

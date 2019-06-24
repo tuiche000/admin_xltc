@@ -304,9 +304,8 @@ export default class AdvancedSearchForm extends React.Component {
               <Search placeholder="责任网格/姓名/区域" onSearch={value => {
                 _this.setState({
                   keyword: value
-                })
-                _this.fnTachaList({}, {
-                  keyword: value
+                }, () => {
+                  _this.fnTachaList()
                 })
               }} enterButton />
             </Col>

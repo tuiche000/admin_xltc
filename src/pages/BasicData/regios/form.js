@@ -113,20 +113,20 @@ export default class regiosForm extends React.Component {
                 <Option value="OTHERS">其他</Option>
               </Select>)}
           </Form.Item>
-          <Form.Item label="坐标">
+          {/* <Form.Item label="坐标">
             {getFieldDecorator('postion', {
               initialValue: initialValue.postion
             })(
               <Input style={{ width: '100%' }} addonAfter={<Icon type="environment" onClick={this.fnToggleMap} theme="filled" />} />
             )}
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="区划代码">
             {getFieldDecorator('areacode', {
               rules: [{ required: true, message: '请输入内容' }],
               initialValue: initialValue.areacode
             })(<Input style={{ width: '100%' }} />)}
           </Form.Item>
-          <Form.Item label="邮编">
+          {/* <Form.Item label="邮编">
             {getFieldDecorator('postcode', {initialValue: initialValue.postcode})(<Input style={{ width: '100%' }} />)}
           </Form.Item>
           <Form.Item label="级别">
@@ -134,7 +134,7 @@ export default class regiosForm extends React.Component {
           </Form.Item>
           <Form.Item label="显示顺序">
             {getFieldDecorator('displayOrder', {initialValue: initialValue.displayOrder})(<InputNumber min={1} max={10} initialValue={3} />)}
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item {...tailFormItemLayout}>
           </Form.Item>
         </Form>

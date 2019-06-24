@@ -39,7 +39,6 @@ export default class AdvancedSearchForm extends React.Component {
     tableLoading: false,
     //
     opt: {
-      routeSort: undefined, // 排序
       roadManagerRank: undefined, // 踏查职级
       issueStatus: undefined, // 问题状态
       gridId: undefined, // 责任网格主键
@@ -174,7 +173,7 @@ export default class AdvancedSearchForm extends React.Component {
       return {
         opt: {
           ...s.opt,
-          routeSort: tag
+          issueStatus: tag
         }
       }
     }, () => {
@@ -260,9 +259,8 @@ export default class AdvancedSearchForm extends React.Component {
               <Search placeholder="责任网格/姓名/区域" onSearch={value => {
                 _this.setState({
                   keyword: value
-                })
-                _this.fnTachaList({}, {
-                  keyword: value
+                }, () => {
+                  _this.fnIssueList()
                 })
               }} enterButton />
             </Col>
