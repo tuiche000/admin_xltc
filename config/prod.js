@@ -1,6 +1,5 @@
 const path = require('path');
 const { stylelintPlugin, htmlPlugin } = require('../config');
-const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack')
 
 module.exports = {
@@ -18,17 +17,6 @@ module.exports = {
     }),
   ],
   optimization: {
-    minimize: true,
-    minimizer: [
-      (compiler) => {
-        const TerserPlugin = require('terser-webpack-plugin');
-        new TerserPlugin({
-          cache: true,
-          parallel: true,
-          sourceMap: true,
-        }).apply(compiler);
-      }
-    ],
     splitChunks: {
       cacheGroups: {
         commons: {
@@ -38,5 +26,5 @@ module.exports = {
         }
       }
     }
-  },
+  }
 };
