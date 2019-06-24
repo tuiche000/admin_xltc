@@ -141,7 +141,7 @@ export default class regiosForm extends React.Component {
     }
     const uploadprops = {
       name: 'uploadFile',
-      action: 'http://checking.fothing.com/api/oss/user/avator',
+      action: `${process.env.API_HOST}/api/oss/user/avator`,
       headers: {
         Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('token')).access_token}`
       },
@@ -154,7 +154,7 @@ export default class regiosForm extends React.Component {
         if (info.file.status === 'done') {
           message.success(`${info.file.name} 文件上传成功`);
           // Get this url from response in real world.
-          
+
         } else if (info.file.status === 'error') {
           message.error(`${info.file.name} 文件上传失败`);
         }
@@ -197,7 +197,7 @@ export default class regiosForm extends React.Component {
         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
           <Form.Item label="用户名">
             {getFieldDecorator('username', {
-              rules: [{ required: true, message: '请输入内容', whitespace: true }],
+              rules: [{ required: true, message: '请输入内容,不得大于20个字符', whitespace: true, max: 20 }],
               initialValue: initialValue.username
             })(<Input />)}
           </Form.Item>
@@ -209,22 +209,21 @@ export default class regiosForm extends React.Component {
           </Form.Item>
           <Form.Item label="邮箱">
             {getFieldDecorator('email', {
-              // rules: [{ required: true, message: '请输入内容', whitespace: true }, {
-              //   type: 'email',
-              //   message: '请输入内容',
-              // },],
+              rules: [{ message: '不得大于60个字符', max: 60 }, {
+                type: 'email',
+              }],
               initialValue: initialValue.email
             })(<Input />)}
           </Form.Item>
           <Form.Item label="电话">
             {getFieldDecorator('phone', {
-              rules: [{ required: true, message: '请输入内容', whitespace: true }],
+              rules: [{ required: true, message: '请输入内容, 不得大于20个字符', max: 20 }],
               initialValue: initialValue.phone
             })(<Input />)}
           </Form.Item>
           <Form.Item label="身份证号码">
             {getFieldDecorator('idcard', {
-              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
+              rules: [{ message: '请输入内容, 不得大于20个字符', max: 20 }],
               initialValue: initialValue.idcard
             })(<Input />)}
           </Form.Item>

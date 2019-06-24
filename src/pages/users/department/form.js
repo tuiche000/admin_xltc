@@ -75,17 +75,9 @@ class regiosForm extends React.Component {
           </div>
 
         }
+  
         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-          <Form.Item label="部门类型" hasFeedback>
-            {getFieldDecorator('departmentType', { initialValue: initialValue.regionType })(
-              <Select >
-                <Option value="CITY">市级</Option>
-                <Option value="COUNTY">区县级</Option>
-                <Option value="TOWNSHIP">街乡镇</Option>
-                <Option value="COMMUNITY">社区级</Option>
-              </Select>)}
-          </Form.Item>
-          <Form.Item
+        <Form.Item
             label={
               <span>
                 名字
@@ -97,12 +89,22 @@ class regiosForm extends React.Component {
               initialValue: initialValue.name
             })(<Input />)}
           </Form.Item>
+          <Form.Item label="部门类型" hasFeedback>
+            {getFieldDecorator('departmentType', { rules: [{ required: true, message: '请输入内容' }], initialValue: initialValue.departmentType })(
+              <Select >
+                <Option value="CITY">市级</Option>
+                <Option value="COUNTY">区县级</Option>
+                <Option value="TOWNSHIP">街乡镇</Option>
+                <Option value="COMMUNITY">社区级</Option>
+              </Select>)}
+          </Form.Item>
+          
           {/* <Form.Item label="企业信用编号">
             {getFieldDecorator('taxcode', {
               initialValue: initialValue.taxcode
             })(<Input style={{ width: '100%' }} />)}
           </Form.Item> */}
-          <Form.Item label="行政区域" hasFeedback>
+          {/* <Form.Item label="行政区域" hasFeedback>
             {getFieldDecorator('regionType', { rules: [{ required: true, message: '请输入内容' }], initialValue: initialValue.departmentType })(
               <Select >
                 <Option value="CITY">省/市</Option>
@@ -110,7 +112,7 @@ class regiosForm extends React.Component {
                 <Option value="VILLAGE">街/村</Option>
                 <Option value="OTHERS">其他</Option>
               </Select>)}
-          </Form.Item>
+          </Form.Item> */}
           {/* <Form.Item label="邮编">
             {getFieldDecorator('postcode', { initialValue: initialValue.postcode })(<Input style={{ width: '100%' }} />)}
           </Form.Item>

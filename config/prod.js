@@ -1,7 +1,7 @@
-const path=require('path');
-const {stylelintPlugin, htmlPlugin}=require('../config');
+const path = require('path');
+const { stylelintPlugin, htmlPlugin } = require('../config');
 
-module.exports={
+module.exports = {
   mode: 'production',
   output: {
     path: path.resolve(__dirname, '../build'),

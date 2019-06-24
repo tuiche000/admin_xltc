@@ -4,20 +4,6 @@ import ModalForm from './form'
 
 const { TreeNode } = Tree;
 
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
-        批量删除
-      </a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
-        批量设置
-      </a>
-    </Menu.Item>
-  </Menu>
-);
 class AdvancedSearchForm extends React.Component {
   state = {
     expand: false,
@@ -50,10 +36,10 @@ class AdvancedSearchForm extends React.Component {
         title: '名字',
         dataIndex: 'name',
       },
-      {
-        title: '行政区域',
-        dataIndex: 'regionId',
-      },
+      // {
+      //   title: '行政区域',
+      //   dataIndex: 'regionId',
+      // },
       // {
       //   title: '启用',
       //   dataIndex: 'enabled',
@@ -222,6 +208,7 @@ class AdvancedSearchForm extends React.Component {
     let { code } = await window._api.departmentDel(record.id)
     if (code == 0) {
       message.success('删除成功')
+      this.fnfirstlevel()
     }
     // this.formRef.props.form.resetFields()
     // this.getRegionChildren(this.state.selectedKeys[0])
@@ -242,17 +229,20 @@ class AdvancedSearchForm extends React.Component {
 
   fnDepartmentAdd = async (opt, query) => {
 
-    let {code} = await window._api.departmentAdd(opt, query)
+    let { code } = await window._api.departmentAdd(opt, query)
     if (code == 0) {
       message.success('添加成功')
+      this.fnfirstlevel()
     }
   }
 
   fnDepartmentEdit = async (opt, query) => {
 
-    let regionId = this.state.initialValue.region
-    let data = await window._api.departmentEdit(regionId, opt, query)
-
+    let { code } = await window._api.departmentEdit(opt, query)
+    if (code == 0) {
+      message.success('修改成功')
+      this.fnfirstlevel()
+    }
   }
 
   // 根据主键获取下一级责任部门列表

@@ -56,10 +56,8 @@ export default class Login extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       
       if (!err) {
-        values.clientId = "5IxFXXu4sgaz6zHrSgUZ8O"
-        values.clientSecret = "VwdtfBwbbhMPmU7B7lEid3rs8U8XR0XA"
-        // values.clientId = "2RLBDDGZd4rmQRkkRvHSZp"
-        // values.clientSecret = "Oo6zHfT68VTzGF05g2u1uS6zVBPbcigK"
+        values.clientId = process.env.CLIENTID
+        values.clientSecret = process.env.CLIENTSECRET
         this.login(values)
       }
     });

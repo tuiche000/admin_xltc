@@ -12,10 +12,6 @@ import Home from '@/pages/Home';
 
 import api from './api/index'
 window._api = api
-// import fetchJson, { _GET, _POST } from './utils/fetch';
-// window.fetchJson = fetchJson
-// window._GET = _GET
-// window._POST = _POST
 
 @connect((state, props) => Object.assign({}, props, state), {
   setLogin

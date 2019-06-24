@@ -338,6 +338,7 @@ export default class GridModal extends React.Component {
                   type={this.props.type}
                   // Platlngs={lineLatlngs}
                   Platlngs={initialValue.latlngs}
+                  distance={initialValue.distance}
                 />
               }
               {

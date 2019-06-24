@@ -111,12 +111,12 @@ export default class App extends React.Component {
   }
 
   componentWillMount() {
-    const { type, Platlngs } = this.props
+    const { type, Platlngs, distance } = this.props
     
     if (type === 'edit') {
-      this.props.save(Platlngs)
+      this.props.save(Platlngs, distance)
       this.setState({
-        Slatlngs: Platlngs
+        Slatlngs: Platlngs, 
       })
       if (Platlngs[0]) this.mapCenter = { longitude: Platlngs[0].longitude, latitude: Platlngs[0].latitude }
     } else {

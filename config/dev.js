@@ -1,5 +1,5 @@
 const path = require('path');
-const { stylelintPlugin, htmlPlugin } = require('../config');
+const { stylelintPlugin, htmlPlugin, definePlugin } = require('../config');
 
 module.exports = {
   mode: 'development',
@@ -15,12 +15,11 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': 'http://checking.fothing.com/',
-      // '/api': 'http://lt.loiot.com/',
-      // '/admin': 'http://localhost:8080/',
     }
   },
   plugins: [
     ...stylelintPlugin,
-    htmlPlugin
+    htmlPlugin,
+    definePlugin
   ]
 };

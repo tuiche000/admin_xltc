@@ -1,8 +1,7 @@
 import queryString from 'query-string'
 import { message, Modal } from 'antd'
 
-let BASE = 'http://checking.fothing.com/'
-// let BASE = 'http://lt.loiot.com/'
+let BASE = process.env.API_HOST
 
 /**
  * 真正的请求
@@ -13,8 +12,7 @@ let BASE = 'http://checking.fothing.com/'
 async function commonFetcdh(url, options, method = 'GET', query) {
   const searchStr = queryString.stringify(options)
   let initObj = {}
-  // const token = JSON.parse(sessionStorage.getItem('token')) && JSON.parse(sessionStorage.getItem('token')).access_token || 'UkIY4dN3AU7aVMA0yIza9LK2tLlxxoy7'
-  const token = JSON.parse(sessionStorage.getItem('token')) && JSON.parse(sessionStorage.getItem('token')).access_token || 'UkIY4dN3AU7aVMA0yIza9LK2tLlxxoy7'
+  const token = JSON.parse(sessionStorage.getItem('token')) && JSON.parse(sessionStorage.getItem('token')).access_token
 
   if (method === 'GET') { // 如果是GET请求，拼接url
     url += '?' + searchStr
@@ -22,7 +20,6 @@ async function commonFetcdh(url, options, method = 'GET', query) {
       method: method,
       headers: new Headers({
         'Authorization': `Bearer ${token}`
-        // 'Authorization': `Bearer 00Qu0CAjtS8txW4GLjHLqaQXpKYzr3pg`
       })
     }
   } else {
@@ -33,13 +30,12 @@ async function commonFetcdh(url, options, method = 'GET', query) {
         'Accept': 'application/json',
         'Content-Type': 'application/json;charset=UTF-8',
         'Authorization': `Bearer ${token}`,
-        // 'Authorization': `Bearer 00Qu0CAjtS8txW4GLjHLqaQXpKYzr3pg`
       }),
       body: JSON.stringify(options)
     }
   }
   try {
-    let res = await fetch((BASE + url), initObj)
+    let res = await fetch((BASE + '/' + url), initObj)
     if (res.status == 401) {
       Modal.error({
         // title: '401',
