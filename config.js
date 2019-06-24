@@ -5,7 +5,6 @@ const path = require('path');
 
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
-const webpack = require('webpack')
 
 module.exports = {
   ESLINT_ENABLE, STYLELINT_ENABLE,
@@ -17,9 +16,4 @@ module.exports = {
   htmlPlugin: new HtmlPlugin({
     template: path.resolve(__dirname, './index.html')
   }),
-  definePlugin: new webpack.DefinePlugin({
-    // 源码中所有 process.env 都会被替换为
-    // '../config/dev.env'这个module export出来的东西
-    'process.env': require('./config/dev.env')
-  })
 };

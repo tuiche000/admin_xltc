@@ -179,18 +179,6 @@ export default class AdvancedSearchForm extends React.Component {
     const { visible, filterVisible, tags, roles, grids } = _this.state
 
     const columns = [
-      // {
-      //   title: '踏查编码',
-      //   dataIndex: 'id',
-      //   render: (text, cord) => <a href="javascript:;" onClick={
-      //     () => {
-      //       _this.setState({
-      //         id: cord.id,
-      //         visible: true
-      //       })
-      //     }
-      //   }>{text}</a>,
-      // },
       {
         title: '责任网格',
         dataIndex: 'gridName',
@@ -203,18 +191,6 @@ export default class AdvancedSearchForm extends React.Component {
           }
         }>{text}</a>,
       },
-      // {
-      //   title: '起点',
-      //   dataIndex: 'beginAddress',
-      // },
-      // {
-      //   title: '终点',
-      //   dataIndex: 'endAddress',
-      // },
-      // {
-      //   title: '角色',
-      //   dataIndex: 'rank',
-      // },
       {
         title: '姓名',
         dataIndex: 'userName',

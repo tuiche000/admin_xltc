@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --env.dev",
-    "build": "webpack --env.prod",
+    "build": "webpack --env.prod --mode production",
     "test": "jest-webpack"
   },
   "keywords": [],
@@ -65,6 +65,7 @@
     "babel-plugin-import": "^1.12.0",
     "query-string": "^6.5.0",
     "react-amap": "^1.2.8",
-    "react-amap-plugin-geolocation": "^0.0.2"
+    "react-amap-plugin-geolocation": "^0.0.2",
+    "terser-webpack-plugin": "^1.3.0"
   }
 }

@@ -1,10 +1,12 @@
 const path = require('path');
-const { stylelintPlugin, htmlPlugin, definePlugin } = require('../config');
+const { stylelintPlugin, htmlPlugin } = require('../config');
+const webpack = require('webpack')
 
 module.exports = {
   mode: 'development',
   output: {
-    filename: 'bundle.js'
+    filename: '[name]-[hash].js',
+    path:  __dirname + '/build'
   },
   devtool: 'source-map',
   devServer: {
@@ -20,6 +22,10 @@ module.exports = {
   plugins: [
     ...stylelintPlugin,
     htmlPlugin,
-    definePlugin
+    new webpack.DefinePlugin({
+      // 源码中所有 process.env 都会被替换为
+      // '../config/dev.env'这个module export出来的东西
+      'process.env': require('./dev.env')
+    })
   ]
 };

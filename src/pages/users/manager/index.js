@@ -1,7 +1,11 @@
 import React from 'react'
-import { Form, Button, Popconfirm, message } from 'antd';
+import { Form, Button, Popconfirm, message, Row, Col, Input, Icon, Upload, Divider } from 'antd';
 import ModalForm from './form'
 import MyTable from '@/components/Table'
+
+import './index.css'
+
+const Search = Input.Search
 
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
@@ -23,15 +27,17 @@ export default class AdvancedSearchForm extends React.Component {
     type: 'add',
     //
     pageNo: 1,
+    keyword: '',
     pageSize: 10,
     totalResults: 1,
     tableLoading: false,
     //
   };
 
-  fnUserList = async (pageNo, pageSize) => {
+  fnUserList = async () => {
+    const {pageNo, pageSize, keyword} = this.state
     let data = await window._api.userList({
-      pageNo, pageSize
+      pageNo, pageSize, keyword
     })
     this.setState({
       tableData: data.result,
@@ -91,8 +97,9 @@ export default class AdvancedSearchForm extends React.Component {
   fnTableChange = (pageNo, pageSize) => {
     this.setState({
       pageNo, pageSize
+    }, () => {
+      this.fnUserList()
     })
-    this.fnUserList(pageNo, pageSize)
   }
 
   componentDidMount() {
@@ -176,13 +183,61 @@ export default class AdvancedSearchForm extends React.Component {
         }
       },
     ];
+    const uploadprops = {
+      name: 'file',
+      action: `${process.env.API_HOST}/api/oss/user/import`,
+      headers: {
+        Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('token')).access_token}`
+      },
+      onChange(info) {
+        if (info.file.status === 'uploading') {
+        }
+        if (info.file.status === 'done') {
+          message.success(`${info.file.name} 文件上传成功`);
+        } else if (info.file.status === 'error') {
+          message.error(`${info.file.name} 文件上传失败`);
+        }
+      },
+    };
     return (
-      <main id="Grid_Container">
+      <main id="user_manager">
         <section className="antd-pro-pages-list-table-list-tableListOperator">
+          <Row type="flex" align="middle">
+            <Col span={8}>
+              <Search placeholder="姓名/手机号码" onSearch={value => {
+                _this.setState({
+                  keyword: value,
+                  pageNo: 1
+                }, () => {
+                  _this.fnUserList()
+                })
+              }} enterButton />
+            </Col>
+            <Col push={10} span={6}>
+            <Row type="flex" justify="end">
+            <Col>
+            <Upload {...uploadprops}>
+              <Button type="primary">
+                <Icon type="upload" /> 导入
+            </Button>
+            </Upload>
+            </Col>
+            <Col>
+            <Button style={{marginLeft: 10}} type="primary" onClick={
+                () => {
+                  window.open(`${process.env.API_HOST}/api/oss/user/@paged/export`)
+                }
+              }>导出查询结果</Button>
+            </Col>
+            </Row>
+            
+            </Col>
+          </Row>
+          <Divider />
           <Button icon="plus" type="primary" onClick={e => {
             this.setState({ initialValue: {}, visible: true, type: 'add' });
           }}>
-            新建
+            添加
           </Button>
           {/* <Button icon="reload" type="primary" onClick={e => {
             this.fnUserList()
@@ -190,6 +245,7 @@ export default class AdvancedSearchForm extends React.Component {
             刷新
           </Button> */}
         </section>
+        <br></br>
         <section className="antd-pro-components-standard-table-index-standardTable">
           <MyTable
             total={this.state.totalResults}

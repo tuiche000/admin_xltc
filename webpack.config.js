@@ -13,7 +13,10 @@ module.exports = function (env = {}, argv) {
 
   return {
     //公共的
-    entry: './src/index',
+    entry: {
+      app: './src/index',
+      vendors: ['react', 'react-amap', 'react-amap-plugin-geolocation', 'react-dom', 'react-redux', 'react-router-dom', 'antd', 'redux']
+    },
     module: {
       rules: [
         //js/jsx
