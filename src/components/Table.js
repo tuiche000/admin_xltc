@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
 
 export default class MyTable extends React.Component {
   constructor(props) {
@@ -20,7 +20,9 @@ export default class MyTable extends React.Component {
         <Table
           pagination={
             {
-              "showQuickJumper": true,
+              "showQuickJumper": {
+                goButton: <Button size="small" style={{marginLeft: 10}}>跳转</Button>
+              },
               total,
               onChange(page, size) {
                 fnTableChange(page, size)

@@ -13,6 +13,8 @@ import Home from '@/pages/Home';
 import api from './api/index'
 window._api = api
 
+import './app.css'
+
 @connect((state, props) => Object.assign({}, props, state), {
   setLogin
 })

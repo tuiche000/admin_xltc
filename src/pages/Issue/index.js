@@ -97,6 +97,7 @@ export default class AdvancedSearchForm extends React.Component {
 
       this.setState((s, p) => {
         return {
+          pageNo: 1,
           opt: {
             ...s.opt,
             roadManagerRank: values.roadManagerRank,
@@ -172,6 +173,7 @@ export default class AdvancedSearchForm extends React.Component {
   fnChange = (tag) => {
     this.setState((s, p) => {
       return {
+        pageNo: 1,
         opt: {
           ...s.opt,
           issueStatus: tag
@@ -241,7 +243,10 @@ export default class AdvancedSearchForm extends React.Component {
       {
         title: '问题描述',
         dataIndex: 'description',
-        width: 400,
+        width: 300,
+        render: text => <div style={{
+          width: '300px'
+        }} className="ellipsis">{text}</div>
       },
       {
         title: '问题级别',
@@ -259,6 +264,7 @@ export default class AdvancedSearchForm extends React.Component {
             <Col span={8}>
               <Search placeholder="责任网格/姓名/区域" onSearch={value => {
                 _this.setState({
+                  pageNo: 1,
                   keyword: value
                 }, () => {
                   _this.fnIssueList()
@@ -295,8 +301,7 @@ export default class AdvancedSearchForm extends React.Component {
                     <Form.Item label="责任网格">
                       {getFieldDecorator('gridId')(
                         <Cascader fieldNames={{ label: 'name', value: 'key', children: 'children' }} style={{ width: 300 }} options={grids} onChange={(value) => {
-                          
-                        }} placeholder="Please select" />
+                        }} placeholder="请选择" />
                       )}
                     </Form.Item>
                     <Form.Item label="角色">

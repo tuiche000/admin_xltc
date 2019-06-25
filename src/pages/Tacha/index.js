@@ -110,6 +110,7 @@ export default class AdvancedSearchForm extends React.Component {
 
       this.setState((s, p) => {
         return {
+          pageNo: 1,
           opt: {
             ...s.opt,
             roadManagerRank: values.roadManagerRank,
@@ -191,6 +192,14 @@ export default class AdvancedSearchForm extends React.Component {
             })
           }
         }>{text}</a>,
+      },
+      {
+        title: '起点',
+        dataIndex: 'beginAddress',
+      },
+      {
+        title: '终点',
+        dataIndex: 'endAddress',
       },
       {
         title: '姓名',
@@ -280,6 +289,7 @@ export default class AdvancedSearchForm extends React.Component {
             <Col span={8}>
               <Search placeholder="责任网格/姓名/区域" onSearch={value => {
                 _this.setState({
+                  pageNo: 1,
                   keyword: value
                 }, () => {
                   _this.fnTachaList()
@@ -367,6 +377,9 @@ export default class AdvancedSearchForm extends React.Component {
             loading={this.state.loading}
             fnTableChange={(pageNo, pageSize) => {
               this.fnTableChange(pageNo, pageSize)
+            }}
+            extra={{
+              current: _this.state.pageNo
             }}
             tableData={this.state.tableData}
           ></MyTable>
