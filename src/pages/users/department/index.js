@@ -4,7 +4,8 @@ import ModalForm from './form'
 
 const { TreeNode } = Tree;
 
-class AdvancedSearchForm extends React.Component {
+@Form.create()
+export default class AdvancedSearchForm extends React.Component {
   state = {
     expand: false,
     tableData: [],
@@ -64,7 +65,7 @@ class AdvancedSearchForm extends React.Component {
               () => this.fnEdit(record)
             }>编辑</a>
             <Popconfirm
-              title="Are you sure delete this task?"
+              title="你确定要删除吗？"
               onConfirm={() => {
                 this.fnDepartmentDel(text)
               }}
@@ -73,8 +74,8 @@ class AdvancedSearchForm extends React.Component {
                   message.error('Click on No');
                 }
               }
-              okText="Yes"
-              cancelText="No"
+              okText="确定"
+              cancelText="取消"
             >
               <a style={{ marginLeft: 10 }} href="javascript:;">删除</a>
             </Popconfirm>
@@ -381,6 +382,3 @@ class AdvancedSearchForm extends React.Component {
     );
   }
 }
-
-const WrappedAdvancedSearchForm = Form.create({ name: 'advanced_search' })(AdvancedSearchForm);
-export default WrappedAdvancedSearchForm

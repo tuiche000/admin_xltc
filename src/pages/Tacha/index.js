@@ -239,7 +239,7 @@ export default class AdvancedSearchForm extends React.Component {
       //           })
       //         }}>编辑</a>
       //         <Popconfirm
-      //           title="Are you sure delete this task?"
+      //           title="你确定要删除吗？"
       //           onConfirm={() => {
       //             _this.fnGridDel(record)
       //           }}
@@ -248,8 +248,8 @@ export default class AdvancedSearchForm extends React.Component {
       //               message.error('Click on No');
       //             }
       //           }
-      //           okText="Yes"
-      //           cancelText="No"
+      //           okText="确定"
+      //           cancelText="取消"
       //         >
       //           <a style={{ marginLeft: 10 }} href="javascript:;">删除</a>
       //         </Popconfirm>
@@ -316,7 +316,7 @@ export default class AdvancedSearchForm extends React.Component {
                     <Form.Item label="责任网格">
                       {getFieldDecorator('gridId')(
                         <Cascader fieldNames={{ label: 'name', value: 'key', children: 'children' }} style={{ width: 300 }} options={grids} onChange={(value) => {
-                          console.log(value);
+                          
                         }} placeholder="Please select" />
                       )}
                     </Form.Item>

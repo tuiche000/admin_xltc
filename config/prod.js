@@ -13,7 +13,7 @@ module.exports = {
     new webpack.DefinePlugin({
       // 源码中所有 process.env 都会被替换为
       // '../config/dev.env'这个module export出来的东西
-      'process.env': require('./prod.env')
+      'process.env': require('./dev.env')
     }),
   ],
   optimization: {

@@ -278,7 +278,7 @@ export default class AdvancedSearchForm extends React.Component {
               <Button type="primary" onClick={
                 () => {
                   const query = queryString.stringify(this.state.opt)
-                  window.open(`${process.env.API_HOST}?${query}`)
+                  window.open(`${process.env.API_HOST}/api/oss/issue/query/export?${query}`)
                 }
               }>导出查询结果</Button>
             </Col>
@@ -295,7 +295,7 @@ export default class AdvancedSearchForm extends React.Component {
                     <Form.Item label="责任网格">
                       {getFieldDecorator('gridId')(
                         <Cascader fieldNames={{ label: 'name', value: 'key', children: 'children' }} style={{ width: 300 }} options={grids} onChange={(value) => {
-                          console.log(value);
+                          
                         }} placeholder="Please select" />
                       )}
                     </Form.Item>

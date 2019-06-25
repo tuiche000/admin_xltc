@@ -7,6 +7,8 @@ import Grid from "@/pages/Grid";
 import Issue from "@/pages/Issue";
 // 踏查管理
 import Tacha from "@/pages/Tacha";
+// 消息管理
+import Message from "@/pages/Message";
 // 基本数据
 import BasicDataRegion from "@/pages/BasicData/regios/index";
 import BasicDataDictionary from "@/pages/BasicData/Dictionary";
@@ -14,7 +16,7 @@ import BasicDataUpload from "@/pages/BasicData/Upload";
 // 权限管理
 import UsersManager from "@/pages/Users/manager/index";
 import Department from "@/pages/Users/department/index";
-import DepartmentFrom from "@/pages/Users/department/form";
+import Roles from "@/pages/Users/roles/index";
 // 地图测试
 import MapTest from "@/pages/Map";
 
@@ -24,26 +26,39 @@ export const allRouters = [
   { path: "/home", component: Home },
   { path: "/users/manager", component: UsersManager },
   { path: "/users/department", component: Department },
-  { path: "/users/department/form", component: DepartmentFrom },
+  { path: "/users/roles", component: Roles },
   { path: "/grid", component: Grid },
   { path: "/issue", component: Issue },
   { path: "/tacha", component: Tacha },
+  { path: "/message", component: Message },
   { path: "/basicData/region", component: BasicDataRegion },
   { path: "/basicData/dictionary", component: BasicDataDictionary,},
   { path: "/basicData/upload", component: BasicDataUpload,},
 ];
 export default [
-  { path: '/home', component: 'Home', name: '首页' },
-  { path: "/grid", component: "Grid", name: "责任网格" },
+  { path: '/home', component: 'Home', icon: 'home', name: '首页' },
+  {
+    path: "/tacha",
+    name: "踏查管理",
+    icon: 'radar-chart',
+    component: Tacha,
+  },
+  { path: "/issue", component: "Grid", icon: 'question', name: "问题台账", },
+  { path: "/message", component: "Message", icon: 'message', name: "消息管理", },
   {
     path: "/users",
-    name: "权限管理",
-    // icon: 'user',
+    name: "用户管理",
+    icon: 'user',
     routes: [
       {
         path: "/users/manager",
-        name: "用户管理",
+        name: "系统用户",
         component: "UsersManager"
+      },
+      {
+        path: "/users/roles",
+        name: "角色管理",
+        component: "Roles"
       },
       {
         path: "/users/department",
@@ -53,34 +68,17 @@ export default [
     ]
   },
   // { path: '/map', component: 'MapTest', name: '地图测试', icon: 'home' },
-  // { path: '/grid', component: 'Grid', name: '责任网格', icon: 'home' },
   {
     path: "/basicData",
-    name: "基本数据",
-    // icon: 'user',
+    name: "配置管理",
+    icon: 'setting',
     routes: [
       {
         path: "/basicData/region",
         name: "行政区域",
         component: "BasicDataRegion"
       },
-      // {
-      //   path: '/basicData/dictionary',
-      //   name: '字典管理',
-      //   component: 'BasicDataDictionary'
-      // },
-      // {
-      //   path: '/basicData/upload',
-      //   name: '文件管理',
-      //   component: 'BasicDataUpload'
-      // },
+      { path: "/grid", component: "Grid", name: "责任网格" },
     ]
-  },
-  { path: "/issue", component: "Grid", name: "问题台账", },
-  {
-    path: "/tacha",
-    name: "踏查管理",
-    // icon: 'user',
-    component: Tacha,
   },
 ];

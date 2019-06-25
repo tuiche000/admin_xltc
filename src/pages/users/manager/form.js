@@ -1,6 +1,5 @@
 import React from 'react'
-import { Form, Input, Select, Button, Switch, Upload, Modal, Icon, DatePicker, Checkbox, Row, TreeSelect, message } from 'antd';
-import { Map } from 'react-amap';
+import { Form, Input, Select, Button, Switch, Upload, Modal, Icon, DatePicker, Row, TreeSelect, message } from 'antd';
 
 const TreeNode = TreeSelect.TreeNode;
 
@@ -12,6 +11,7 @@ export default class regiosForm extends React.Component {
     visible: true,
     mapVisble: true,
     gData: [],
+    roles: [], // 角色opt
     value: undefined, // tree值
   };
 
@@ -68,6 +68,15 @@ export default class regiosForm extends React.Component {
     })
   }
 
+  fnRoleList = async () => {
+    let data = await window._api.roleList({
+      pageSize: 1000
+    })
+    this.setState({
+      roles: data.result
+    })
+  }
+
   // 根据主键获取下一级责任部门列表
   fnGetChildren = async (arr, e) => {
 
@@ -95,6 +104,7 @@ export default class regiosForm extends React.Component {
 
   componentDidMount() {
     this.fnfirstlevel()
+    this.fnRoleList()
   }
 
   render() {
@@ -111,31 +121,7 @@ export default class regiosForm extends React.Component {
         sm: { span: 12 },
       },
     };
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0,
-        },
-        sm: {
-          span: 16,
-          offset: 8,
-        },
-      },
-    };
-    const position = { longitude: 120, latitude: 32 }
-    const amapkey = "e6356bced344d01851e9d87b2ad188fe"
-    const mapEvents = {
-      created: (mapInstance) => {
-
-      },
-      click: (params) => {
-        const { lat, lng } = params.lnglat
-        this.props.form.setFieldsValue({
-          postion: `${lat},${lng}`
-        })
-      },
-    }
+  
     function onChange(date, dateString) {
 
     }
@@ -188,12 +174,12 @@ export default class regiosForm extends React.Component {
         onOk={onCreate}
         centered={true}
       >
-        {
+        {/* {
           !this.state.mapVisble && <div style={{ width: '100%', height: '400px' }}>
             <Map center={position} zoom={5} amapkey={amapkey} events={mapEvents} />
           </div>
 
-        }
+        } */}
         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
           <Form.Item label="用户名">
             {getFieldDecorator('username', {
@@ -285,23 +271,30 @@ export default class regiosForm extends React.Component {
               </TreeSelect>
             )}
           </Form.Item>
+          <Form.Item label="角色">
+            {getFieldDecorator('roles', {
+              rules: [{ required: true, message: '请输入内容' }],
+              initialValue: initialValue.roles
+            })(<Select >
+              {
+                this.state.roles.map(item => {
+                  return (
+                    <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                  )
+                })
+              }
+              
+              {/* <Option value="SECOND">二级踏查人</Option>
+              <Option value="THIRD">三级踏查人</Option>
+              <Option value="FOURTH">问题处置员</Option>
+              <Option value="FIFTH">问题协调员</Option> */}
+            </Select>)}
+          </Form.Item>
           <Form.Item label="启用">
             {getFieldDecorator('enable', {
               // rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.name
             })(<Switch />)}
-          </Form.Item>
-          <Form.Item label="角色">
-            {getFieldDecorator('roles', {
-              rules: [{ required: true, message: '请输入内容' }],
-              initialValue: initialValue.roles
-            })(<Checkbox.Group style={{ width: '100%' }}>
-              <Row>
-                <Checkbox value="系统管理员">系统管理员</Checkbox>
-                <Checkbox value="审计员">审计员</Checkbox>
-                <Checkbox value="中台管理员">中台管理员</Checkbox>
-              </Row>
-            </Checkbox.Group>)}
           </Form.Item>
         </Form>
       </Modal>

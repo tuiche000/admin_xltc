@@ -14,6 +14,12 @@ import {
   userList, userAdd, userDel, userPut, userSelf,
 } from './user'
 import {
+  roleList, roleAdd, roleDel, rolePut, roleId,
+} from './role'
+import {
+  noticeList, noticeId,
+} from './notice'
+import {
   issueList, issueId,
 } from './issue'
 import {
@@ -26,6 +32,8 @@ export default {
   departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit, departmentAll,
   gridList, gridDel, gridAdd, gridPut, gridId, gridFilter,
   userList, userAdd, userDel, userPut, userSelf,
+  roleList, roleAdd, roleDel, rolePut, roleId,
+  noticeList, noticeId,
   issueList, issueId,
   tachaList, tachaId, tachaExport,
 }

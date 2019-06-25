@@ -14,6 +14,7 @@ export default class AdvancedSearchForm extends React.Component {
     tableData: [],
     type: 'add',
     initialValue: {}, // form回显的字段
+    selectedRows: [], // 选择行
     //
     pageNo: 1,
     pageSize: 10,
@@ -35,7 +36,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input  />
+          return <Input />
         }
       },
       {
@@ -44,7 +45,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input  />
+          return <Input />
         }
       },
       {
@@ -53,7 +54,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input  />
+          return <Input />
         }
       },
       {
@@ -62,7 +63,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input  />
+          return <Input />
         }
       },
       {
@@ -71,7 +72,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input  />
+          return <Input />
         }
       },
       {
@@ -80,7 +81,7 @@ export default class AdvancedSearchForm extends React.Component {
         options: {
         },
         render() {
-          return <Input  />
+          return <Input />
         }
       },
     ];
@@ -99,15 +100,17 @@ export default class AdvancedSearchForm extends React.Component {
   handleSearch = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      
+
     });
   };
 
-  fnGridList = async (pageNo, pageSize, keyword) => {
+  fnGridList = async () => {
+    const { pageNo, pageSize, keyword } = this.state
     let data = await window._api.gridList({
       pageNo, pageSize, keyword
     })
     this.setState({
+      selectedRows: [],
       tableData: data.result,
       totalResults: data.totalResults,
     })
@@ -123,6 +126,7 @@ export default class AdvancedSearchForm extends React.Component {
     if (code == 0) {
       message.success('添加成功')
       this.fnGridList()
+      return true
     }
   }
 
@@ -131,6 +135,7 @@ export default class AdvancedSearchForm extends React.Component {
     if (code == 0) {
       message.success('修改成功')
       this.fnGridList()
+      return true
     }
   }
 
@@ -138,43 +143,56 @@ export default class AdvancedSearchForm extends React.Component {
   handleCreate = () => {
     const { type, initialValue } = this.state
     const form = this.formRef.props.form;
-    form.validateFields((err, values) => {
-      values.region = values.region.value
-      if (values.latlngs && values.latlngs.length) {
-        values.mapabled = true
-      } else {
-        values.mapabled = false
-      }
-      
+    form.validateFields(async (err, values) => {
+
       if (err) {
         return;
       }
+
+      if (!values.latlngs || !values.latlngs.length) {
+        message.warning('请新增地图责任网格')
+        return false;
+      }
+
+      values.region = values.region.value
+      values.mapabled = true
+      // if (values.latlngs && values.latlngs.length) {
+      //   values.mapabled = true
+      // } else {
+      //   values.mapabled = false
+      // }
+
       if (type == 'add') {
         values.departments = values.departments.map(item => {
           return item.value
         })
-        this.fnGridAdd(values)
+        await this.fnGridAdd(values)
+        form.resetFields();
+        this.setState({ visible: false });
       } else if (type == 'edit') {
         values.id = initialValue.id
         values.departments = values.departments.map(item => {
           return item.value
         })
-        this.fnGridEdit(values)
+        await this.fnGridEdit(values)
+        form.resetFields();
+        this.setState({ visible: false });
       }
 
-      
-      form.resetFields();
-      this.setState({ visible: false });
     });
   }
 
   fnTableChange = (pageNo, pageSize) => {
-    this.fnGridList(pageNo, pageSize)
+    this.setState({
+      pageNo, pageSize
+    }, () => {
+      this.fnGridList()
+    })
   }
 
   // 删除责任网格
-  fnGridDel = async (record) => {
-    let { code } = await window._api.gridDel(record.id)
+  fnGridDel = async (arr) => {
+    let { code } = await window._api.gridDel(arr)
     if (code == 0) {
       message.success('删除成功')
       this.fnGridList()
@@ -189,9 +207,13 @@ export default class AdvancedSearchForm extends React.Component {
 
   render() {
     const _this = this
+    const { selectedRows } = this.state
+    // rowSelection object indicates the need for row selection
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
-        
+        _this.setState({
+          selectedRows: selectedRowKeys
+        })
       },
       getCheckboxProps: record => ({
         disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -235,6 +257,7 @@ export default class AdvancedSearchForm extends React.Component {
       // },
       {
         title: '操作',
+        align: "center",
         render(text, record) {
           return (
             <div>
@@ -252,17 +275,13 @@ export default class AdvancedSearchForm extends React.Component {
                 })
               }}>编辑</a>
               <Popconfirm
-                title="Are you sure delete this task?"
+                title="你确定要删除吗？"
                 onConfirm={() => {
-                  _this.fnGridDel(record)
+                  _this.fnGridDel(record.id)
                 }}
-                onCancel={
-                  () => {
-                    message.error('Click on No');
-                  }
-                }
-                okText="Yes"
-                cancelText="No"
+
+                okText="确定"
+                cancelText="取消"
               >
                 <a style={{ marginLeft: 10 }} href="javascript:;">删除</a>
               </Popconfirm>
@@ -282,23 +301,14 @@ export default class AdvancedSearchForm extends React.Component {
                 <Search placeholder="责任网格/行政区域" onSearch={value => {
                   let { pageNo, pageSize } = this.state
                   _this.setState({
+                    pageNo, pageSize,
                     keyword: value
+                  }, () => {
+                    _this.fnGridList()
                   })
-                  _this.fnGridList(pageNo, pageSize, value)
                 }} enterButton />
 
               </Col>
-              {/* <Col span={24} style={{ textAlign: 'right' }}>
-                <Button type="primary" htmlType="submit">
-                  查询
-            </Button>
-                <Button style={{ marginLeft: 8 }} onClick={() => this.props.form.resetFields()}>
-                  重置
-            </Button>
-                <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
-                  展开更多 <Icon type={this.state.expand ? 'up' : 'down'} />
-                </a>
-              </Col> */}
             </Row>
           </Form>
         </section>
@@ -309,6 +319,19 @@ export default class AdvancedSearchForm extends React.Component {
           }}>
             新建
           </Button>
+          {selectedRows.length > 0 && (
+            <Popconfirm
+              title="你确定要删除吗？"
+              onConfirm={() => {
+                _this.fnGridDel(selectedRows)
+              }}
+
+              okText="确定"
+              cancelText="取消"
+            >
+              <Button type="danger" icon="delete" style={{ marginLeft: 10 }}>删除</Button>
+            </Popconfirm>
+          )}
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
           <MyTable
@@ -318,6 +341,9 @@ export default class AdvancedSearchForm extends React.Component {
             loading={this.state.tableLoading}
             fnTableChange={(pageNo, pageSize) => {
               this.fnTableChange(pageNo, pageSize)
+            }}
+            extra={{
+              rowSelection: rowSelection
             }}
             tableData={this.state.tableData}
           ></MyTable>

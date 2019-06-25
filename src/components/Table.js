@@ -13,7 +13,7 @@ export default class MyTable extends React.Component {
   }
 
   render() {
-    const { total, fnTableChange, rowSelection, columns, tableData, loading } = this.props
+    const { total, fnTableChange, columns, tableData, loading, pageSize, extra } = this.props
     return (
       <div>
         {/* <Alert message={`共有${total}条数据`} type="info" showIcon style={{ marginBottom: '16px' }} /> */}
@@ -22,14 +22,14 @@ export default class MyTable extends React.Component {
             {
               "showQuickJumper": true,
               total,
-              onChange(page, pageSize) {
-                fnTableChange(page, pageSize)
+              onChange(page, size) {
+                fnTableChange(page, size)
               }
             }
           }
           loading={loading}
           rowKey="id"
-          // rowSelection={rowSelection}
+          {...extra}
           columns={columns}
           dataSource={tableData}
         />

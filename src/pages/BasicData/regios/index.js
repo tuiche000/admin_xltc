@@ -48,10 +48,10 @@ export default class SearchTree extends React.Component {
               <div>
                 <a href="javascript:;" onClick={(e) => this.fnEdit(record)}>编辑</a>
                 <Popconfirm
-                  title="Are you sure delete this task?"
+                  title="你确定要删除吗？"
                   onConfirm={(e) => this.fnDel(record)}
-                  okText="Yes"
-                  cancelText="No"
+                  okText="确定"
+                  cancelText="取消"
                 >
                   <a href="javascript:;" style={{ marginLeft: 10 }}>删除</a>
                 </Popconfirm>

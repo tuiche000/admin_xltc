@@ -177,10 +177,10 @@ export default class RegistrationForm extends React.Component {
 
     return (
       <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-        {step == 1 && <div>
+        {step == 1 && <div style={{opacity: `1`}}>
           <Form.Item label="手机号码">
             {getFieldDecorator('phone', {
-              rules: [{ required: true, message: '请输入内容' }],
+              rules: [{ required: true, message: '请输入内容,长度11', max: 11, min: 11 }],
             })(<Input style={{ width: '100%' }} />)}
           </Form.Item>
           <Form.Item label="登录密码" hasFeedback>
@@ -188,7 +188,8 @@ export default class RegistrationForm extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: '请输入内容',
+                  message: '请输入内容,长度不超过20',
+                  max: 20,
                 },
                 {
                   validator: this.validateToNextPassword,
@@ -201,7 +202,8 @@ export default class RegistrationForm extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: '请输入内容',
+                  message: '请输入内容,长度不超过20',
+                  max: 20,
                 },
                 {
                   validator: this.compareToFirstPassword,
@@ -217,7 +219,7 @@ export default class RegistrationForm extends React.Component {
               label="真实姓名"
             >
               {getFieldDecorator('name', {
-                rules: [{ required: true, message: '请输入内容', whitespace: true }],
+                rules: [{ required: true, message: '请输入内容,长度不超过20', whitespace: true, max: 20, }],
               })(<Input />)}
             </Form.Item>
             <Form.Item

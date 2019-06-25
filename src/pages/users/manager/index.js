@@ -73,14 +73,13 @@ export default class AdvancedSearchForm extends React.Component {
     const { type } = this.state
     const form = this.formRef.props.form;
     form.validateFields((err, values) => {
-
-
       if (err) {
         return;
       }
       if (values.avatar) {
         values.avatar = values.avatar[values.avatar.length - 1].response.data.resource
       }
+      if (values.roles) values.roles = [values.roles]
       if (type == 'add') {
         this.fnUserAdd(values)
       } else if (type == 'edit') {
@@ -163,17 +162,13 @@ export default class AdvancedSearchForm extends React.Component {
                 }
               }>编辑</a>
               <Popconfirm
-                title="Are you sure delete this task?"
+                title="你确定要删除吗？"
                 onConfirm={() => {
                   _this.fnUserDel(record)
                 }}
-                onCancel={
-                  () => {
-                    message.error('Click on No');
-                  }
-                }
-                okText="Yes"
-                cancelText="No"
+                
+                okText="确定"
+                cancelText="取消"
               >
                 <a href="javascript:;" style={{ marginLeft: 10 }}>删除</a>
               </Popconfirm>
