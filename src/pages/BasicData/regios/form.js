@@ -105,7 +105,7 @@ export default class regiosForm extends React.Component {
             })(<Input />)}
           </Form.Item>
           <Form.Item label="所属平台" hasFeedback>
-            {getFieldDecorator('regionType', { rules: [{ required: true, message: '请输入内容' }], initialValue: initialValue.regionType })(
+            {getFieldDecorator('regionType', { initialValue: initialValue.regionType })(
               <Select >
                 <Option value="CITY">省/市</Option>
                 <Option value="COUNTY">区/县</Option>

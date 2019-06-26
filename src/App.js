@@ -31,9 +31,9 @@ export default class App extends Component {
     if (!Plogin) {
       if (!login) {
         // 缓存和状态都没有登录信息滚去登录吧！
-        if (this.props.location.pathname != '/') {
-          Message.warning('未登录！')
-        }
+        // if (this.props.location.pathname != '/') {
+        //   Message.warning('未登录')
+        // }
         this.props.history.push('/', {});
       }
       else {

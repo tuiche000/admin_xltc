@@ -29,6 +29,7 @@ export default class MyTable extends React.Component {
               }
             }
           }
+          size="middle"
           loading={loading}
           rowKey="id"
           {...extra}

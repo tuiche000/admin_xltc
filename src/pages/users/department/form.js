@@ -85,7 +85,7 @@ class regiosForm extends React.Component {
             }
           >
             {getFieldDecorator('name', {
-              rules: [{ required: true, message: '请输入内容', whitespace: true }],
+              rules: [{ required: true, message: '请输入内容,长度不超过20个字符', whitespace: true, max: 20 }],
               initialValue: initialValue.name
             })(<Input />)}
           </Form.Item>

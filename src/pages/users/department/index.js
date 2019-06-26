@@ -1,6 +1,7 @@
 import React from 'react'
-import { Form, Row, Col, Input, Tree, Button, Icon, Dropdown, Select, InputNumber, Cascader, Menu, message, Popconfirm, Table } from 'antd';
+import { Form, Row, Col, Input, Tree, Button, Select, InputNumber, Cascader, message, Popconfirm } from 'antd';
 import ModalForm from './form'
+import MyTable from '@/components/Table'
 
 const { TreeNode } = Tree;
 
@@ -13,6 +14,7 @@ export default class AdvancedSearchForm extends React.Component {
     selected: {}, // 当前选中的treeNode对象
     initialValue: {}, // 编辑的数据
     visible: false, // 弹出框显示隐藏
+    treeVisible: false,
     type: 'add', // add=>添加 edit=>编辑
     gData: [], //树形数据
     columns: [
@@ -197,10 +199,14 @@ export default class AdvancedSearchForm extends React.Component {
   };
 
   fnfirstlevel = async () => {
+    this.setState({
+      treeVisible: false,
+    })
     let data = await window._api.departmentFirstlevel()
     this.setState({
       tableData: data,
-      gData: data
+      gData: data,
+      treeVisible: true
     })
   }
 
@@ -310,15 +316,22 @@ export default class AdvancedSearchForm extends React.Component {
       <main id="Grid_Container">
         <Row>
           <Col span={6}>
-            <Tree
-              loadData={this.onLoadData}
-              onSelect={this.fnGetChildren}
-              onExpand={this.onExpand}
-            >
-              {/* <TreeNode key='xzqy' title="行政区域" isLeaf={true} >
-              </TreeNode> */}
-              {this.renderTreeNodes(this.state.gData)}
-            </Tree>
+            <a href="javascript:void(0)" onClick={() => {
+              this.fnfirstlevel()
+            }}>责任部门</a>
+            {
+              this.state.treeVisible && (
+                <Tree
+                  // showLine={true}
+                  loadData={this.onLoadData}
+                  onSelect={this.fnGetChildren}
+                  onExpand={this.onExpand}
+                >
+                  {this.renderTreeNodes(this.state.gData)}
+                </Tree>
+              )
+            }
+
           </Col>
           <Col span={18}>
             {/* <section className="antd-pro-pages-list-table-list-tableListForm">
@@ -357,11 +370,21 @@ export default class AdvancedSearchForm extends React.Component {
               )}
             </section>
             <section className="antd-pro-components-standard-table-index-standardTable">
-              <Table pagination={
+              <MyTable
+                columns={this.state.columns}
+                loading={this.state.loading}
+                extra={{
+                  pagination: {
+                    defaultPageSize: 20
+                  }
+                }}
+                tableData={this.state.tableData}
+              ></MyTable>
+              {/* <Table pagination={
                 {
                   defaultPageSize: 20
                 }
-              } rowKey="id" dataSource={this.state.tableData} columns={this.state.columns} />
+              } rowKey="id" dataSource={this.state.tableData} columns={this.state.columns} /> */}
             </section>
           </Col>
         </Row>

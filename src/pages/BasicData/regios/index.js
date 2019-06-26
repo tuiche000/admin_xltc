@@ -1,6 +1,6 @@
 import React from 'react'
-import { Tree, Popconfirm, Row, Col, Button, message, Table } from 'antd';
-
+import { Tree, Popconfirm, Row, Col, message } from 'antd';
+import MyTable from '@/components/Table'
 import ModalForm from './form'
 
 const { TreeNode } = Tree;
@@ -14,6 +14,7 @@ export default class SearchTree extends React.Component {
       searchValue: '', //搜索的值
       autoExpandParent: true, //是否自动展开
       gData: [], //树形数据
+      loading: false, // table的loading
       dataList: [], //数据列表
       TablePropData: [], //table数据
       initialValue: {}, // 编辑的默认数据 
@@ -21,13 +22,17 @@ export default class SearchTree extends React.Component {
       type: 'add', // 编辑或新增
       columns: [
         {
-          title: '名字',
-          dataIndex: 'name',
-        },
-        {
-          title: '区划代码',
+          title: '行政区划代码',
           dataIndex: 'areacode',
         },
+        {
+          title: '行政区域名称',
+          dataIndex: 'name',
+        },
+        // {
+        //   title: '行政区域类型',
+        //   dataIndex: 'regionType',
+        // },
         // {
         //   title: '邮编',
         //   dataIndex: '3',
@@ -40,25 +45,25 @@ export default class SearchTree extends React.Component {
         //   title: '显示顺序',
         //   dataIndex: 'displayOrder',
         // },
-        {
-          title: '操作',
-          dataIndex: '6',
-          render: (text, record) => {
-            return (
-              <div>
-                <a href="javascript:;" onClick={(e) => this.fnEdit(record)}>编辑</a>
-                <Popconfirm
-                  title="你确定要删除吗？"
-                  onConfirm={(e) => this.fnDel(record)}
-                  okText="确定"
-                  cancelText="取消"
-                >
-                  <a href="javascript:;" style={{ marginLeft: 10 }}>删除</a>
-                </Popconfirm>
-              </div>
-            )
-          }
-        },
+        // {
+        //   title: '操作',
+        //   dataIndex: '6',
+        //   render: (text, record) => {
+        //     return (
+        //       <div>
+        //         <a href="javascript:;" onClick={(e) => this.fnEdit(record)}>编辑</a>
+        //         <Popconfirm
+        //           title="你确定要删除吗？"
+        //           onConfirm={(e) => this.fnDel(record)}
+        //           okText="确定"
+        //           cancelText="取消"
+        //         >
+        //           <a href="javascript:;" style={{ marginLeft: 10 }}>删除</a>
+        //         </Popconfirm>
+        //       </div>
+        //     )
+        //   }
+        // },
       ]
     };
   }
@@ -256,37 +261,36 @@ export default class SearchTree extends React.Component {
 
   render() {
     // const { expandedKeys, autoExpandParent, selectedKeys } = this.state;
-    const loop = data =>
-      data.map(item => {
-        if (item.children) {
-          return (
-            <TreeNode key={item.id} title={title} >
-              {loop(item.children)}
-            </TreeNode>
-          );
-        }
-        return <TreeNode key={item.id} title={title} />;
-      });
+    // const loop = data =>
+    //   data.map(item => {
+    //     if (item.children) {
+    //       return (
+    //         <TreeNode key={item.id} title={title} >
+    //           {loop(item.children)}
+    //         </TreeNode>
+    //       );
+    //     }
+    //     return <TreeNode key={item.id} title="title" />;
+    //   });
 
     return (
       <main>
         <Row>
-          <Col span={6}>
+          {/* <Col span={6}>
             <Tree
+              showLine={true}
               loadData={this.onLoadData}
               onSelect={this.getRegionChildren}
               onExpand={this.onExpand}
             >
-              {/* <TreeNode key='xzqy' title="行政区域" isLeaf={true} >
-              </TreeNode> */}
               {this.renderTreeNodes(this.state.gData)}
             </Tree>
-          </Col>
-          <Col span={18}>
+          </Col> */}
+          <Col span={24}>
             <div className="antd-pro-pages-list-table-list-tableListOperator">
-              <Button icon="plus" type="primary" onClick={this.fnForm}>
+              {/* <Button icon="plus" type="primary" onClick={this.fnForm}>
                 新建
-              </Button>
+              </Button> */}
               {/* {(
                 <span>
                   <Button>批量操作</Button>
@@ -298,11 +302,14 @@ export default class SearchTree extends React.Component {
                 </span>
               )} */}
             </div>
-            <Table pagination={
-              {
-                defaultPageSize: 20
-              }
-            } rowKey="id" dataSource={this.state.TablePropData} columns={this.state.columns} />
+            <MyTable
+              columns={this.state.columns}
+              loading={this.state.loading}
+              extra={{
+                pagination: false
+              }}
+              tableData={this.state.TablePropData}
+            ></MyTable>
           </Col>
 
         </Row>
