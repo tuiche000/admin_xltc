@@ -2,20 +2,11 @@ import React from 'react'
 import { Form, Button, Popconfirm, message, Row, Col, Input, Icon, Upload, Divider } from 'antd';
 import ModalForm from './form'
 import MyTable from '@/components/Table'
+// import moment from 'moment';
 
 import './index.css'
 
 const Search = Input.Search
-
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-
-  },
-  getCheckboxProps: record => ({
-    disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    name: record.name,
-  }),
-};
 
 @Form.create()
 export default class AdvancedSearchForm extends React.Component {
@@ -25,6 +16,7 @@ export default class AdvancedSearchForm extends React.Component {
     initialValue: {},
     tableData: [],
     type: 'add',
+    selectedRowKeys: [],
     //
     pageNo: 1,
     keyword: '',
@@ -75,22 +67,31 @@ export default class AdvancedSearchForm extends React.Component {
     const { type } = this.state
     const form = this.formRef.props.form;
     form.validateFields(async (err, values) => {
+      console.log(values)
       if (err) {
         return;
       }
+      // if (values.birthday) {
+      //   values.birthday = moment(values.birthday).format('YYYY-MM-DD')
+      // }
       if (values.avatar) {
         values.avatar = values.avatar[values.avatar.length - 1].response.data.resource
       }
       if (values.roles) values.roles = [values.roles]
+      
       if (type == 'add') {
-        await this.fnUserAdd(values)
-        form.resetFields();
-        this.setState({ visible: false });
+        const data = await this.fnUserAdd(values)
+        if (data) {
+          form.resetFields();
+          this.setState({ visible: false });
+        }
       } else if (type == 'edit') {
         // values.id = initialValue.id
-        await this.fnUserPut(values)
-        form.resetFields();
-        this.setState({ visible: false });
+        const data = await this.fnUserPut(values)
+        if (data) {
+          form.resetFields();
+          this.setState({ visible: false })
+        }
       }
     });
   };
@@ -196,6 +197,18 @@ export default class AdvancedSearchForm extends React.Component {
         }
       },
     };
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(selectedRowKeys)
+        _this.setState({
+          selectedRowKeys: selectedRowKeys
+        })
+      },
+      getCheckboxProps: record => ({
+        disabled: record.name === 'Disabled User', // Column configuration not to be checked
+        name: record.name,
+      }),
+    };
     return (
       <main id="user_manager">
         <section className="antd-pro-pages-list-table-list-tableListOperator">
@@ -222,7 +235,7 @@ export default class AdvancedSearchForm extends React.Component {
                 <Col>
                   <Button style={{ marginLeft: 10 }} type="primary" onClick={
                     () => {
-                      window.open(`${process.env.API_HOST}/api/oss/user/@paged/export`)
+                      window.open(`${process.env.API_HOST}/api/oss/user/@paged/export?ids=${[..._this.state.selectedRowKeys]}`)
                     }
                   }>导出查询结果</Button>
                 </Col>
@@ -246,8 +259,10 @@ export default class AdvancedSearchForm extends React.Component {
         <section className="antd-pro-components-standard-table-index-standardTable">
           <MyTable
             total={this.state.totalResults}
-            rowSelection={rowSelection}
             columns={columns}
+            extra={{
+              rowSelection: rowSelection
+            }}
             loading={this.state.tableLoading}
             fnTableChange={(pageNo, pageSize) => {
               this.fnTableChange(pageNo, pageSize)

@@ -85,16 +85,6 @@ export default class RegistrationForm extends React.Component {
     callback();
   };
 
-  handleWebsiteChange = value => {
-    let autoCompleteResult;
-    if (!value) {
-      autoCompleteResult = [];
-    } else {
-      autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-    }
-    this.setState({ autoCompleteResult });
-  };
-
   fnRegionFirstlevel = async () => {
     let data = await window._api.regionFirstlevel()
     data.map(item => {

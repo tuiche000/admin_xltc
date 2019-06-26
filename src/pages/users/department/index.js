@@ -326,10 +326,10 @@ export default class AdvancedSearchForm extends React.Component {
             {
               this.state.treeVisible && (
                 <Tree
-                  // showLine={true}
+                  showLine={true}
                   loadData={this.onLoadData}
                   onSelect={this.fnGetChildren}
-                  onExpand={this.onExpand}
+                  // onExpand={this.onExpand}
                 >
                   {this.renderTreeNodes(this.state.gData)}
                 </Tree>

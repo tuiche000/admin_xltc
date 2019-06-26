@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tree, Input, Row, Col, message, Divider } from 'antd';
+import { Tree, Input, Row, Col, message, Divider, Popconfirm } from 'antd';
 import MyTable from '@/components/Table'
 import ModalForm from './form'
 
@@ -12,6 +12,7 @@ export default class SearchTree extends React.Component {
     this.state = {
       expandedKeys: [], //（受控）展开指定的树节点
       selectedKeys: [], //（受控）设置选中的树节点	
+      treeVisible: false, // tree显示
       searchValue: '', //搜索的值
       autoExpandParent: true, //是否自动展开
       gData: [], //树形数据
@@ -185,10 +186,14 @@ export default class SearchTree extends React.Component {
   };
 
   regionFirstlevel = async () => {
+    this.setState({
+      treeVisible: false,
+    })
     let data = await window._api.regionFirstlevel()
     this.setState({
       gData: data,
       TablePropData: data,
+      treeVisible: true
     });
     this.init()
   }
@@ -209,12 +214,12 @@ export default class SearchTree extends React.Component {
     })
   }
 
-  onExpand = expandedKeys => {
-    this.setState({
-      expandedKeys,
-      autoExpandParent: false,
-    });
-  };
+  // onExpand = expandedKeys => {
+  //   this.setState({
+  //     expandedKeys,
+  //     autoExpandParent: false,
+  //   });
+  // };
 
   handleCancel = () => {
     this.setState({ visible: false });
@@ -301,17 +306,28 @@ export default class SearchTree extends React.Component {
         </Row>
         <Divider />
         <Row>
-          {/* <Col span={6}>
-            <Tree
-              showLine={true}
-              loadData={this.onLoadData}
-              onSelect={this.getRegionChildren}
-              onExpand={this.onExpand}
-            >
-              {this.renderTreeNodes(this.state.gData)}
-            </Tree>
-          </Col> */}
-          <Col span={24}>
+          <Col span={6}>
+            <a href="javascript:void(0)" onClick={() => {
+              this.setState({
+                selectedKeys: []
+              }, () => {
+                this.regionFirstlevel()
+              })
+            }}>行政区域</a>
+            {
+              this.state.treeVisible && (
+                <Tree
+                  showLine={true}
+                  loadData={this.onLoadData}
+                  onSelect={this.getRegionChildren}
+                // onExpand={this.onExpand}
+                >
+                  {this.renderTreeNodes(this.state.gData)}
+                </Tree>
+              )
+            }
+          </Col>
+          <Col span={18}>
             <div className="antd-pro-pages-list-table-list-tableListOperator">
               {/* <Button icon="plus" type="primary" onClick={this.fnForm}>
                 新建

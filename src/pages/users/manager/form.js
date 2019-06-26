@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form, Input, Select, Button, Switch, Upload, Modal, Icon, DatePicker, Row, TreeSelect, message } from 'antd';
+import moment from 'moment'
 
 const TreeNode = TreeSelect.TreeNode;
 
@@ -10,6 +11,7 @@ export default class regiosForm extends React.Component {
     ID: "",
     visible: true,
     mapVisble: true,
+    avatar: '',
     gData: [],
     roles: [], // 角色opt
     value: undefined, // tree值
@@ -93,12 +95,12 @@ export default class regiosForm extends React.Component {
     return data.map(item => {
       if (item.children) {
         return (
-          <TreeNode value={item.name} title={item.name} key={item.id} dataRef={item}>
+          <TreeNode value={item.id} title={item.name} key={item.id} dataRef={item}>
             {this.renderTreeNodes(item.children)}
           </TreeNode>
         );
       }
-      return <TreeNode value={item.name} title={item.name} isLeaf={item.hasChildren ? false : true} key={item.id} dataRef={item} />;
+      return <TreeNode value={item.id} title={item.name} isLeaf={item.hasChildren ? false : true} key={item.id} dataRef={item} />;
     })
   };
 
@@ -109,6 +111,7 @@ export default class regiosForm extends React.Component {
 
   render() {
     const { visible, onCancel, onCreate, form, initialValue } = this.props;
+    const { avatar } = this.state
     const { getFieldDecorator } = form;
 
     const formItemLayout = {
@@ -121,7 +124,7 @@ export default class regiosForm extends React.Component {
         sm: { span: 12 },
       },
     };
-  
+
     function onChange(date, dateString) {
 
     }
@@ -131,40 +134,32 @@ export default class regiosForm extends React.Component {
       headers: {
         Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('token')).access_token}`
       },
+      showUploadList: false,
       listType: "picture",
       // beforeUpload: beforeUpload,
-      onChange(info) {
+      onChange: (info) => {
         if (info.file.status === 'uploading') {
           sessionStorage;
         }
         if (info.file.status === 'done') {
           message.success(`${info.file.name} 文件上传成功`);
           // Get this url from response in real world.
-
+          this.setState({
+            avatar: info.file.response.data.resource
+          })
         } else if (info.file.status === 'error') {
           message.error(`${info.file.name} 文件上传失败`);
         }
       },
     };
 
-    function getBase64(img, callback) {
-      const reader = new FileReader();
-      reader.addEventListener('load', () => callback(reader.result));
-      reader.readAsDataURL(img);
-    }
+    const uploadButton = (
+      <div>
+        <Icon type={this.state.loading ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
 
-    function beforeUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
-      const isPNG = file.type === 'image/png';
-      if (!(isJPG || isPNG)) {
-        message.error('You can only upload JPG or PNG file!');
-      }
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-      }
-      return isJPG && isLt2M;
-    }
     return (
       <Modal
         visible={visible}
@@ -185,7 +180,7 @@ export default class regiosForm extends React.Component {
             {getFieldDecorator('username', {
               rules: [{ required: true, message: '请输入内容,不得大于20个字符', whitespace: true, max: 20 }],
               initialValue: initialValue.username
-            })(<Input />)}
+            })(<Input type="number" />)}
           </Form.Item>
           <Form.Item label="名字">
             {getFieldDecorator('name', {
@@ -205,11 +200,11 @@ export default class regiosForm extends React.Component {
             {getFieldDecorator('phone', {
               rules: [{ required: true, message: '请输入内容, 不得大于20个字符', max: 20 }],
               initialValue: initialValue.phone
-            })(<Input />)}
+            })(<Input type="number" />)}
           </Form.Item>
           <Form.Item label="身份证号码">
             {getFieldDecorator('idcard', {
-              rules: [{ message: '请输入内容, 不得大于20个字符', max: 20 }],
+              rules: [{ message: '请输入正确的身份证号码', pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/ }],
               initialValue: initialValue.idcard
             })(<Input />)}
           </Form.Item>
@@ -218,16 +213,26 @@ export default class regiosForm extends React.Component {
               rules: [{ required: true, message: '请输入内容' }],
               initialValue: initialValue.avatar,
               getValueFromEvent: this.normFile,
-            })(<Upload {...uploadprops}>
-              <Button>
-                <Icon type="upload" /> Click to upload
-            </Button>
-            </Upload>)}
+            })(
+              <Upload {...uploadprops} >
+                {/* {uploadButton} */}
+                {(initialValue.avatar || avatar) ? <img width="60" height="60" src={(avatar || initialValue.avatar)} alt="avatar" /> : uploadButton}
+              </Upload>
+              // <Upload {...uploadprops}>
+              //   {initialValue.avatar ? (
+              //     <img src={initialValue.avatar} style={{ width: 66, height: 66 }}></img>
+              //   ) : (
+              //       <Button>
+              //         <Icon type="upload" /> Click to upload
+              //     </Button>
+              //     )}
+              // </Upload>
+            )}
           </Form.Item>
           <Form.Item label="生日">
             {getFieldDecorator('birthday', {
               // rules: [{ required: true, message: '请输入内容', whitespace: true }],
-              // initialValue: initialValue.birthday
+              initialValue: moment(initialValue.birthday, 'YYYY-MM-DD')
             })(<DatePicker onChange={onChange} />)}
           </Form.Item>
           <Form.Item label="性别">
@@ -253,7 +258,7 @@ export default class regiosForm extends React.Component {
           </Form.Item> */}
           <Form.Item label="责任部门">
             {getFieldDecorator('department', {
-              // rules: [{ required: true, message: '请输入内容', whitespace: true }],
+              rules: [{ required: true, message: '请输入内容' }],
               initialValue: initialValue.department
             })(
               <TreeSelect
@@ -283,7 +288,7 @@ export default class regiosForm extends React.Component {
                   )
                 })
               }
-              
+
               {/* <Option value="SECOND">二级踏查人</Option>
               <Option value="THIRD">三级踏查人</Option>
               <Option value="FOURTH">问题处置员</Option>
@@ -293,7 +298,7 @@ export default class regiosForm extends React.Component {
           <Form.Item label="启用">
             {getFieldDecorator('enable', {
               // rules: [{ required: true, message: '请输入内容', whitespace: true }],
-              initialValue: initialValue.name
+              initialValue: initialValue.enable
             })(<Switch />)}
           </Form.Item>
         </Form>
