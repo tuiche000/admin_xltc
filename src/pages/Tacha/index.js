@@ -309,7 +309,7 @@ export default class AdvancedSearchForm extends React.Component {
               <Button type="primary" onClick={
                 () => {
                   const query = queryString.stringify(this.state.opt)
-                  window.open(`${process.env.API_HOST}/api/oss/route/query/export?${query}`)
+                  window.open(`${process.env.API_HOST}/api/oss/route/query/export?access_token=${JSON.parse(sessionStorage.getItem('token')).access_token}&${query}`)
                 }
               }>导出查询结果</Button>
             </Col>

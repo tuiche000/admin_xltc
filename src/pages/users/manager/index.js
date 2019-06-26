@@ -35,7 +35,7 @@ export default class AdvancedSearchForm extends React.Component {
   };
 
   fnUserList = async () => {
-    const {pageNo, pageSize, keyword} = this.state
+    const { pageNo, pageSize, keyword } = this.state
     let data = await window._api.userList({
       pageNo, pageSize, keyword
     })
@@ -46,10 +46,11 @@ export default class AdvancedSearchForm extends React.Component {
   }
 
   fnUserAdd = async (opt) => {
-    let { code } = await window._api.userAdd(opt)
-    if (code == 0) {
+    let data = await window._api.userAdd(opt)
+    if (data) {
       message.success('添加成功')
       this.fnUserList()
+      return true
     }
   }
 
@@ -66,13 +67,14 @@ export default class AdvancedSearchForm extends React.Component {
     if (code == 0) {
       message.success('修改成功')
       this.fnUserList()
+      return true
     }
   }
 
   handleCreate = () => {
     const { type } = this.state
     const form = this.formRef.props.form;
-    form.validateFields((err, values) => {
+    form.validateFields(async (err, values) => {
       if (err) {
         return;
       }
@@ -81,15 +83,15 @@ export default class AdvancedSearchForm extends React.Component {
       }
       if (values.roles) values.roles = [values.roles]
       if (type == 'add') {
-        this.fnUserAdd(values)
+        await this.fnUserAdd(values)
+        form.resetFields();
+        this.setState({ visible: false });
       } else if (type == 'edit') {
         // values.id = initialValue.id
-        this.fnUserPut(values)
+        await this.fnUserPut(values)
+        form.resetFields();
+        this.setState({ visible: false });
       }
-
-
-      form.resetFields();
-      this.setState({ visible: false });
     });
   };
 
@@ -130,7 +132,7 @@ export default class AdvancedSearchForm extends React.Component {
         </span>
       },
       {
-        title: '电电子邮箱',
+        title: '电子邮箱',
         dataIndex: 'email',
       },
       {
@@ -166,7 +168,7 @@ export default class AdvancedSearchForm extends React.Component {
                 onConfirm={() => {
                   _this.fnUserDel(record)
                 }}
-                
+
                 okText="确定"
                 cancelText="取消"
               >
@@ -190,7 +192,7 @@ export default class AdvancedSearchForm extends React.Component {
         if (info.file.status === 'done') {
           message.success(`${info.file.name} 文件上传成功`);
         } else if (info.file.status === 'error') {
-          message.error(`${info.file.name} 文件上传失败`);
+          message.error(`${info.file.response.message}`);
         }
       },
     };
@@ -209,23 +211,23 @@ export default class AdvancedSearchForm extends React.Component {
               }} enterButton />
             </Col>
             <Col push={10} span={6}>
-            <Row type="flex" justify="end">
-            <Col>
-            <Upload {...uploadprops}>
-              <Button type="primary">
-                <Icon type="upload" /> 导入
+              <Row type="flex" justify="end">
+                <Col>
+                  <Upload {...uploadprops}>
+                    <Button type="primary">
+                      <Icon type="upload" /> 导入
             </Button>
-            </Upload>
-            </Col>
-            <Col>
-            <Button style={{marginLeft: 10}} type="primary" onClick={
-                () => {
-                  window.open(`${process.env.API_HOST}/api/oss/user/@paged/export`)
-                }
-              }>导出查询结果</Button>
-            </Col>
-            </Row>
-            
+                  </Upload>
+                </Col>
+                <Col>
+                  <Button style={{ marginLeft: 10 }} type="primary" onClick={
+                    () => {
+                      window.open(`${process.env.API_HOST}/api/oss/user/@paged/export`)
+                    }
+                  }>导出查询结果</Button>
+                </Col>
+              </Row>
+
             </Col>
           </Row>
           <Divider />

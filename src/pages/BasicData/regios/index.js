@@ -1,8 +1,9 @@
 import React from 'react'
-import { Tree, Popconfirm, Row, Col, message } from 'antd';
+import { Tree, Input, Row, Col, message, Divider } from 'antd';
 import MyTable from '@/components/Table'
 import ModalForm from './form'
 
+const Search = Input.Search
 const { TreeNode } = Tree;
 
 export default class SearchTree extends React.Component {
@@ -29,10 +30,19 @@ export default class SearchTree extends React.Component {
           title: '行政区域名称',
           dataIndex: 'name',
         },
-        // {
-        //   title: '行政区域类型',
-        //   dataIndex: 'regionType',
-        // },
+        {
+          title: '行政区域类型',
+          dataIndex: 'regionType',
+          render: (text) => {
+            const Enum = {
+              "CITY": '省/市',
+              "COUNTY": '区/县',
+              "VILLAGE": '街/村',
+              "OTHERS": '其他',
+            }
+            return <span>{Enum[text]}</span>
+          }
+        },
         // {
         //   title: '邮编',
         //   dataIndex: '3',
@@ -66,6 +76,13 @@ export default class SearchTree extends React.Component {
         // },
       ]
     };
+  }
+
+  fnQuery = async (keyword) => {
+    let data = await window._api.regionQuery({ keyword })
+    this.setState({
+      TablePropData: data
+    })
   }
 
   fnEdit = (record) => {
@@ -275,6 +292,14 @@ export default class SearchTree extends React.Component {
 
     return (
       <main>
+        <Row type="flex" align="middle">
+          <Col span={8}>
+            <Search placeholder="搜索" onSearch={value => {
+              this.fnQuery(value)
+            }} enterButton />
+          </Col>
+        </Row>
+        <Divider />
         <Row>
           {/* <Col span={6}>
             <Tree

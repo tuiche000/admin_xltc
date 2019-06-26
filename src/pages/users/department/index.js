@@ -317,7 +317,11 @@ export default class AdvancedSearchForm extends React.Component {
         <Row>
           <Col span={6}>
             <a href="javascript:void(0)" onClick={() => {
-              this.fnfirstlevel()
+              this.setState({
+                selectedKeys: []
+              }, () => {
+                this.fnfirstlevel()
+              })
             }}>责任部门</a>
             {
               this.state.treeVisible && (

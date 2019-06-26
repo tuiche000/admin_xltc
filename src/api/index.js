@@ -2,7 +2,7 @@ import {
   commonEnum,
 } from './common'
 import {
-  regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut, regionId,
+  regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut, regionId, regionQuery,
 } from './region'
 import {
   departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit, departmentAll,
@@ -28,7 +28,7 @@ import {
 
 export default {
   commonEnum,
-  regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut, regionId,
+  regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut, regionId, regionQuery,
   departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit, departmentAll,
   gridList, gridDel, gridAdd, gridPut, gridId, gridFilter,
   userList, userAdd, userDel, userPut, userSelf,

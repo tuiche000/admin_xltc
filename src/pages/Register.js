@@ -23,6 +23,7 @@ export default class RegistrationForm extends React.Component {
     ],
     step: 1, // 注册的步骤
     step1Values: {}, // step1的数据
+    step2Values: {}, // step1的数据
   };
 
   register = async (json) => {
@@ -50,6 +51,9 @@ export default class RegistrationForm extends React.Component {
           })
           return
         }
+        this.setState({
+          step2Values: values
+        })
         let regionId = values.regionId
         values.regionId = regionId[regionId.length - 1]
         values.clientId = process.env.CLIENTID
@@ -135,6 +139,7 @@ export default class RegistrationForm extends React.Component {
 
   fnPrev = () => {
     this.setState({
+      step2Values: this.props.form.getFieldsValue(),
       step: 1,
     })
   }
@@ -146,7 +151,7 @@ export default class RegistrationForm extends React.Component {
   render() {
     const _this = this
     const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult, regoinOpt, step } = this.state;
+    const { autoCompleteResult, regoinOpt, step, step1Values, step2Values } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -180,8 +185,8 @@ export default class RegistrationForm extends React.Component {
         {step == 1 && <div style={{opacity: `1`}}>
           <Form.Item label="手机号码">
             {getFieldDecorator('phone', {
-              rules: [{ required: true, message: '请输入内容,长度11', max: 11, min: 11 }],
-            })(<Input style={{ width: '100%' }} />)}
+              rules: [{ required: true, message: '请输入内容,长度11', max: 11, min: 11 }], initialValue: step1Values.phone,
+            })(<Input style={{ width: '100%' }} type="number" />)}
           </Form.Item>
           <Form.Item label="登录密码" hasFeedback>
             {getFieldDecorator('password', {
@@ -195,6 +200,7 @@ export default class RegistrationForm extends React.Component {
                   validator: this.validateToNextPassword,
                 },
               ],
+              initialValue: step1Values.password,
             })(<Input.Password />)}
           </Form.Item>
           <Form.Item label="确认密码" hasFeedback>
@@ -209,6 +215,7 @@ export default class RegistrationForm extends React.Component {
                   validator: this.compareToFirstPassword,
                 },
               ],
+              initialValue: step1Values.confirm,
             })(<Input.Password onBlur={this.handleConfirmBlur} />)}
           </Form.Item>
         </div>
@@ -219,14 +226,16 @@ export default class RegistrationForm extends React.Component {
               label="真实姓名"
             >
               {getFieldDecorator('name', {
-                rules: [{ required: true, message: '请输入内容,长度不超过20', whitespace: true, max: 20, }],
+                rules: [{ required: true, message: '请输入内容,长度不超过20', whitespace: true, max: 20, },],
+                initialValue: step2Values.name,
               })(<Input />)}
             </Form.Item>
             <Form.Item
               label="身份证号"
             >
               {getFieldDecorator('idcard', {
-                rules: [{ required: true, message: '请输入内容', whitespace: true }],
+                rules: [{ required: true, message: '请输入正确的身份证号', whitespace: true, pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/ }],
+                initialValue: step2Values.idcard,
               })(<Input />)}
             </Form.Item>
             <Form.Item label="所在地区">
@@ -234,6 +243,7 @@ export default class RegistrationForm extends React.Component {
                 rules: [
                   { type: 'array', required: true, message: '请输入内容' },
                 ],
+                initialValue: step2Values.regionId,
               })(<Cascader
                 options={regoinOpt}
                 loadData={this.loadData}
@@ -244,7 +254,8 @@ export default class RegistrationForm extends React.Component {
               label="所在单位"
             >
               {getFieldDecorator('departmentName', {
-                rules: [{ required: true, message: '请输入内容', whitespace: true }],
+                rules: [{ required: true, message: '请输入内容,长度不超过20', whitespace: true, max: 20 }],
+                initialValue: step2Values.departmentName,
               })(<Input />)}
             </Form.Item>
             <Form.Item label="使用邮箱">
@@ -252,20 +263,22 @@ export default class RegistrationForm extends React.Component {
                 rules: [
                   {
                     type: 'email',
-                    message: '请输入内容',
+                    message: '请输入正确内容格式',
                   },
                   {
                     required: true,
                     message: '请输入内容',
                   },
                 ],
+                initialValue: step2Values.email,
               })(<Input />)}
             </Form.Item>
             <Form.Item
               label="企业信用编号"
             >
               {getFieldDecorator('taxcode', {
-                rules: [{ required: true, message: '请输入内容', whitespace: true }],
+                rules: [{ required: true, message: '请输入内容,长度不超过20', whitespace: true, max: 20 }],
+                initialValue: step2Values.taxcode,
               })(<Input />)}
             </Form.Item>
           </div>

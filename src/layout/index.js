@@ -121,7 +121,7 @@ export default class BasicLayout extends Component {
                   </Col>
                   <Col>{name}</Col>
                   {levelName && <Col>{levelName}</Col>}
-                  <Col><Button style={{padding: 0}} type="link" onClick={
+                  <Col><Button style={{ padding: 0 }} type="link" onClick={
                     () => {
                       _this.props.loginOut()
                     }

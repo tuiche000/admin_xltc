@@ -239,7 +239,7 @@ export default class regiosForm extends React.Component {
               <Option value="FEMALE">女</Option>
             </Select>)}
           </Form.Item>
-          <Form.Item label="踏查职级">
+          {/* <Form.Item label="踏查职级">
             {getFieldDecorator('roadManagerRank', {
               rules: [{ required: true, message: '请输入内容', whitespace: true }],
               initialValue: initialValue.roadManagerRank
@@ -250,7 +250,7 @@ export default class regiosForm extends React.Component {
               <Option value="FOURTH">问题处置员</Option>
               <Option value="FIFTH">问题协调员</Option>
             </Select>)}
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="责任部门">
             {getFieldDecorator('department', {
               // rules: [{ required: true, message: '请输入内容', whitespace: true }],
@@ -279,7 +279,7 @@ export default class regiosForm extends React.Component {
               {
                 this.state.roles.map(item => {
                   return (
-                    <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                    <Select.Option key={item.id} value={item.code}>{item.name}</Select.Option>
                   )
                 })
               }
