@@ -29,9 +29,7 @@ export const allRouters = [
   { path: "/issue", component: Issue },
   { path: "/tacha", component: Tacha },
   { path: "/message", component: Message },
-  { path: "/basicData/region", component: BasicDataRegion },
-  { path: "/basicData/dictionary", component: BasicDataDictionary,},
-  { path: "/basicData/upload", component: BasicDataUpload,},
+  { path: "/basicData/region", component: BasicDataRegion }
 ];
 export default [
   { path: '/home', component: 'Home', icon: 'home', name: '首页' },
