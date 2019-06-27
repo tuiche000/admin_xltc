@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Row, Col, Input, Button, Popconfirm, message } from 'antd';
+import { Form, Row, Col, Input, Button, Popconfirm, message, Upload, Icon } from 'antd';
 import './index.css'
 import MyTable from '@/components/Table'
 import GridModal from './modal'
@@ -290,6 +290,23 @@ export default class AdvancedSearchForm extends React.Component {
         }
       },
     ];
+    const uploadprops = {
+      name: 'file',
+      action: `${process.env.API_HOST}/api/oss/grid/import`,
+      headers: {
+        Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('token')).access_token}`
+      },
+      showUploadList: false,
+      onChange(info) {
+        if (info.file.status === 'uploading') {
+        }
+        if (info.file.status === 'done') {
+          message.success(`${info.file.name} 文件上传成功`);
+        } else if (info.file.status === 'error') {
+          message.error(`${info.file.response.message}`);
+        }
+      },
+    };
     return (
       <main id="Grid_Container">
         <section className="antd-pro-pages-list-table-list-tableListForm">
@@ -309,6 +326,25 @@ export default class AdvancedSearchForm extends React.Component {
                 }} enterButton />
 
               </Col>
+              <Col push={10} span={6}>
+                <Row gutter={10} type="flex" justify="end">
+                  <Col>
+                    <Upload {...uploadprops}>
+                      <Button type="primary">
+                        <Icon type="download" /> 导入
+                      </Button>
+                    </Upload>
+                  </Col>
+                  <Col>
+                    <Button type="primary" onClick={
+                      () => {
+                        window.open(`${process.env.IMG_HOST}/report/template/grid_query_export_template.xls`)
+                      }
+                    }><Icon type="download" />下载表格模板</Button>
+                  </Col>
+                </Row>
+
+              </Col>
             </Row>
           </Form>
         </section>
@@ -320,7 +356,8 @@ export default class AdvancedSearchForm extends React.Component {
             新建
           </Button>
           {selectedRows.length > 0 && (
-            <Popconfirm
+            <span>
+              <Popconfirm
               title="你确定要删除吗？"
               onConfirm={() => {
                 _this.fnGridDel(selectedRows)
@@ -331,12 +368,17 @@ export default class AdvancedSearchForm extends React.Component {
             >
               <Button type="danger" icon="delete" style={{ marginLeft: 10 }}>删除</Button>
             </Popconfirm>
+              <Button style={{ marginLeft: 10 }} type="primary" onClick={
+                () => {
+                  window.open(`${process.env.API_HOST}/api/oss/grid/query/export?access_token=${JSON.parse(sessionStorage.getItem('token')).access_token}&ids=${[..._this.state.selectedRows]}`)
+                }
+              }><Icon type="upload" />导出查询结果</Button>
+            </span>
           )}
         </section>
         <section className="antd-pro-components-standard-table-index-standardTable">
           <MyTable
             total={this.state.totalResults}
-            rowSelection={rowSelection}
             columns={columns}
             loading={this.state.tableLoading}
             fnTableChange={(pageNo, pageSize) => {

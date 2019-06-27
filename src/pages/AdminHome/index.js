@@ -45,7 +45,7 @@ export default class HomeModal extends React.Component {
           {
             data.length && data.map(item => {
               return (
-                <Polyline style={{ cursor: 'pointer', strokeWeight: 10 }} key={item.id} path={item.latlngs} events={
+                <Polyline style={{ cursor: 'pointer', strokeWeight: 6, lineJoin: 'round', strokeColor: "#3366FF" }} key={item.id} path={item.latlngs} events={
                   {
                     click: () => { _this.setState({ id: item.id, visible: true }) }
                   }

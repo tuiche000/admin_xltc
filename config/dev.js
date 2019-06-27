@@ -4,10 +4,6 @@ const webpack = require('webpack')
 
 module.exports = {
   mode: 'development',
-  output: {
-    filename: '[name]-[hash].js',
-    path:  __dirname + '/build'
-  },
   devtool: 'source-map',
   devServer: {
     contentBase: path.resolve(__dirname, '../'),

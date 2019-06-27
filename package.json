@@ -6,6 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --env.dev",
     "build": "webpack --env.prod",
+    "pre": "webpack --env.pre",
     "test": "jest-webpack"
   },
   "keywords": [],
@@ -63,6 +64,7 @@
     "@babel/plugin-proposal-decorators": "^7.4.4",
     "antd": "^3.19.2",
     "babel-plugin-import": "^1.12.0",
+    "clean-webpack-plugin": "^3.0.0",
     "query-string": "^6.5.0",
     "react-amap": "^1.2.8",
     "react-amap-plugin-geolocation": "^0.0.2"

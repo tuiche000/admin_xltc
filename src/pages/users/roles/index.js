@@ -112,7 +112,7 @@ export default class AdvancedSearchForm extends React.Component {
     const columns = [
       {
         title: '角色ID',
-        dataIndex: 'id',
+        dataIndex: 'code',
         render: text => <a href="javascript:;">{text}</a>,
       },
       {
@@ -121,7 +121,12 @@ export default class AdvancedSearchForm extends React.Component {
       },
       {
         title: '角色类型',
-        dataIndex: 'roadRank',
+        dataIndex: 'roadRankName',
+        render: (text, record) => {
+          return (
+            <span>{text}</span>
+          )
+        }
       },
       {
         title: '描述',

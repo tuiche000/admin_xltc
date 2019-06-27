@@ -141,7 +141,7 @@ export default class App extends React.Component {
         <div style={{ width: '100%', height: '600px' }}>
           <Map version={'1.4.4'} zoom={17} center={this.mapCenter} plugins={plugins} events={this.amapEvents}>
             <MouseTool events={this.toolEvents} />
-            <Polyline path={latlngs}>
+            <Polyline style={{ strokeWeight: 6, lineJoin: 'round', strokeColor: "#3366FF" }} path={latlngs}>
               <PolyEditor active={this.state.lineActive} events={this.editorEvents} />
             </Polyline>
             <div style={{

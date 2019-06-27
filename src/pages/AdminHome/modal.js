@@ -69,7 +69,7 @@ export default class IssuseModal extends React.Component {
                 {
                   data.mapabled ? (
                     <Map version={'1.4.14'} zoom={16} center={center} plugins={plugins} >
-                      <Polyline path={data.latlngs} />
+                      <Polyline path={data.latlngs} style={{ strokeWeight: 6, lineJoin: 'round', strokeColor: "#3366FF" }} />
                     </Map>
                   ) : <div>无地图信息</div>
                 }

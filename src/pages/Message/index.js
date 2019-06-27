@@ -1,17 +1,7 @@
 import React from 'react'
-import { Form } from 'antd';
+import { Form, Row, Col, Button, Divider } from 'antd';
 import Detail from './detail'
 import MyTable from '@/components/Table'
-
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-
-  },
-  getCheckboxProps: record => ({
-    disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    name: record.name,
-  }),
-};
 
 @Form.create()
 export default class AdvancedSearchForm extends React.Component {
@@ -19,6 +9,7 @@ export default class AdvancedSearchForm extends React.Component {
     visible: false,
     id: '',
     tableData: [],
+    rowSelection: [],
     //
     pageNo: 1,
     pageSize: 10,
@@ -120,12 +111,37 @@ export default class AdvancedSearchForm extends React.Component {
         }
       },
     ];
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        this.setState({
+          rowSelection: selectedRowKeys
+        })
+      },
+      getCheckboxProps: record => ({
+        disabled: record.name === 'Disabled User', // Column configuration not to be checked
+        name: record.name,
+      }),
+    };
     return (
       <main id="user_manager">
+        <section className="antd-pro-pages-list-table-list-tableListForm">
+          <Row type="flex" justify="end">
+            <Col>
+              <Button type="primary" onClick={
+                () => {
+                  window.open(`${process.env.API_HOST}/api/oss/notice/query/export?access_token=${JSON.parse(sessionStorage.getItem('token')).access_token}&ids=${[..._this.state.rowSelection]}`)
+                }
+              }>导出查询结果</Button>
+            </Col>
+          </Row>
+        </section>
+        <Divider />
         <section className="antd-pro-components-standard-table-index-standardTable">
           <MyTable
             total={this.state.totalResults}
-            rowSelection={rowSelection}
+            extra={{
+              rowSelection: rowSelection
+            }}
             columns={columns}
             loading={this.state.loading}
             fnTableChange={(pageNo, pageSize) => {

@@ -5,6 +5,7 @@ const path = require('path');
 
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   ESLINT_ENABLE, STYLELINT_ENABLE,
@@ -16,4 +17,5 @@ module.exports = {
   htmlPlugin: new HtmlPlugin({
     template: path.resolve(__dirname, './index.html')
   }),
+  cleanWebpackPlugin: new CleanWebpackPlugin(),
 };

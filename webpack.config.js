@@ -7,6 +7,8 @@ module.exports = function (env = {}, argv) {
     config = require('./config/dev');
   } else if (env.prod) {
     config = require('./config/prod');
+  }  else if (env.pre) {
+    config = require('./config/pre');
   } else {
     config = require('./config/test');
   }
@@ -83,7 +85,6 @@ module.exports = function (env = {}, argv) {
         "@": path.resolve(__dirname, 'src/'),
       }
     },
-
     //特定的
     ...config
   };

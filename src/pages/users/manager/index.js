@@ -4,8 +4,6 @@ import ModalForm from './form'
 import MyTable from '@/components/Table'
 // import moment from 'moment';
 
-import './index.css'
-
 const Search = Input.Search
 
 @Form.create()
@@ -78,7 +76,7 @@ export default class AdvancedSearchForm extends React.Component {
         values.avatar = values.avatar[values.avatar.length - 1].response.data.resource
       }
       if (values.roles) values.roles = [values.roles]
-      
+
       if (type == 'add') {
         const data = await this.fnUserAdd(values)
         if (data) {
@@ -199,7 +197,6 @@ export default class AdvancedSearchForm extends React.Component {
     };
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
-        console.log(selectedRowKeys)
         _this.setState({
           selectedRowKeys: selectedRowKeys
         })
@@ -224,7 +221,7 @@ export default class AdvancedSearchForm extends React.Component {
               }} enterButton />
             </Col>
             <Col push={10} span={6}>
-              <Row type="flex" justify="end">
+              <Row type="flex" justify="end" gutter={10}>
                 <Col>
                   <Upload {...uploadprops}>
                     <Button type="primary">
@@ -233,11 +230,11 @@ export default class AdvancedSearchForm extends React.Component {
                   </Upload>
                 </Col>
                 <Col>
-                  <Button style={{ marginLeft: 10 }} type="primary" onClick={
+                  <Button type="primary" onClick={
                     () => {
-                      window.open(`${process.env.API_HOST}/api/oss/user/@paged/export?ids=${[..._this.state.selectedRowKeys]}`)
+                      window.open(`${process.env.IMG_HOST}/report/template/user_query_export_template.xls`)
                     }
-                  }>导出查询结果</Button>
+                  }><Icon type="download" />下载表格模板</Button>
                 </Col>
               </Row>
 
@@ -249,11 +246,13 @@ export default class AdvancedSearchForm extends React.Component {
           }}>
             添加
           </Button>
-          {/* <Button icon="reload" type="primary" onClick={e => {
-            this.fnUserList()
-          }}>
-            刷新
-          </Button> */}
+          {
+            this.state.selectedRowKeys.length > 0 && <Button style={{ marginLeft: 10 }} type="primary" onClick={
+              () => {
+                window.open(`${process.env.API_HOST}/api/oss/user/@paged/export?access_token=${JSON.parse(sessionStorage.getItem('token')).access_token}&ids=${[..._this.state.selectedRowKeys]}`)
+              }
+            }><Icon type="upload" />导出查询结果</Button>
+          }
         </section>
         <br></br>
         <section className="antd-pro-components-standard-table-index-standardTable">
