@@ -7,7 +7,7 @@ module.exports = {
   mode: 'production',
   output: {
     filename: '[name]-[hash].js',
-    path: path.resolve(__dirname, '../pc')
+    path: path.resolve(__dirname, '../../pc')
   },
   plugins: [
     ...stylelintPlugin,
