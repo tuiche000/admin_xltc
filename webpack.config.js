@@ -82,7 +82,7 @@ module.exports = function (env = {}, argv) {
     },
     resolve: {
       alias: {
-        "@": path.resolve(__dirname, 'src/'),
+        "@": path.resolve(__dirname, './src/'),
       }
     },
     //特定的

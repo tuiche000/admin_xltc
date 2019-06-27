@@ -11,12 +11,10 @@ import Tacha from "@/pages/Tacha";
 import Message from "@/pages/Message";
 // 基本数据
 import BasicDataRegion from "@/pages/BasicData/regios/index";
-import BasicDataDictionary from "@/pages/BasicData/Dictionary";
-import BasicDataUpload from "@/pages/BasicData/Upload";
 // 权限管理
-import UsersManager from "@/pages/Users/manager/index";
-import Department from "@/pages/Users/department/index";
-import Roles from "@/pages/Users/roles/index";
+import UsersManager from "@/pages/users/manager/index";
+import Department from "@/pages/users/department/index";
+import Roles from "@/pages/users/roles/index";
 // 地图测试
 import MapTest from "@/pages/Map";
 
