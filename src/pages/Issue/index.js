@@ -32,6 +32,7 @@ export default class AdvancedSearchForm extends React.Component {
     id: undefined, // 点击详情的id
     initialValue: {}, // form回显的字段
     //
+    keyword: '',
     pageNo: 1,
     pageSize: 10,
     loading: false,
@@ -283,6 +284,10 @@ export default class AdvancedSearchForm extends React.Component {
             <Col push={11} span={2}>
               <Button type="primary" onClick={
                 () => {
+                  // let keyword = this.state.keyword
+                  // let opt = this.state.opt
+                  // opt.keyword = {keyword}
+                  // console.log(this.state.tags)
                   const query = queryString.stringify(this.state.opt)
                   window.open(`${process.env.API_HOST}/api/oss/issue/query/export?access_token=${JSON.parse(sessionStorage.getItem('token')).access_token}&${query}`)
                 }

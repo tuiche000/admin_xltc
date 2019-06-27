@@ -110,11 +110,11 @@ export default class AdvancedSearchForm extends React.Component {
   render() {
     const _this = this
     const columns = [
-      {
-        title: '角色ID',
-        dataIndex: 'code',
-        render: text => <a href="javascript:;">{text}</a>,
-      },
+      // {
+      //   title: '角色ID',
+      //   dataIndex: 'code',
+      //   render: text => <a href="javascript:;">{text}</a>,
+      // },
       {
         title: '角色名称',
         dataIndex: 'name',

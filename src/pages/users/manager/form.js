@@ -154,9 +154,16 @@ export default class regiosForm extends React.Component {
     };
 
     const uploadButton = (
-      <div>
-        <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">Upload</div>
+      <div style={{ width: 60,
+        height: 60,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: '#ecf0f1'
+      }}>
+        <Icon type="upload" />
+        <div className="ant-upload-text">上传</div>
       </div>
     );
 
@@ -232,7 +239,7 @@ export default class regiosForm extends React.Component {
           <Form.Item label="生日">
             {getFieldDecorator('birthday', {
               // rules: [{ required: true, message: '请输入内容', whitespace: true }],
-              initialValue: moment(initialValue.birthday, 'YYYY-MM-DD')
+              initialValue: initialValue.birthday ? moment(initialValue.birthday, 'YYYY-MM-DD') : null
             })(<DatePicker onChange={onChange} />)}
           </Form.Item>
           <Form.Item label="性别">
@@ -288,17 +295,12 @@ export default class regiosForm extends React.Component {
                   )
                 })
               }
-
-              {/* <Option value="SECOND">二级踏查人</Option>
-              <Option value="THIRD">三级踏查人</Option>
-              <Option value="FOURTH">问题处置员</Option>
-              <Option value="FIFTH">问题协调员</Option> */}
             </Select>)}
           </Form.Item>
           <Form.Item label="启用">
             {getFieldDecorator('enable', {
               // rules: [{ required: true, message: '请输入内容', whitespace: true }],
-              initialValue: initialValue.enable
+              initialValue: initialValue.enable, valuePropName: 'checked'
             })(<Switch />)}
           </Form.Item>
         </Form>
