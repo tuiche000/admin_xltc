@@ -299,7 +299,7 @@ export default class regiosForm extends React.Component {
           <Form.Item label="角色">
             {getFieldDecorator('roles', {
               rules: [{ required: true, message: '请输入内容' }],
-              initialValue: initialValue.roles
+              initialValue: initialValue.mainRole
             })(<Select >
               {
                 this.state.roles.map(item => {

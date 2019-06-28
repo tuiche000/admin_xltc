@@ -71,11 +71,6 @@ export default class AdvancedSearchForm extends React.Component {
               onConfirm={() => {
                 this.fnDepartmentDel(text)
               }}
-              onCancel={
-                () => {
-                  message.error('Click on No');
-                }
-              }
               okText="确定"
               cancelText="取消"
             >
