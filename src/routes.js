@@ -48,7 +48,7 @@ export default [
     routes: [
       {
         path: "/users/manager",
-        name: "系统用户",
+        name: "帐号管理",
         component: "UsersManager"
       },
       {
