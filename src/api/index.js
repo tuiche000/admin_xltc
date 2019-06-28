@@ -11,7 +11,7 @@ import {
   gridList, gridDel, gridAdd, gridPut, gridId, gridFilter,
 } from './grid'
 import {
-  userList, userAdd, userDel, userPut, userSelf,
+  userList, userAdd, userDel, userPut, userSelf, userDetail,
 } from './user'
 import {
   roleList, roleAdd, roleDel, rolePut, roleId,
@@ -31,7 +31,7 @@ export default {
   regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut, regionId, regionQuery,
   departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit, departmentAll,
   gridList, gridDel, gridAdd, gridPut, gridId, gridFilter,
-  userList, userAdd, userDel, userPut, userSelf,
+  userList, userAdd, userDel, userPut, userSelf, userDetail,
   roleList, roleAdd, roleDel, rolePut, roleId,
   noticeList, noticeId,
   issueList, issueId,

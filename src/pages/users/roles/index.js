@@ -86,6 +86,7 @@ export default class AdvancedSearchForm extends React.Component {
         this.fnRoleAdd(values)
       } else if (type == 'edit') {
         values.id = initialValue.id
+        values.code = initialValue.code
         this.fnRolePut(values)
       }
 

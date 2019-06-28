@@ -253,13 +253,14 @@ export default class AdvancedSearchForm extends React.Component {
   }
 
   // 根据主键获取下一级责任部门列表
-  fnGetChildren = async (arr, e) => {
-
-    let data = await window._api.departmentId(arr[0])
+  fnGetChildren = async (selectedKeys, e) => {
+    const selectedKey = selectedKeys[0] ? selectedKeys[0] : this.state.selectedKeys
+    const selected = e.selectedNodes[0] ? e.selectedNodes[0].props.dataRef : this.state.selected
+    let data = await window._api.departmentId(selectedKey)
     this.setState({
       tableData: data,
-      selectedKeys: arr,
-      selected: e.selectedNodes[0].props.dataRef,
+      selectedKeys,
+      selected
     })
   }
 
@@ -329,7 +330,7 @@ export default class AdvancedSearchForm extends React.Component {
                   showLine={true}
                   loadData={this.onLoadData}
                   onSelect={this.fnGetChildren}
-                  // onExpand={this.onExpand}
+                // onExpand={this.onExpand}
                 >
                   {this.renderTreeNodes(this.state.gData)}
                 </Tree>
@@ -338,40 +339,13 @@ export default class AdvancedSearchForm extends React.Component {
 
           </Col>
           <Col span={18}>
-            {/* <section className="antd-pro-pages-list-table-list-tableListForm">
-              <Form onSubmit={this.handleSearch}>
-                <Row gutter={24}>{this.getFields()}</Row>
-                <Row>
-                  <Col span={24} style={{ textAlign: 'right' }}>
-                    <Button type="primary" htmlType="submit">
-                      查询
-            </Button>
-                    <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
-                      重置
-            </Button>
-                    <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
-                      展开更多 <Icon type={this.state.expand ? 'up' : 'down'} />
-                    </a>
-                  </Col>
-                </Row>
-              </Form>
-            </section> */}
             <section className="antd-pro-pages-list-table-list-tableListOperator">
               <Button icon="plus" type="primary" onClick={e => {
                 this.setState({ initialValue: {}, visible: true, type: 'add' });
               }}>
                 新建
           </Button>
-              {(
-                <span>
-                  {/* <Button>批量操作</Button> */}
-                  {/* <Dropdown overlay={menu}>
-                    <Button>
-                      更多操作 <Icon type="down" />
-                    </Button>
-                  </Dropdown> */}
-                </span>
-              )}
+
             </section>
             <section className="antd-pro-components-standard-table-index-standardTable">
               <MyTable
@@ -384,11 +358,6 @@ export default class AdvancedSearchForm extends React.Component {
                 }}
                 tableData={this.state.tableData}
               ></MyTable>
-              {/* <Table pagination={
-                {
-                  defaultPageSize: 20
-                }
-              } rowKey="id" dataSource={this.state.tableData} columns={this.state.columns} /> */}
             </section>
           </Col>
         </Row>

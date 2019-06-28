@@ -378,9 +378,7 @@ export default class AdvancedSearchForm extends React.Component {
             fnTableChange={(pageNo, pageSize) => {
               this.fnTableChange(pageNo, pageSize)
             }}
-            extra={{
-              current: _this.state.pageNo
-            }}
+            current= {this.state.pageNo}
             tableData={this.state.tableData}
           ></MyTable>
         </section>

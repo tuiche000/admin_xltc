@@ -53,7 +53,7 @@ export default class AdvancedSearchForm extends React.Component {
   }
 
   fnUserPut = async (opt) => {
-    let { code } = await window._api.userPut(opt, opt.username)
+    let { code } = await window._api.userPut(opt)
     if (code == 0) {
       message.success('修改成功')
       this.fnUserList()
@@ -62,7 +62,7 @@ export default class AdvancedSearchForm extends React.Component {
   }
 
   handleCreate = () => {
-    const { type } = this.state
+    const { type, initialValue } = this.state
     const form = this.formRef.props.form;
     form.validateFields(async (err, values) => {
       console.log(values)
@@ -72,7 +72,7 @@ export default class AdvancedSearchForm extends React.Component {
       // if (values.birthday) {
       //   values.birthday = moment(values.birthday).format('YYYY-MM-DD')
       // }
-      if (values.avatar) {
+      if (values.avatar && values.avatar instanceof Array) {
         values.avatar = values.avatar[values.avatar.length - 1].response.data.resource
       }
       if (values.roles) values.roles = [values.roles]
@@ -84,7 +84,7 @@ export default class AdvancedSearchForm extends React.Component {
           this.setState({ visible: false });
         }
       } else if (type == 'edit') {
-        // values.id = initialValue.id
+        values.id = initialValue.id
         const data = await this.fnUserPut(values)
         if (data) {
           form.resetFields();

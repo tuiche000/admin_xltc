@@ -15,6 +15,7 @@ export default class regiosForm extends React.Component {
     gData: [],
     roles: [], // 角色opt
     value: undefined, // tree值
+    initialValue: {}
   };
 
   fnToggleMap = () => {
@@ -38,6 +39,16 @@ export default class regiosForm extends React.Component {
 
     this.setState({ value });
   };
+
+  fnDetail = async () => {
+    let data
+    if (this.props.initialValue.username) {
+      data = await window._api.userDetail(this.props.initialValue.username)
+      this.setState({
+        initialValue: data
+      })
+    }
+  }
 
   // tree异步加载数据
   onLoadData = treeNode =>
@@ -107,10 +118,12 @@ export default class regiosForm extends React.Component {
   componentDidMount() {
     this.fnfirstlevel()
     this.fnRoleList()
+    this.fnDetail()
   }
 
   render() {
-    const { visible, onCancel, onCreate, form, initialValue } = this.props;
+    const { visible, onCancel, onCreate, form } = this.props;
+    const { initialValue } = this.state
     const { avatar } = this.state
     const { getFieldDecorator } = form;
 
@@ -298,9 +311,9 @@ export default class regiosForm extends React.Component {
             </Select>)}
           </Form.Item>
           <Form.Item label="启用">
-            {getFieldDecorator('enable', {
+            {getFieldDecorator('enabled', {
               // rules: [{ required: true, message: '请输入内容', whitespace: true }],
-              initialValue: initialValue.enable, valuePropName: 'checked'
+              initialValue: initialValue.enabled, valuePropName: 'checked'
             })(<Switch />)}
           </Form.Item>
         </Form>
