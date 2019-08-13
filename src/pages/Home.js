@@ -73,7 +73,7 @@ export default class Home extends Component {
             </Col>
             <div className="header_div">
               <Title level={3}>网格精细化治理城市的探索与实践</Title>
-              <p style={{ fontSize: 18 }}>
+              <p style={{ fontSize: 30 }}>
                 路长责任制的软件化实施
               </p>
               <div>
