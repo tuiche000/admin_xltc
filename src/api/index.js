@@ -1,30 +1,33 @@
 import {
   commonEnum,
-} from './common'
+} from "./common";
 import {
   regionAll, regionFirstlevel, regionChildren, regionAdd, regionDel, regionPut, regionId, regionQuery,
-} from './region'
+} from "./region";
 import {
   departmentFirstlevel, departmentId, departmentDel, departmentAdd, departmentEdit, departmentAll,
-} from './department'
+} from "./department";
 import {
   gridList, gridDel, gridAdd, gridPut, gridId, gridFilter,
-} from './grid'
+} from "./grid";
 import {
   userList, userAdd, userDel, userPut, userSelf, userDetail,
-} from './user'
+} from "./user";
 import {
   roleList, roleAdd, roleDel, rolePut, roleId,
-} from './role'
+} from "./role";
 import {
   noticeList, noticeId,
-} from './notice'
+} from "./notice";
 import {
   issueList, issueId,
-} from './issue'
+} from "./issue";
+import {
+  feedbackList, feedbackId,
+} from "./feedback";
 import {
   tachaList, tachaId, tachaExport,
-} from './tacha'
+} from "./tacha";
 
 export default {
   commonEnum,
@@ -35,5 +38,6 @@ export default {
   roleList, roleAdd, roleDel, rolePut, roleId,
   noticeList, noticeId,
   issueList, issueId,
+  feedbackList, feedbackId,
   tachaList, tachaId, tachaExport,
-}
+};

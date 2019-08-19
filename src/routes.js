@@ -5,6 +5,8 @@ import Home from "@/pages/AdminHome/index";
 import Grid from "@/pages/Grid";
 // 问题台账
 import Issue from "@/pages/Issue";
+// 意见反馈
+import Feedback from "@/pages/Feedback";
 // 踏查管理
 import Tacha from "@/pages/Tacha";
 // 消息管理
@@ -27,24 +29,26 @@ export const allRouters = [
   { path: "/users/roles", component: Roles },
   { path: "/grid", component: Grid },
   { path: "/issue", component: Issue },
+  { path: "/feedback", component: Feedback },
   { path: "/tacha", component: Tacha },
   { path: "/message", component: Message },
   { path: "/basicData/region", component: BasicDataRegion }
 ];
 export default [
-  { path: '/home', component: 'Home', icon: 'home', name: '首页' },
+  { path: "/home", component: "Home", icon: "home", name: "首页" },
   {
     path: "/tacha",
     name: "踏查管理",
-    icon: 'radar-chart',
+    icon: "radar-chart",
     component: Tacha,
   },
-  { path: "/issue", component: "Grid", icon: 'question', name: "问题台账", },
-  { path: "/message", component: "Message", icon: 'message', name: "消息管理", },
+  { path: "/issue", component: "Grid", icon: "question", name: "问题台账", },
+  { path: "/message", component: "Message", icon: "message", name: "消息管理", },
+  { path: "/feedback", component: "Feedback", icon: "info", name: "意见反馈", },
   {
     path: "/users",
     name: "用户管理",
-    icon: 'user',
+    icon: "user",
     routes: [
       {
         path: "/users/manager",
@@ -67,7 +71,7 @@ export default [
   {
     path: "/basicData",
     name: "配置管理",
-    icon: 'setting',
+    icon: "setting",
     routes: [
       {
         path: "/basicData/region",
