@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Row, Col, Input, Tree, Button, Select, InputNumber, Cascader, message, Popconfirm } from 'antd';
+import { Form, Row, Col, Input, Tree, Button, Select, InputNumber, Cascader, message, Popconfirm, Icon, Upload } from 'antd';
 import ModalForm from './form'
 import MyTable from '@/components/Table'
 
@@ -308,6 +308,23 @@ export default class AdvancedSearchForm extends React.Component {
   }
 
   render() {
+    const uploadprops = {
+      name: 'file',
+      action: `${process.env.API_HOST}/api/oss/department/import`,
+      headers: {
+        Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('token')).access_token}`
+      },
+      showUploadList: false,
+      onChange(info) {
+        if (info.file.status === 'uploading') {
+        }
+        if (info.file.status === 'done') {
+          message.success(`${info.file.name} 文件上传成功`);
+        } else if (info.file.status === 'error') {
+          message.error(`${info.file.response.message}`);
+        }
+      },
+    };
     return (
       <main id="Grid_Container">
         <Row>
@@ -340,7 +357,16 @@ export default class AdvancedSearchForm extends React.Component {
               }}>
                 新建
           </Button>
-
+              <Upload {...uploadprops}>
+                <Button type="primary">
+                  <Icon type="download" /> 导入
+                      </Button>
+              </Upload>
+              <Button type="primary" onClick={
+                () => {
+                  window.open(`${process.env.IMG_HOST}/report/template/department_query_export_template.xls`)
+                }
+              }><Icon type="download" />下载表格模板</Button>
             </section>
             <section className="antd-pro-components-standard-table-index-standardTable">
               <MyTable
