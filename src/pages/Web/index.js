@@ -3,6 +3,7 @@ import { Route } from "react-router-dom";
 import MyHeader from './components/header'
 import MyFooter from './components/footer'
 import Home from './home'
+import FAQ from "./faq/index";
 
 export default class Web extends React.Component {
   render() {
@@ -10,6 +11,7 @@ export default class Web extends React.Component {
       <div>
         <MyHeader></MyHeader>
         <Route path="/web/home" component={Home}></Route>
+        <Route path="/web/faq" component={FAQ}></Route>
         <MyFooter></MyFooter>
       </div>
     );
