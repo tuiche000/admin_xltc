@@ -3,6 +3,25 @@ header {
   background: #2257c9;
   width: 100%;
 }
+header nav {
+  width: 1180px;
+  margin: 0 auto;
+  padding-top: 30px;
+}
+header nav .nav_right {
+	width: 126px;
+	height: 20px;
+	font-family: MicrosoftYaHei;
+	font-size: 20px;
+	font-weight: normal;
+	font-stretch: normal;
+	line-height: 50px;
+	letter-spacing: 0px;
+	color: #ffffff;
+}
+header a {
+  color: #ffffff;
+}
 
 footer {
   height: 242px;
