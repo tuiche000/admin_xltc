@@ -8,7 +8,8 @@ import { connect } from 'react-redux';
 import { setLogin } from './actions';
 
 import Layout from './layout/index';
-import Home from '@/pages/Home';
+// import Home from '@/pages/Home';
+import Web from '@/pages/Web/index';
 
 import api from './api/index'
 window._api = api
@@ -54,21 +55,22 @@ export default class App extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.location.pathname != '/') {
-      this.checkLogin();
-    }
+    // if (this.props.location.pathname != '/') {
+    //   this.checkLogin();
+    // }
   }
 
   componentDidMount() {
-    this.checkLogin();
+    // this.checkLogin();
   }
 
   render() {
     return (
       <div>
-        {
-          this.props.location.pathname == '/' ? <Route path="/" exact component={Home}></Route> : <Layout {...this.props} />
-        }
+        <Route path="/web" component={Web}></Route>
+        {/* {
+          this.props.location.pathname == '/web' ? <Route path="/web" component={Web}></Route> : <Layout {...this.props} />
+        } */}
       </div>
     );
   }
