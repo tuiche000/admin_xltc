@@ -17,9 +17,10 @@ export default class Web extends React.Component {
               </div>
             </Col>
             <Col>
+              <div className="menu">
               <Row gutter={30} type="flex">
                 <Col>
-                  <a>首页</a>
+                  <a className="menu-active">首页</a>
                 </Col>
                 <Col>
                   <a>应用案例</a>
@@ -34,6 +35,7 @@ export default class Web extends React.Component {
                   <a>版本日志</a>
                 </Col>
               </Row>
+              </div>
             </Col>
             <Col>
               <div className="nav_right">
@@ -43,9 +45,6 @@ export default class Web extends React.Component {
               </div>
             </Col>
           </Row>
-
-
-
         </nav>
       </header>
     );
