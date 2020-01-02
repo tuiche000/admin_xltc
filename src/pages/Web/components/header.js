@@ -2,6 +2,7 @@ import React from "react";
 import './common.css';
 import logo from '@/assets/images/logo.png';
 import { Divider, Row, Col } from 'antd';
+import { Link } from 'react-router-dom';
 
 export default class Web extends React.Component {
   render() {
@@ -18,28 +19,28 @@ export default class Web extends React.Component {
             </Col>
             <Col>
               <div className="menu">
-              <Row gutter={30} type="flex">
-                <Col>
-                  <a className="menu-active">首页</a>
-                </Col>
-                <Col>
-                  <a>应用案例</a>
-                </Col>
-                <Col>
-                  <a>使用方式</a>
-                </Col>
-                <Col>
-                  <a>技术支持</a>
-                </Col>
-                <Col>
-                  <a>版本日志</a>
-                </Col>
-              </Row>
+                <Row gutter={30} type="flex">
+                  <Col>
+                    <Link to='/web/home' className="menu-active">首页</Link>
+                  </Col>
+                  <Col>
+                    <a>应用案例</a>
+                  </Col>
+                  <Col>
+                    <a>使用方式</a>
+                  </Col>
+                  <Col>
+                    <a>技术支持</a>
+                  </Col>
+                  <Col>
+                    <a>版本日志</a>
+                  </Col>
+                </Row>
               </div>
             </Col>
             <Col>
               <div className="nav_right">
-                <a>登录</a>
+                <Link to='/web/login' className="menu-active">登录</Link>
                 <Divider type="vertical"></Divider>
                 <a>注册</a>
               </div>

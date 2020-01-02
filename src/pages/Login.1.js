@@ -54,7 +54,7 @@ export default class Login extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-
+      
       if (!err) {
         values.clientId = process.env.CLIENTID
         values.clientSecret = process.env.CLIENTSECRET
@@ -90,7 +90,17 @@ export default class Login extends Component {
       },
     };
     return (
-      <div style={{margin: '30px 0'}}>
+      <Modal
+        title={null}
+        visible={this.props.visible}
+        onCancel={this.props.fnCancel}
+        footer={null}
+      >
+        <Row align="middle" type="flex" justify="center" gutter={10} style={{ marginBottom: 50 }}>
+          <Col><img src={fang} /></Col>
+          <Col>{type == 'login' ? (<Title level={2} style={{ marginBottom: 0, color: '#e67e22' }}>登录</Title>) : (<Title style={{ marginBottom: 0, color: '#e67e22' }} level={2}>注册</Title>)}</Col>
+          <Col><img src={fang} /></Col>
+        </Row>
         {
           type == 'login' ? <Form {...formItemLayout} onSubmit={this.handleSubmit}>
             <Form.Item label="用户名" hasFeedback>
@@ -99,7 +109,7 @@ export default class Login extends Component {
               })(
                 <Input
                   prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-
+                  
                 />,
               )}
             </Form.Item>
@@ -121,38 +131,11 @@ export default class Login extends Component {
                 登录
           </Button>
             </Form.Item>
-          </Form> : <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-            <Form.Item label="用户名" hasFeedback>
-              {getFieldDecorator('phone', {
-                rules: [{ required: true, message: '请输入用户名' }],
-              })(
-                <Input
-                  prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-
-                />,
-              )}
-            </Form.Item>
-            <Form.Item label="验证码" hasFeedback>
-              {getFieldDecorator('password', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请输入验证码',
-                  },
-                  {
-                    validator: this.validateToNextPassword,
-                  },
-                ],
-              })(<Input.Password />)}
-            </Form.Item>
-            <Form.Item {...tailFormItemLayout}>
-              <Button style={{ background: '#e67e22', color: '#fff' }} size="large" block htmlType="submit">
-                登录
-          </Button>
-            </Form.Item>
-          </Form>
+          </Form> : <Register fnCancel={
+            this.props.fnCancel
+          }></Register>
         }
-      </div>
+      </Modal >
     );
   }
 }

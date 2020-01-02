@@ -3,3 +3,10 @@
   white-space: nowrap;
   text-overflow: ellipsis
 }
+.mid {
+  margin: 0 auto;
+}
+.ant-tabs-bar {
+  border-bottom: inherit;
+  text-align: center;
+}
