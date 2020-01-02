@@ -56,6 +56,11 @@ export default class App extends Component {
 
   componentDidUpdate() {
     if (this.props.location.pathname != '/') {
+      let token = {
+        access_token: 'ZG25CAmiUklUBe5byYxHOb294rvU2KtV'
+      }
+      // sessionStorage.setItem('login', true)
+      // sessionStorage.setItem('token', JSON.stringify(token))
       // this.checkLogin();
     }
   }
@@ -68,6 +73,9 @@ export default class App extends Component {
     return (
       <div>
         <Route path="/web" component={Web}></Route>
+        {/* {
+          (this.props.location.pathname == '/' || this.props.location.pathname.includes('web')) ? <Route path="/web" component={Web}></Route> : <Layout {...this.props} />
+        } */}
         {/* {
           this.props.location.pathname == '/' ? <Route path="/home" component={Home}></Route> : <Layout {...this.props} />
         } */}

@@ -24,13 +24,13 @@ export default class Web extends React.Component {
                     <Link to='/web/home' className="menu-active">首页</Link>
                   </Col>
                   <Col>
-                    <a>应用案例</a>
+                    <Link to='/web/case' className="menu-active">应用案例</Link>
                   </Col>
                   <Col>
                     <Link to='/web/faq' className="menu-active">使用方式</Link>
                   </Col>
                   <Col>
-                    <Link to='/web/home' className="menu-active">技术支持</Link>
+                    <Link to='/web/support' className="menu-active">技术支持</Link>
                   </Col>
                   <Col>
                     <a>版本日志</a>

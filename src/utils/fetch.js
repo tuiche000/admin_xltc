@@ -19,8 +19,7 @@ async function commonFetcdh(url, options, method = 'GET', query) {
     initObj = {
       method: method,
       headers: new Headers({
-        'Authorization': 'Bearer 7Ou2JXvBPpNnONnVE69Oi6Pq6jJfSQ1f'
-        // 'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`
       })
     }
   } else {
