@@ -4,7 +4,7 @@ import './common.css'
 export default class Web extends React.Component {
   render() {
     return (
-      <footer>
+      <footer className="Web_footer">
         <div className="foot">
             <div className="foot-t">
               <div>

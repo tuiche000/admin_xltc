@@ -1,14 +1,14 @@
-header {
+.Web_header {
   height: 110px;
   background: #2257c9;
   width: 100%;
 }
-header nav {
+.Web_header nav {
   width: 1180px;
   margin: 0 auto;
   padding-top: 30px;
 }
-header nav .nav_right {
+.Web_header nav .nav_right {
 	font-family: MicrosoftYaHei;
 	font-size: 20px;
 	font-weight: normal;
@@ -16,20 +16,20 @@ header nav .nav_right {
 	letter-spacing: 0px;
 	color: #ffffff;
 }
-header a {
+.Web_header a {
   color: #ffffff;
 }
-header .menu {
+.Web_header .menu {
   font-size: 20px;
 }
-header .menu-active::after {
+.Web_header .menu-active::after {
   width: 52px;
   height: 3px;
   background-color: #ffb307;
   border-radius: 2px;
 }
 
-footer {
+.Web_footer {
   height: 242px;
   background: #2257c9;
   width: 100%;

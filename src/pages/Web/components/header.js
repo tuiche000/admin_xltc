@@ -6,7 +6,7 @@ import { Divider, Row, Col } from 'antd';
 export default class Web extends React.Component {
   render() {
     return (
-      <header>
+      <header className="Web_header">
         <nav>
           <Row type="flex" justify="space-between" align="bottom">
             <Col>
