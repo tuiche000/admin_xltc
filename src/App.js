@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { setLogin } from './actions';
 
 import Layout from './layout/index';
-// import Home from '@/pages/Home';
+import Home from '@/pages/Home';
 import Web from '@/pages/Web/index';
 
 import api from './api/index'
@@ -55,9 +55,9 @@ export default class App extends Component {
   }
 
   componentDidUpdate() {
-    // if (this.props.location.pathname != '/') {
-    //   this.checkLogin();
-    // }
+    if (this.props.location.pathname != '/') {
+      // this.checkLogin();
+    }
   }
 
   componentDidMount() {
@@ -69,7 +69,7 @@ export default class App extends Component {
       <div>
         <Route path="/web" component={Web}></Route>
         {/* {
-          this.props.location.pathname == '/web' ? <Route path="/web" component={Web}></Route> : <Layout {...this.props} />
+          this.props.location.pathname == '/' ? <Route path="/home" component={Home}></Route> : <Layout {...this.props} />
         } */}
       </div>
     );
