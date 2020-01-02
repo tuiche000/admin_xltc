@@ -27,10 +27,10 @@ export default class Web extends React.Component {
                     <a>应用案例</a>
                   </Col>
                   <Col>
-                    <a>使用方式</a>
+                    <Link to='/web/faq' className="menu-active">使用方式</Link>
                   </Col>
                   <Col>
-                    <a>技术支持</a>
+                    <Link to='/web/home' className="menu-active">技术支持</Link>
                   </Col>
                   <Col>
                     <a>版本日志</a>

@@ -6,26 +6,20 @@ export default class Web extends React.Component {
     super(props)
   }
 
-  state = {
-    active: 0,
-  }
-
   render() {
     return (
       <div className="webTabs">
         <div className="webTabs_left">
           {
             this.props.tabs.map((item, index) => {
-              if (index == this.state.active) {
+              if (index == this.props.active) {
                 return (
                   <div className="webTabs_left_item active">{item.title}</div>
                 )
               } else {
                 return (
                   <div className="webTabs_left_item" onClick={() => {
-                    this.setState({
-                      active: index
-                    })
+                    this.props.changeActive(index)
                   }}>{item.title}</div>
                 )
               }
@@ -34,7 +28,19 @@ export default class Web extends React.Component {
         </div>
         <div className="webTabs_right">
           <div className="webTabs_right_content">
-            {this.props.children}
+            {
+              this.props.title ? (<div style={{textAlign: 'center'}}>
+                {
+                  <div>
+                    <div className="webTabs_right_content_title">{this.props.title.title}</div>
+                    <div className="webTabs_right_content_time">{this.props.title.time}</div>
+                  </div>
+                }
+              </div>) : null
+            }
+            <div style={{marginTop: 50}}>
+              {this.props.children}
+            </div>
           </div>
         </div>
       </div>

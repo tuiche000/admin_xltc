@@ -25,8 +25,16 @@
 }
 .webTabs_right {
   flex: 1;
-  padding: 50px 30px;
+  padding: 40px 30px;
 }
 .webTabs_right_content {
   width: 80%;
+}
+.webTabs_right_content_title {
+  font-size: 15px;
+  color: #303030;
+}
+.webTabs_right_content_time {
+  font-size: 10px;
+  color: #303030;
 }
