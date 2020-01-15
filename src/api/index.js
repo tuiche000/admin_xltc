@@ -28,6 +28,9 @@ import {
 import {
   tachaList, tachaId, tachaExport,
 } from "./tacha";
+import {
+  questions_type,
+} from "./web";
 
 export default {
   commonEnum,
@@ -40,4 +43,5 @@ export default {
   issueList, issueId,
   feedbackList, feedbackId,
   tachaList, tachaId, tachaExport,
+  questions_type,
 };

@@ -57,7 +57,12 @@ export default class App extends Component {
 
   componentDidUpdate() {
     if (this.props.location.pathname != '/') {
-      this.checkLogin();
+      let token = {
+        access_token: 'ZG25CAmiUklUBe5byYxHOb294rvU2KtV'
+      }
+      // sessionStorage.setItem('login', true)
+      // sessionStorage.setItem('token', JSON.stringify(token))
+      // this.checkLogin();
     }
   }
 

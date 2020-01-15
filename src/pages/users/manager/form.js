@@ -74,7 +74,34 @@ export default class regiosForm extends React.Component {
 
   // 获取第一层的tree数据
   fnfirstlevel = async () => {
-    let data = await window._api.departmentFirstlevel()
+    let data = await window._api.departmentAll()
+    // let data = [{
+    //   "id": 8,
+    //   "name": "WAO公司",
+    //   "level": 1,
+    //   "departmentType": "COUNTY",
+    //   "enabled": false,
+    //   "fullname": "WAO公司",
+    //   "children": [
+    //     {
+    //       "id": 9,
+    //       "name": "研发部1",
+    //       "level": 2,
+    //       "departmentType": "TOWNSHIP",
+    //       "enabled": false,
+    //       "fullname": "WAO公司 / 研发部1",
+    //       "hasChildren": false
+    //     }, {
+    //       "id": 10,
+    //       "name": "营销部",
+    //       "level": 2,
+    //       "departmentType": "TOWNSHIP",
+    //       "enabled": false,
+    //       "fullname": "WAO公司 / 营销部",
+    //       "hasChildren": false
+    //     }
+    //   ]
+    // }]
     this.setState({
       tableData: data,
       gData: data
@@ -167,7 +194,8 @@ export default class regiosForm extends React.Component {
     };
 
     const uploadButton = (
-      <div style={{ width: 60,
+      <div style={{
+        width: 60,
         height: 60,
         display: 'flex',
         flexDirection: 'column',
@@ -282,11 +310,12 @@ export default class regiosForm extends React.Component {
               initialValue: initialValue.department
             })(
               <TreeSelect
-                loadData={this.onLoadData}
+                // loadData={this.onLoadData}
                 onSelect={this.getRegionChildren}
                 showSearch
                 style={{ width: 300 }}
                 // value={this.state.value}
+                treeDefaultExpandAll
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
 
                 allowClear
