@@ -42,7 +42,7 @@ async function commonFetcdh(url, options, method = 'GET', query) {
         content: '登录过期了,请重新登录.',
         onOk() {
           sessionStorage.clear()
-          window.location.href = '/'
+          window.location.href = 'http://oss.fothing.com/'
         }
       });
       return

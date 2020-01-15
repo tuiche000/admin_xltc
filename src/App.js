@@ -2,13 +2,15 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { message as Message } from 'antd'
+const queryString = require('query-string');
 /*eslint-enable no-unused-vars*/
 
 import { connect } from 'react-redux';
 import { setLogin } from './actions';
 
 import Layout from './layout/index';
-import Home from '@/pages/Home';
+import Auth from '@/pages/Auth';
+// import Home from '@/pages/Home';
 
 import api from './api/index'
 window._api = api
@@ -34,7 +36,7 @@ export default class App extends Component {
         // if (this.props.location.pathname != '/') {
         //   Message.warning('未登录')
         // }
-        this.props.history.push('/', {});
+        window.location.href = `http://oss.fothing.com/`
       }
       else {
         // 状态没有登录缓存有登录说明登录了但是刷新页面了
@@ -43,7 +45,7 @@ export default class App extends Component {
           if (this.props.location.pathname != '/') {
             Message.warning('未登录')
           }
-          this.props.history.push('/', {});
+          window.location.href = `http://oss.fothing.com/`
         }
         else {
           // 缓存里有token也有登录状态
@@ -60,14 +62,16 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    this.checkLogin();
+    if (this.props.location.pathname != '/') {
+      this.checkLogin();
+    }
   }
 
   render() {
     return (
       <div>
         {
-          this.props.location.pathname == '/' ? <Route path="/" exact component={Home}></Route> : <Layout {...this.props} />
+          this.props.location.pathname == '/' ? <Route path="/" exact component={Auth}></Route> : <Layout {...this.props} />
         }
       </div>
     );

@@ -8,7 +8,7 @@ export default function (state = { login: false, token: {}, user_info: {} }, act
       return { ...state, token: action.value, login: true }
     case LOGIN_OUT:
       sessionStorage.clear()
-      window.location.href = '/'
+      window.location.href = 'http://oss.fothing.com/'
       return { login: false, token: {} };
     case USER_INFO:
       sessionStorage.setItem(USER_INFO, JSON.stringify(action.value))
