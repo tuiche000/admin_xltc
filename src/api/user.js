@@ -1,5 +1,7 @@
 import { _GET, _POST, _DELETE, _PUT } from "@/utils/fetch";
 export const userSelf = () => _GET("api/oss/user/self");
+export const userPass = (id, password) => _GET(`api/oss/user/${id}/password/${password}`);
+export const userLogout = () => _GET(`api/oss/user/logout`);
 export const userDetail = (username) => _GET(`api/oss/user/${username}`);
 export const userList = (opt) => _GET("api/oss/user/query", opt);
 export const userAdd = (opt) => _POST("api/oss/user", opt);

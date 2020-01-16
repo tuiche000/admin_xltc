@@ -56,18 +56,18 @@ export default class App extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.location.pathname != '/') {
-      let token = {
-        access_token: 'ZG25CAmiUklUBe5byYxHOb294rvU2KtV'
-      }
+    if (this.props.location.pathname != '/' || this.props.location.pathname != '/auth') {
+      // let token = {
+      //   access_token: 'ZG25CAmiUklUBe5byYxHOb294rvU2KtV'
+      // }
       // sessionStorage.setItem('login', true)
       // sessionStorage.setItem('token', JSON.stringify(token))
-      // this.checkLogin();
+      this.checkLogin();
     }
   }
 
   componentDidMount() {
-    if (this.props.location.pathname != '/') {
+    if (this.props.location.pathname != '/' || this.props.location.pathname != '/auth') {
       this.checkLogin();
     }
   }
@@ -76,7 +76,7 @@ export default class App extends Component {
     return (
       <div>
         {
-          this.props.location.pathname == '/' ? <Route path="/" exact component={Auth}></Route> : <Layout {...this.props} />
+          this.props.location.pathname == '/' || this.props.location.pathname == '/auth' ? <Route component={Auth}></Route> : <Layout {...this.props} />
         }
       </div>
     );

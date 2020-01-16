@@ -10,6 +10,7 @@ _roadhog-api-doc
 /build
 /dist
 /.vscode
+/lt
 
 # misc
 .DS_Store
@@ -26,6 +27,7 @@ package-lock.json
 # visual studio code
 .history
 *.log
+*.zip
 functions/*
 lambda/mock/index.js
 .temp/**

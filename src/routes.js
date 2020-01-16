@@ -19,11 +19,13 @@ import Department from "@/pages/users/department/index";
 import Roles from "@/pages/users/roles/index";
 // 地图测试
 import MapTest from "@/pages/Map";
+import Auth from "@/pages/Auth";
 
 export const allRouters = [
   { path: "/map", component: MapTest },
   { path: "/login", component: Login },
   { path: "/home", component: Home },
+  { path: "/auth", component: Auth },
   { path: "/users/manager", component: UsersManager },
   { path: "/users/department", component: Department },
   { path: "/users/roles", component: Roles },
