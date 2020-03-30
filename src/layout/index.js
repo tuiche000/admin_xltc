@@ -149,7 +149,7 @@ export default class BasicLayout extends Component {
                       </Menu>
                     )}>
                       <a className="ant-dropdown-link" href="javascript:void(0)">
-                        name <Icon type="down" />
+                        {name} <Icon type="down" />
                       </a>
                     </Dropdown>
                   </Col>

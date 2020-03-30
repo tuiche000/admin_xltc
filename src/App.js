@@ -36,7 +36,8 @@ export default class App extends Component {
         // if (this.props.location.pathname != '/') {
         //   Message.warning('未登录')
         // }
-        window.location.href = `http://oss.fothing.com/`
+        window.location.href = `http://product.loiot.com/`
+        // window.location.href = `localhost:8081`
       }
       else {
         // 状态没有登录缓存有登录说明登录了但是刷新页面了
@@ -45,7 +46,8 @@ export default class App extends Component {
           if (this.props.location.pathname != '/') {
             Message.warning('未登录')
           }
-          window.location.href = `http://oss.fothing.com/`
+          window.location.href = `http://product.loiot.com`
+          // window.location.href = `localhost:8081`
         }
         else {
           // 缓存里有token也有登录状态

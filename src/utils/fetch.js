@@ -1,5 +1,5 @@
 import queryString from 'query-string'
-import { message, Modal } from 'antd'
+import { message as Message, Modal } from 'antd'
 
 let BASE = process.env.API_HOST
 
@@ -36,6 +36,7 @@ async function commonFetcdh(url, options, method = 'GET', query) {
   }
   try {
     let res = await fetch((BASE + '/' + url), initObj)
+    // console.log(res.json())
     if (res.status == 401) {
       Modal.error({
         // title: '401',
@@ -47,6 +48,11 @@ async function commonFetcdh(url, options, method = 'GET', query) {
       });
       return
     }
+    if (res.status > 399) {
+      let { message } = await res.json();
+      Message.error(message)
+      return
+    }
     let { code, status, data, message } = await res.json();
     if (code === '0' && status === 'OK') {
       if (data) return data
@@ -55,7 +61,7 @@ async function commonFetcdh(url, options, method = 'GET', query) {
         status
       }
     } else {
-      message.error(message)
+      Message.error(message)
       throw new Error();
     }
   } catch (e) {
