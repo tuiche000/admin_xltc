@@ -32,6 +32,24 @@ export default class HomeModal extends React.Component {
   }
 
   componentDidMount() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log(position)
+    }, (error) => {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          alert("用户拒绝对获取地理位置的请求。")
+          break;
+        case error.POSITION_UNAVAILABLE:
+          alert("位置信息是不可用的。")
+          break;
+        case error.TIMEOUT:
+          alert("请求用户地理位置超时。")
+          break;
+        case error.UNKNOWN_ERROR:
+          alert("未知错误。")
+          break;
+      }
+    });
     this.fnTachaList()
   }
 
@@ -43,7 +61,7 @@ export default class HomeModal extends React.Component {
       <div style={{ height: '100%' }}>
         <Map events={this.amapEvents} version={'1.4.14'} zoom={15} center={center} plugins={plugins} >
           {
-            data.length && data.map(item => {
+            data.length ? (data.map(item => {
               return (
                 <Polyline style={{ cursor: 'pointer', strokeWeight: 6, lineJoin: 'round', strokeColor: "#3366FF" }} key={item.id} path={item.latlngs} events={
                   {
@@ -51,7 +69,7 @@ export default class HomeModal extends React.Component {
                   }
                 } />
               )
-            })
+            })) : null
           }
           <div style={{
             position: 'absolute',
@@ -61,7 +79,7 @@ export default class HomeModal extends React.Component {
             <Search style={{ width: 300 }} placeholder="责任网格/行政区域" onSearch={value => this.fnTachaList(value)} enterButton />
           </div>
         </Map>
-        {visible && <Modal
+        {visible ? <Modal
           onCancel={() => {
             this.setState({
               visible: false
@@ -69,7 +87,7 @@ export default class HomeModal extends React.Component {
           }}
           id={id}
           visible={visible}
-        ></Modal>}
+        ></Modal> : null}
       </div>
     )
   }
