@@ -22,7 +22,7 @@ export default class Auth extends Component {
             sessionStorage.setItem('token', JSON.stringify({ "access_token": access_token }));
             window.location.href = `${location.origin}/#/home`
         } else {
-            window.location.href = `http://oss.fothing.com/`
+            window.location.href = `http://ticksite.fothing.com/`
         }
     }
 

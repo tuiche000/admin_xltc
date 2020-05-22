@@ -43,7 +43,7 @@ async function commonFetcdh(url, options, method = 'GET', query) {
         content: '登录过期了,请重新登录.',
         onOk() {
           sessionStorage.clear()
-          window.location.href = 'http://oss.fothing.com/'
+          window.location.href = 'http://ticksite.fothing.com/'
         }
       });
       return
