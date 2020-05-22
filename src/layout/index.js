@@ -139,7 +139,8 @@ export default class BasicLayout extends Component {
                             () => {
                               window._api.userLogout().then(res => {
                                 sessionStorage.clear()
-                                window.location.href = `${res}/#/auth?logout=ok`
+                                window.location.href = `http://ticksite.fothing.com/#/auth?logout=ok`
+                                // window.location.href = `${res}/#/auth?logout=ok`
                               })
                             }
                           }>
