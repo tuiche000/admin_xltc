@@ -249,7 +249,7 @@ export default class AdvancedSearchForm extends React.Component {
           {
             this.state.selectedRowKeys.length > 0 && <Button style={{ marginLeft: 10 }} type="primary" onClick={
               () => {
-                window.open(`${process.env.API_HOST}/api/oss/user/@paged/export?access_token=${JSON.parse(sessionStorage.getItem('token')).access_token}&ids=${[..._this.state.selectedRowKeys]}`)
+                window.open(`${process.env.API_HOST}/api/oss/user/export?access_token=${JSON.parse(sessionStorage.getItem('token')).access_token}&ids=${[..._this.state.selectedRowKeys]}`)
               }
             }><Icon type="upload" />导出查询结果</Button>
           }
