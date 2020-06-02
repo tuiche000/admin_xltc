@@ -284,11 +284,12 @@ export default class AdvancedSearchForm extends React.Component {
             <Col push={11} span={2}>
               <Button type="primary" onClick={
                 () => {
-                  // let keyword = this.state.keyword
-                  // let opt = this.state.opt
-                  // opt.keyword = {keyword}
+                  let keyword = this.state.keyword
+                  let opt = this.state.opt
+                  opt.keyword = {keyword}
                   // console.log(this.state.tags)
                   const query = queryString.stringify(this.state.opt)
+                  // window.open(`${process.env.API_HOST}/api/oss/issue/query/export?access_token=FI2qlebxvYggug17SgEHHJFbfEdUO6HZ&${query}`)
                   window.open(`${process.env.API_HOST}/api/oss/issue/query/export?access_token=${JSON.parse(sessionStorage.getItem('token')).access_token}&${query}`)
                 }
               }>导出查询结果</Button>

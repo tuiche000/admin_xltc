@@ -129,6 +129,7 @@ export default class AdvancedSearchForm extends React.Component {
             <Col>
               <Button type="primary" onClick={
                 () => {
+                  // window.open(`${process.env.API_HOST}/api/oss/notice/query/export?access_token=sUz4g8tohKk8QWnNlHfYhDiHSCNApSmi&ids=${[..._this.state.rowSelection]}`)
                   window.open(`${process.env.API_HOST}/api/oss/notice/query/export?access_token=${JSON.parse(sessionStorage.getItem('token')).access_token}&ids=${[..._this.state.rowSelection]}`)
                 }
               }>导出查询结果</Button>

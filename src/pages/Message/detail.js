@@ -53,7 +53,7 @@ export default class regiosForm extends React.Component {
     return (
       <Drawer
         width={640}
-        title={`${data.id}详情`}
+        title={`详情`}
         placement="right"
         closable={false}
         onClose={onClose}

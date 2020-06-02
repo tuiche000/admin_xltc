@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input } from 'antd'
+import { Input, message as Message } from 'antd'
 import Modal from './modal'
 import { Map, Polyline } from 'react-amap';
 
@@ -24,6 +24,9 @@ export default class HomeModal extends React.Component {
 
   fnTachaList = async (searchVal) => {
     let data = await window._api.gridList({ "pageSize": 1000, "pageNo": 1, "keyword": searchVal })
+    if (data.result.length == 0) {
+      Message.warning('没有数据')
+    }
     this.setState({
       data: data.result,
       center: data.result[0].latlngs[0]

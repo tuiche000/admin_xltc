@@ -13,6 +13,7 @@ async function commonFetcdh(url, options, method = 'GET', query) {
   const searchStr = queryString.stringify(options)
   let initObj = {}
   const token = JSON.parse(sessionStorage.getItem('token')) && JSON.parse(sessionStorage.getItem('token')).access_token
+  // const token = JSON.parse(sessionStorage.getItem('token')) ? JSON.parse(sessionStorage.getItem('token')).access_token : 'sUz4g8tohKk8QWnNlHfYhDiHSCNApSmi'
 
   if (method === 'GET') { // 如果是GET请求，拼接url
     url += '?' + searchStr
